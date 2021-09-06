@@ -8,7 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.net.*;
 
-public class Gui implements Runnable {
+public class Client implements Runnable {
    // Connect status constants
    public final static int NULL = 0;
    public final static int DISCONNECTED = 1;
@@ -21,7 +21,7 @@ public class Gui implements Runnable {
       " Error! Could not connect!", " Disconnected",
       " Disconnecting...", " Connecting...", " Connected"
    };
-   public final static Gui tcpObj = new Gui();
+   public final static Client tcpObj = new Client();
    public final static String END_CHAT_SESSION =
       new Character((char)0).toString(); // Indicates the end of a session
 
