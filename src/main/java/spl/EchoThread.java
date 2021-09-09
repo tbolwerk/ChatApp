@@ -16,14 +16,18 @@ public class EchoThread extends Thread {
         this.socket = clientSocket;
         this.others = others;
     }
+    
+    private boolean isDisconnected(String line) {
+    	return (line == null) || (line.equalsIgnoreCase("QUIT"));
+    }
 
     public void run() {
         InputStream inp = null;
-        BufferedReader brinp = null;
+        BufferedReader buffer = null;
         DataOutputStream out = null;
         try {
             inp = socket.getInputStream();
-            brinp = new BufferedReader(new InputStreamReader(inp));
+            buffer = new BufferedReader(new InputStreamReader(inp));
             
         } catch (IOException e) {
             return;
@@ -31,8 +35,8 @@ public class EchoThread extends Thread {
         String line;
         while (true) {
             try {
-                line = brinp.readLine();
-                if ((line == null) || line.equalsIgnoreCase("QUIT")) {
+                line = buffer.readLine();
+                if (isDisconnected(line)) {
                     socket.close();
                 	others.remove(socket);
                     return;
