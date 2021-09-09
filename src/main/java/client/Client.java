@@ -6,6 +6,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
 import java.net.*;
 
 public class Client implements Runnable {
@@ -50,6 +51,8 @@ public class Client implements Runnable {
    public static Socket socket = null;
    public static BufferedReader in = null;
    public static PrintWriter out = null;
+   
+   private static Encrypter encrypter = new Encrypter();
 
    /////////////////////////////////////////////////////////////////
 
@@ -196,7 +199,8 @@ public class Client implements Runnable {
                   chatLine.selectAll();
 
                   // Send the string
-                  sendString(nicknameField.getText() + ": " + s);
+                  String encryptedContent = encrypter.encrypt(nicknameField.getText() + ": " + s);
+                  sendString(encryptedContent);
                }
             }
          });
@@ -344,7 +348,6 @@ public class Client implements Runnable {
          chatLine.setEnabled(false);
          statusColor.setBackground(Color.orange);
          break;
-
       case CONNECTED:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(true);
@@ -406,7 +409,6 @@ public class Client implements Runnable {
                changeStatusTS(DISCONNECTED, false);
             }
             break;
-
          case CONNECTED:
             try {
                // Send data
@@ -427,7 +429,8 @@ public class Client implements Runnable {
 
                      // Otherwise, receive what text
                      else {
-                        appendToChatBox(s + "\n");
+                    	String decryptedContent = encrypter.encrypt(s);
+                        appendToChatBox(decryptedContent + "\n");
                         changeStatusTS(NULL, true);
                      }
                   }
@@ -441,7 +444,6 @@ public class Client implements Runnable {
 
          case DISCONNECTING:
             // Tell other chatter to disconnect as well
-        	System.out.println(END_CHAT_SESSION);
             out.print(END_CHAT_SESSION); 
             out.flush();
 

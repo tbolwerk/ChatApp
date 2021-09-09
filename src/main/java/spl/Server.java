@@ -11,9 +11,7 @@ import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
 class Server {
-<<<<<<< HEAD
-   public static void main(String args[]) {	   
-=======
+
 	// TCP components
 	public static ServerSocket hostServer = null;
 	public static Socket socket = null;
@@ -28,7 +26,6 @@ class Server {
 	public static StringBuffer toSend = new StringBuffer("");
   
    public static void main(String args[]) {
->>>>>>> main
       try {
     	 
     	 System.out.println("Starting listening on port: " + 1234);

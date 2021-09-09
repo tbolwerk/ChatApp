@@ -1,4 +1,4 @@
-package spl;
+package client;
 
 public class Encrypter {
 	public String encrypt(String message) {
@@ -8,6 +8,7 @@ public class Encrypter {
 	}
 	
 	private String rot13(String message) {
+		System.out.println("Encrypting: " + message);
 		char[] chars = message.toCharArray();
 		char[] rot13Chars = new char[chars.length];
 		for (int i = 0; i < chars.length; i++) {
