@@ -17,7 +17,8 @@ public class Client implements Runnable {
    public final static int DISCONNECTED = 1;
    public final static int DISCONNECTING = 2;
    public final static int BEGIN_CONNECT = 3;
-   public final static int CONNECTED = 4;
+   public final static int CONNECTING = 4;
+   public final static int CONNECTED = 5;
 
    // Other constants
    public final static String statusMessages[] = {
@@ -26,6 +27,7 @@ public class Client implements Runnable {
    };
    public final static Client tcpObj = new Client();
    public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
+   public final static String PWDPREFIX = "/PWDMSG/";
 
    // Connection state info
    public static String hostIP = "localhost";
@@ -34,6 +36,7 @@ public class Client implements Runnable {
    public static String statusString = statusMessages[connectionStatus];
    public static StringBuffer toAppend = new StringBuffer("");
    public static StringBuffer toSend = new StringBuffer("");
+   public static String serverSecret = "";
 
    // Various GUI components and info
    public static JFrame mainFrame = null;
@@ -45,6 +48,7 @@ public class Client implements Runnable {
    public static JTextField ipField = null;
    public static JTextField portField = null;
    public static JTextField nicknameField = null;
+   public static JTextField passwordField = null;
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
    
@@ -64,7 +68,7 @@ public class Client implements Runnable {
       ActionAdapter buttonListener = null;
 
       // Create an options pane
-      JPanel optionsPane = new JPanel(new GridLayout(4, 1));
+      JPanel optionsPane = new JPanel(new GridLayout(6, 1));
 
       // IP address input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -129,6 +133,21 @@ public class Client implements Runnable {
       colorSelection = new ColorSelection(chatText);
       JComboBox colorSelectionBox = colorSelection.init();
       pane.add(colorSelectionBox);
+      optionsPane.add(pane);
+      
+      // Password input
+      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      pane.add(new JLabel("Password:"));
+      passwordField = new JTextField(10);
+      passwordField.setEditable(true);
+      passwordField.addActionListener(new ActionAdapter() {
+    	  public void actionPreformed(ActionEvent e) {
+    		  JTextField field = (JTextField)e.getSource();
+    		  System.out.print(PWDPREFIX + field.getText());
+    		  sendString(PWDPREFIX + field.getText());
+    	  }
+      });
+      pane.add(passwordField);
       optionsPane.add(pane);
       
       // Host/guest option
@@ -213,7 +232,7 @@ public class Client implements Runnable {
          });
       chatPane.add(chatLine, BorderLayout.SOUTH);
       chatPane.add(chatTextPane, BorderLayout.CENTER);
-      chatPane.setPreferredSize(new Dimension(200, 200));
+      chatPane.setPreferredSize(new Dimension(200, 300));
       
       // Set up the options pane
       JPanel optionsPane = initOptionsPane();
@@ -343,6 +362,7 @@ public class Client implements Runnable {
       case DISCONNECTED:
          connectButton.setEnabled(true);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(true);
          ipField.setEnabled(true);
          portField.setEnabled(true);
          nicknameField.setEnabled(true);
@@ -353,6 +373,7 @@ public class Client implements Runnable {
       case DISCONNECTING:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          chatLine.setEnabled(false);
@@ -362,6 +383,7 @@ public class Client implements Runnable {
       case CONNECTED:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(true);
+         passwordField.setEnabled(true);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          nicknameField.setEnabled(false);
@@ -371,12 +393,23 @@ public class Client implements Runnable {
       case BEGIN_CONNECT:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          chatLine.setEnabled(false);
          chatLine.grabFocus();
          statusColor.setBackground(Color.orange);
          break;
+      case CONNECTING:
+          connectButton.setEnabled(false);
+          disconnectButton.setEnabled(false);
+          passwordField.setEnabled(false);
+          ipField.setEnabled(false);
+          portField.setEnabled(false);
+          chatLine.setEnabled(false);
+          chatLine.grabFocus();
+          statusColor.setBackground(Color.orange);
+          break;
       }
 
       // Make sure that the button/text field states are consistent
@@ -412,7 +445,10 @@ public class Client implements Runnable {
                in = new BufferedReader(new 
                   InputStreamReader(socket.getInputStream()));
                out = new PrintWriter(socket.getOutputStream(), true);
-               changeStatusTS(CONNECTED, true);
+               // Send password
+               out.print(PWDPREFIX + passwordField.getText());
+               out.flush();
+               changeStatusTS(CONNECTING, true);
             }
             // If error, clean up and output an error message
             catch (IOException e) {
@@ -420,12 +456,25 @@ public class Client implements Runnable {
                changeStatusTS(DISCONNECTED, false);
             }
             break;
+         case CONNECTING:
+        	 try {
+        		 if (in.read() == 1) {
+        			 changeStatusTS(CONNECTED, true);
+        		 } else {
+        			 throw new Exception("Invalid password");
+        		 }
+        	 }
+        	 catch (Exception e) {
+        		 cleanUp();
+        		 changeStatusTS(DISCONNECTED, false);
+        	 }
 
          case CONNECTED:
             try {
                // Send data
                if (toSend.length() != 0) {
-                  out.print(toSend); out.flush();
+                  out.print(toSend); 
+                  out.flush();
                   toSend.setLength(0);
                   changeStatusTS(NULL, true);
                }

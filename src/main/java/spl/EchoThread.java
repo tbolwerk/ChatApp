@@ -9,6 +9,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class EchoThread extends Thread {
+	private final String PWDPREFIX = "/PWDMSG/";
+	private final String PWD = "melons";
+	
     protected Socket socket;
     protected ArrayList<Socket> others;
 
@@ -32,11 +35,25 @@ public class EchoThread extends Thread {
         while (true) {
             try {
                 line = brinp.readLine();
+                System.out.print(line);
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
+                	// Remove connection
                     socket.close();
                 	others.remove(socket);
                     return;
+                } else if (line.startsWith(PWDPREFIX)) { 
+                	// Authenticate
+                	if (line.equals(PWDPREFIX + PWD)) {
+                		out = new DataOutputStream(socket.getOutputStream());
+                    	out.writeByte(1);
+                    	out.flush();
+                	} else {
+                		out = new DataOutputStream(socket.getOutputStream());
+                    	out.writeByte(0);
+                    	out.flush();
+                	}
                 } else {
+                	// Send messages to other sockets
                 	for(Socket other : others) {
                 		if(other.equals(socket)) continue;
                 		out = new DataOutputStream(other.getOutputStream());
