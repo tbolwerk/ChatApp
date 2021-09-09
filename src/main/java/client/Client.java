@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import spl.Logger;
+
 import java.net.*;
 
 public class Client implements Runnable {
@@ -53,6 +55,7 @@ public class Client implements Runnable {
    public static PrintWriter out = null;
    
    private static Encrypter encrypter = new Encrypter();
+   private static Logger logger = new Logger();
 
    /////////////////////////////////////////////////////////////////
 
@@ -429,6 +432,7 @@ public class Client implements Runnable {
 
                      // Otherwise, receive what text
                      else {
+                    	logger.log("client_log.txt", s);
                     	String decryptedContent = encrypter.encrypt(s);
                         appendToChatBox(decryptedContent + "\n");
                         changeStatusTS(NULL, true);

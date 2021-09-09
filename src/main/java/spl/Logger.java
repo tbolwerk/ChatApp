@@ -5,9 +5,9 @@ import java.io.IOException;
 public class Logger {
 	
 	
-	public void log(String text) {
+	public void log(String filename, String text) {
 		try {
-			FileWriter writer = new FileWriter("log.txt", true);
+			FileWriter writer = new FileWriter(filename, true);
 			writer.write(text + "\n");
 			writer.close();
 		} catch (IOException e) {

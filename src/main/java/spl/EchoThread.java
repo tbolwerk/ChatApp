@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class EchoThread extends Thread {
     protected Socket socket;
     protected ArrayList<Socket> others;
+    private Logger logger = new Logger();
 
     public EchoThread(Socket clientSocket, ArrayList<Socket> others) {
         this.socket = clientSocket;
@@ -43,6 +44,7 @@ public class EchoThread extends Thread {
                 } else {
                 	for(Socket other : others) {
                 		System.out.println("Incoming message: "  + line);
+                		this.logger.log("server_log.txt", line);
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();

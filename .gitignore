@@ -1,2 +1,5 @@
 target/*
 /target/
+client_log.txt
+server_log.txt
+target
