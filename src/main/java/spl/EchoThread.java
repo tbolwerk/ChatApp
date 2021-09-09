@@ -33,7 +33,8 @@ public class EchoThread extends Thread {
             try {
                 line = brinp.readLine();
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
-                    
+                    socket.close();
+                	others.remove(socket);
                     return;
                 } else {
                 	for(Socket other : others) {
@@ -41,7 +42,7 @@ public class EchoThread extends Thread {
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();
-                	}             	
+                	}
                 }
             } catch (IOException e) {
                 e.printStackTrace();
