@@ -33,10 +33,11 @@ public class EchoThread extends Thread {
             try {
                 line = brinp.readLine();
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
-                    socket.close();
+                    
                     return;
                 } else {
                 	for(Socket other : others) {
+                		if(other.equals(socket)) continue;
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();
