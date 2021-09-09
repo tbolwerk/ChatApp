@@ -20,9 +20,7 @@ class Server {
 	public static BufferedReader in = null;
 	public static PrintWriter out = null;
 	
-	   public final static String END_CHAT_SESSION =
-			      new Character((char)0).toString(); // Indicates the end of a session
-	   public final static int NULL = 0;
+	public final static int NULL = 0;
 	   
 	public static StringBuffer toSend = new StringBuffer("");
   
@@ -36,7 +34,7 @@ class Server {
          while(true) {
         	 socket = hostServer.accept();
         	 socketPool.add(socket);
-        	 new EchoThread(socket,socketPool).start();
+        	 new EchoThread(socket, socketPool).start();
          }
          
          

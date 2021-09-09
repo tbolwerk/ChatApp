@@ -22,14 +22,12 @@ public class Client implements Runnable {
       " Disconnecting...", " Connecting...", " Connected"
    };
    public final static Client tcpObj = new Client();
-   public final static String END_CHAT_SESSION =
-      new Character((char)0).toString(); // Indicates the end of a session
+   public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
 
-   // Connection tate info
+   // Connection state info
    public static String hostIP = "localhost";
    public static int port = 1234;
    public static int connectionStatus = DISCONNECTED;
-   public static boolean isHost = true;
    public static String statusString = statusMessages[connectionStatus];
    public static StringBuffer toAppend = new StringBuffer("");
    public static StringBuffer toSend = new StringBuffer("");
@@ -43,8 +41,7 @@ public class Client implements Runnable {
    public static JTextField statusColor = null;
    public static JTextField ipField = null;
    public static JTextField portField = null;
-   public static JRadioButton hostOption = null;
-   public static JRadioButton guestOption = null;
+   public static JTextField nicknameField = null;
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
 
@@ -86,7 +83,8 @@ public class Client implements Runnable {
       // Port input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
       pane.add(new JLabel("Port:"));
-      portField = new JTextField(10); portField.setEditable(true);
+      portField = new JTextField(10); 
+      portField.setEditable(true);
       portField.setText((new Integer(port)).toString());
       portField.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
@@ -109,7 +107,16 @@ public class Client implements Runnable {
          });
       pane.add(portField);
       optionsPane.add(pane);
-
+      
+      // Nickname input
+      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      pane.add(new JLabel("Nickname:"));
+      nicknameField = new JTextField(10);
+      nicknameField.setEditable(true);
+      nicknameField.setText("Guest " + String.valueOf(new Random().nextInt(100)));
+      pane.add(nicknameField);
+      optionsPane.add(pane);
+      
       // Host/guest option
       buttonListener = new ActionAdapter() {
             public void actionPerformed(ActionEvent e) {
@@ -117,35 +124,10 @@ public class Client implements Runnable {
                   changeStatusNTS(NULL, true);
                }
                else {
-                  isHost = e.getActionCommand().equals("host");
-
-                  // Cannot supply host IP if host option is chosen
-                  if (isHost) {
-                     ipField.setEnabled(false);
-                     ipField.setText("localhost");
-                     hostIP = "localhost";
-                  }
-                  else {
-                     ipField.setEnabled(true);
-                  }
+            	   ipField.setEnabled(true);
                }
             }
          };
-      ButtonGroup bg = new ButtonGroup();
-      hostOption = new JRadioButton("Host", true);
-      hostOption.setMnemonic(KeyEvent.VK_H);
-      hostOption.setActionCommand("host");
-      hostOption.addActionListener(buttonListener);
-      guestOption = new JRadioButton("Guest", false);
-      guestOption.setMnemonic(KeyEvent.VK_G);
-      guestOption.setActionCommand("guest");
-      guestOption.addActionListener(buttonListener);
-      bg.add(hostOption);
-      bg.add(guestOption);
-      pane = new JPanel(new GridLayout(1, 2));
-      pane.add(hostOption);
-      pane.add(guestOption);
-      optionsPane.add(pane);
 
       // Connect/disconnect buttons
       JPanel buttonPane = new JPanel(new GridLayout(1, 2));
@@ -210,11 +192,11 @@ public class Client implements Runnable {
             public void actionPerformed(ActionEvent e) {
                String s = chatLine.getText();
                if (!s.equals("")) {
-                  appendToChatBox("OUTGOING: " + s + "\n");
+//                  appendToChatBox("OUTGOING: " + s + "\n");
                   chatLine.selectAll();
 
                   // Send the string
-                  sendString(s);
+                  sendString(nicknameField.getText() + ": " + s);
                }
             }
          });
@@ -349,19 +331,16 @@ public class Client implements Runnable {
          disconnectButton.setEnabled(false);
          ipField.setEnabled(true);
          portField.setEnabled(true);
-         hostOption.setEnabled(true);
-         guestOption.setEnabled(true);
-         chatLine.setText(""); chatLine.setEnabled(false);
+         nicknameField.setEnabled(true);
+         chatLine.setText(""); 
+         chatLine.setEnabled(false);
          statusColor.setBackground(Color.red);
          break;
-
       case DISCONNECTING:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
-         hostOption.setEnabled(false);
-         guestOption.setEnabled(false);
          chatLine.setEnabled(false);
          statusColor.setBackground(Color.orange);
          break;
@@ -371,19 +350,15 @@ public class Client implements Runnable {
          disconnectButton.setEnabled(true);
          ipField.setEnabled(false);
          portField.setEnabled(false);
-         hostOption.setEnabled(false);
-         guestOption.setEnabled(false);
+         nicknameField.setEnabled(false);
          chatLine.setEnabled(true);
          statusColor.setBackground(Color.green);
          break;
-
       case BEGIN_CONNECT:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
-         hostOption.setEnabled(false);
-         guestOption.setEnabled(false);
          chatLine.setEnabled(false);
          chatLine.grabFocus();
          statusColor.setBackground(Color.orange);
@@ -394,8 +369,6 @@ public class Client implements Runnable {
       // with the internal states
       ipField.setText(hostIP);
       portField.setText((new Integer(port)).toString());
-      hostOption.setSelected(isHost);
-      guestOption.setSelected(!isHost);
       statusField.setText(statusString);
       chatText.append(toAppend.toString());
       toAppend.setLength(0);
@@ -420,17 +393,8 @@ public class Client implements Runnable {
          switch (connectionStatus) {
          case BEGIN_CONNECT:
             try {
-               // Try to set up a server if host
-               if (isHost) {
-                  hostServer = new ServerSocket(port);
-                  socket = hostServer.accept();
-               }
-
-               // If guest, try to connect to the server
-               else {
-                  socket = new Socket(hostIP, port);
-               }
-
+               // Try to connect to the server
+               socket = new Socket(hostIP, port);
                in = new BufferedReader(new 
                   InputStreamReader(socket.getInputStream()));
                out = new PrintWriter(socket.getOutputStream(), true);
@@ -456,14 +420,14 @@ public class Client implements Runnable {
                if (in.ready()) {
                   s = in.readLine();
                   if ((s != null) &&  (s.length() != 0)) {
-                     // Check if it is the end of a trasmission
+                     // Check if it is the end of a transmission
                      if (s.equals(END_CHAT_SESSION)) {
                         changeStatusTS(DISCONNECTING, true);
                      }
 
                      // Otherwise, receive what text
                      else {
-                        appendToChatBox("INCOMING: " + s + "\n");
+                        appendToChatBox(s + "\n");
                         changeStatusTS(NULL, true);
                      }
                   }
@@ -477,7 +441,9 @@ public class Client implements Runnable {
 
          case DISCONNECTING:
             // Tell other chatter to disconnect as well
-            out.print(END_CHAT_SESSION); out.flush();
+        	System.out.println(END_CHAT_SESSION);
+            out.print(END_CHAT_SESSION); 
+            out.flush();
 
             // Clean up (close all streams/sockets)
             cleanUp();
