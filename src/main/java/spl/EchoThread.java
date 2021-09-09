@@ -42,7 +42,7 @@ public class EchoThread extends Thread {
                     return;
                 } else {
                 	for(Socket other : others) {
-                		if(other.equals(socket)) continue;
+                		System.out.println("Incoming message: "  + line);
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();
