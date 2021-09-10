@@ -45,11 +45,11 @@ public class EchoThread extends Thread {
                 	// Authenticate
                 	if (line.equals(PWDPREFIX + PWD)) {
                 		out = new DataOutputStream(socket.getOutputStream());
-                    	out.writeByte(1);
+                    	out.writeBytes("Correct\n\r");
                     	out.flush();
                 	} else {
                 		out = new DataOutputStream(socket.getOutputStream());
-                    	out.writeByte(0);
+                    	out.writeBytes("Incorrect\n\r");
                     	out.flush();
                 	}
                 } else {

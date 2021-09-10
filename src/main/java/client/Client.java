@@ -17,17 +17,17 @@ public class Client implements Runnable {
    public final static int DISCONNECTED = 1;
    public final static int DISCONNECTING = 2;
    public final static int BEGIN_CONNECT = 3;
-   public final static int CONNECTING = 4;
-   public final static int CONNECTED = 5;
+   public final static int CONNECTED = 4;
 
    // Other constants
    public final static String statusMessages[] = {
       " Error! Could not connect!", " Disconnected",
-      " Disconnecting...", " Connecting...", " Connected"
+      " Disconnecting...", " Begin Connecting...", " Connected"
    };
    public final static Client tcpObj = new Client();
    public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
    public final static String PWDPREFIX = "/PWDMSG/";
+   public final static int MAX_PWD_RETRIES = 1000;
 
    // Connection state info
    public static String hostIP = "localhost";
@@ -400,16 +400,6 @@ public class Client implements Runnable {
          chatLine.grabFocus();
          statusColor.setBackground(Color.orange);
          break;
-      case CONNECTING:
-          connectButton.setEnabled(false);
-          disconnectButton.setEnabled(false);
-          passwordField.setEnabled(false);
-          ipField.setEnabled(false);
-          portField.setEnabled(false);
-          chatLine.setEnabled(false);
-          chatLine.grabFocus();
-          statusColor.setBackground(Color.orange);
-          break;
       }
 
       // Make sure that the button/text field states are consistent
@@ -446,29 +436,34 @@ public class Client implements Runnable {
                   InputStreamReader(socket.getInputStream()));
                out = new PrintWriter(socket.getOutputStream(), true);
                // Send password
-               out.print(PWDPREFIX + passwordField.getText());
-               out.flush();
-               changeStatusTS(CONNECTING, true);
+               if(passwordField != null) {
+		           System.out.println(PWDPREFIX + passwordField.getText());
+		        
+		           out.print(PWDPREFIX + passwordField.getText() + "\n\r");
+		           out.flush();
+		           
+		           int retryCount = 0;
+		           retryloop:
+		           while (retryCount < MAX_PWD_RETRIES) {
+		        	   if (in.ready()) {
+		        		   String res = in.readLine();
+		        		   System.out.print("This: " + res);
+		        		   if (res.equals("Correct")) {
+		        			   changeStatusNTS(CONNECTED, true);
+		        			   break retryloop;
+		        		   } else if (res.equals("Incorrect")) {
+		          			  throw new Exception("Invalid password");
+		          		   }
+		        	   }
+		           }
+               }
             }
             // If error, clean up and output an error message
-            catch (IOException e) {
+            catch (Exception e) {
                cleanUp();
                changeStatusTS(DISCONNECTED, false);
             }
             break;
-         case CONNECTING:
-        	 try {
-        		 if (in.read() == 1) {
-        			 changeStatusTS(CONNECTED, true);
-        		 } else {
-        			 throw new Exception("Invalid password");
-        		 }
-        	 }
-        	 catch (Exception e) {
-        		 cleanUp();
-        		 changeStatusTS(DISCONNECTED, false);
-        	 }
-
          case CONNECTED:
             try {
                // Send data
