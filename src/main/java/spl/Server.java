@@ -11,6 +11,7 @@ import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
 class Server {
+
 	// TCP components
 	public static ServerSocket hostServer = null;
 	public static Socket socket = null;
