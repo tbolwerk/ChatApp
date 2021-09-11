@@ -6,7 +6,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import client.component.ColorSelection;
 import java.net.*;
 
 public class Client implements Runnable {
@@ -45,6 +45,9 @@ public class Client implements Runnable {
    public static JTextField nicknameField = null;
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
+   
+   // Custom GUI components
+   public static ColorSelection colorSelection = null;
 
    // TCP Components
    public static ServerSocket hostServer = null;
@@ -120,6 +123,14 @@ public class Client implements Runnable {
       pane.add(nicknameField);
       optionsPane.add(pane);
       
+      // Color input
+      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      pane.add(new JLabel("Color: "));
+      colorSelection = new ColorSelection(chatText);
+      JComboBox colorSelectionBox = colorSelection.init();
+      pane.add(colorSelectionBox);
+      optionsPane.add(pane);
+      
       // Host/guest option
       buttonListener = new ActionAdapter() {
             public void actionPerformed(ActionEvent e) {
@@ -177,15 +188,12 @@ public class Client implements Runnable {
       statusBar.add(statusColor, BorderLayout.WEST);
       statusBar.add(statusField, BorderLayout.CENTER);
 
-      // Set up the options pane
-      JPanel optionsPane = initOptionsPane();
-
       // Set up the chat pane
       JPanel chatPane = new JPanel(new BorderLayout());
       chatText = new JTextArea(10, 20);
       chatText.setLineWrap(true);
       chatText.setEditable(false);
-      chatText.setForeground(Color.blue);
+      chatText.setForeground(Color.BLUE);
       JScrollPane chatTextPane = new JScrollPane(chatText,
          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -207,6 +215,9 @@ public class Client implements Runnable {
       chatPane.add(chatLine, BorderLayout.SOUTH);
       chatPane.add(chatTextPane, BorderLayout.CENTER);
       chatPane.setPreferredSize(new Dimension(200, 200));
+      
+      // Set up the options pane
+      JPanel optionsPane = initOptionsPane();
 
       // Set up the main pane
       JPanel mainPane = new JPanel(new BorderLayout());
