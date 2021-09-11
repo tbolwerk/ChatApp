@@ -11,9 +11,10 @@ import java.util.ArrayList;
 public class EchoThread extends Thread {
 	private final String PWDPREFIX = "/PWDMSG/";
 	private final String PWD = "melons";
-	
+
     protected Socket socket;
     protected ArrayList<Socket> others;
+    private Logger logger = new Logger();
 
     public EchoThread(Socket clientSocket, ArrayList<Socket> others) {
         this.socket = clientSocket;
@@ -41,7 +42,7 @@ public class EchoThread extends Thread {
                     socket.close();
                 	others.remove(socket);
                     return;
-                } else if (line.startsWith(PWDPREFIX)) { 
+                } else if (line.startsWith(PWDPREFIX)) {
                 	// Authenticate
                 	if (line.equals(PWDPREFIX + PWD)) {
                 		out = new DataOutputStream(socket.getOutputStream());
@@ -55,6 +56,8 @@ public class EchoThread extends Thread {
                 } else {
                 	// Send messages to other sockets
                 	for(Socket other : others) {
+                		System.out.println("Incoming message: "  + line);
+                		this.logger.log("server_log.txt", line);
                 		if(other.equals(socket)) continue;
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");

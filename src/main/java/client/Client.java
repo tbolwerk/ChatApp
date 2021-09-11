@@ -6,6 +6,9 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import spl.Logger;
+
 import client.component.ColorSelection;
 import java.net.*;
 
@@ -49,7 +52,7 @@ public class Client implements Runnable {
    public static JTextField passwordField = null;
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
-   
+
    // Custom GUI components
    public static ColorSelection colorSelection = null;
 
@@ -60,6 +63,7 @@ public class Client implements Runnable {
    public static PrintWriter out = null;
    
    private static Encrypter encrypter = new Encrypter();
+   private static Logger logger = new Logger();
 
    /////////////////////////////////////////////////////////////////
 
@@ -126,7 +130,7 @@ public class Client implements Runnable {
       nicknameField.setText("Guest " + String.valueOf(new Random().nextInt(100)));
       pane.add(nicknameField);
       optionsPane.add(pane);
-      
+
       // Color input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
       pane.add(new JLabel("Color: "));
@@ -134,7 +138,7 @@ public class Client implements Runnable {
       JComboBox colorSelectionBox = colorSelection.init();
       pane.add(colorSelectionBox);
       optionsPane.add(pane);
-      
+
       // Password input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
       pane.add(new JLabel("Password:"));
@@ -149,7 +153,7 @@ public class Client implements Runnable {
       });
       pane.add(passwordField);
       optionsPane.add(pane);
-      
+
       // Host/guest option
       buttonListener = new ActionAdapter() {
             public void actionPerformed(ActionEvent e) {
@@ -234,7 +238,7 @@ public class Client implements Runnable {
       chatPane.add(chatLine, BorderLayout.SOUTH);
       chatPane.add(chatTextPane, BorderLayout.CENTER);
       chatPane.setPreferredSize(new Dimension(200, 300));
-      
+
       // Set up the options pane
       JPanel optionsPane = initOptionsPane();
 
@@ -438,10 +442,10 @@ public class Client implements Runnable {
                // Send password
                if(passwordField != null) {
 		           System.out.println(PWDPREFIX + passwordField.getText());
-		        
+
 		           out.print(PWDPREFIX + passwordField.getText() + "\n\r");
 		           out.flush();
-		           
+
 		           int retryCount = 0;
 		           retryloop:
 		           while (retryCount < MAX_PWD_RETRIES) {
@@ -468,7 +472,7 @@ public class Client implements Runnable {
             try {
                // Send data
                if (toSend.length() != 0) {
-                  out.print(toSend); 
+                  out.print(toSend);
                   out.flush();
                   toSend.setLength(0);
                   changeStatusTS(NULL, true);
@@ -485,6 +489,7 @@ public class Client implements Runnable {
 
                      // Otherwise, receive what text
                      else {
+                    	logger.log("client_log.txt", s);
                     	String decryptedContent = encrypter.encrypt(s);
                         appendToChatBox(decryptedContent + "\n");
                         changeStatusTS(NULL, true);
