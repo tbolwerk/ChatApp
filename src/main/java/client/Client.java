@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import spl.Logger;
 
+import client.component.ColorSelection;
 import java.net.*;
 
 public class Client implements Runnable {
@@ -22,10 +23,12 @@ public class Client implements Runnable {
    // Other constants
    public final static String statusMessages[] = {
       " Error! Could not connect!", " Disconnected",
-      " Disconnecting...", " Connecting...", " Connected"
+      " Disconnecting...", " Begin Connecting...", " Connected"
    };
    public final static Client tcpObj = new Client();
    public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
+   public final static String PWDPREFIX = "/PWDMSG/";
+   public final static int MAX_PWD_RETRIES = 1000;
 
    // Connection state info
    public static String hostIP = "localhost";
@@ -34,6 +37,7 @@ public class Client implements Runnable {
    public static String statusString = statusMessages[connectionStatus];
    public static StringBuffer toAppend = new StringBuffer("");
    public static StringBuffer toSend = new StringBuffer("");
+   public static String serverSecret = "";
 
    // Various GUI components and info
    public static JFrame mainFrame = null;
@@ -45,8 +49,12 @@ public class Client implements Runnable {
    public static JTextField ipField = null;
    public static JTextField portField = null;
    public static JTextField nicknameField = null;
+   public static JTextField passwordField = null;
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
+
+   // Custom GUI components
+   public static ColorSelection colorSelection = null;
 
    // TCP Components
    public static ServerSocket hostServer = null;
@@ -64,7 +72,7 @@ public class Client implements Runnable {
       ActionAdapter buttonListener = null;
 
       // Create an options pane
-      JPanel optionsPane = new JPanel(new GridLayout(4, 1));
+      JPanel optionsPane = new JPanel(new GridLayout(6, 1));
 
       // IP address input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -122,7 +130,30 @@ public class Client implements Runnable {
       nicknameField.setText("Guest " + String.valueOf(new Random().nextInt(100)));
       pane.add(nicknameField);
       optionsPane.add(pane);
-      
+
+      // Color input
+      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      pane.add(new JLabel("Color: "));
+      colorSelection = new ColorSelection(chatText);
+      JComboBox colorSelectionBox = colorSelection.init();
+      pane.add(colorSelectionBox);
+      optionsPane.add(pane);
+
+      // Password input
+      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      pane.add(new JLabel("Password:"));
+      passwordField = new JTextField(10);
+      passwordField.setEditable(true);
+      passwordField.addActionListener(new ActionAdapter() {
+    	  public void actionPreformed(ActionEvent e) {
+    		  JTextField field = (JTextField)e.getSource();
+    		  System.out.print(PWDPREFIX + field.getText());
+    		  sendString(PWDPREFIX + field.getText());
+    	  }
+      });
+      pane.add(passwordField);
+      optionsPane.add(pane);
+
       // Host/guest option
       buttonListener = new ActionAdapter() {
             public void actionPerformed(ActionEvent e) {
@@ -180,15 +211,12 @@ public class Client implements Runnable {
       statusBar.add(statusColor, BorderLayout.WEST);
       statusBar.add(statusField, BorderLayout.CENTER);
 
-      // Set up the options pane
-      JPanel optionsPane = initOptionsPane();
-
       // Set up the chat pane
       JPanel chatPane = new JPanel(new BorderLayout());
       chatText = new JTextArea(10, 20);
       chatText.setLineWrap(true);
       chatText.setEditable(false);
-      chatText.setForeground(Color.blue);
+      chatText.setForeground(Color.BLUE);
       JScrollPane chatTextPane = new JScrollPane(chatText,
          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -209,7 +237,10 @@ public class Client implements Runnable {
          });
       chatPane.add(chatLine, BorderLayout.SOUTH);
       chatPane.add(chatTextPane, BorderLayout.CENTER);
-      chatPane.setPreferredSize(new Dimension(200, 200));
+      chatPane.setPreferredSize(new Dimension(200, 300));
+
+      // Set up the options pane
+      JPanel optionsPane = initOptionsPane();
 
       // Set up the main pane
       JPanel mainPane = new JPanel(new BorderLayout());
@@ -336,6 +367,7 @@ public class Client implements Runnable {
       case DISCONNECTED:
          connectButton.setEnabled(true);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(true);
          ipField.setEnabled(true);
          portField.setEnabled(true);
          nicknameField.setEnabled(true);
@@ -346,6 +378,7 @@ public class Client implements Runnable {
       case DISCONNECTING:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          chatLine.setEnabled(false);
@@ -354,6 +387,7 @@ public class Client implements Runnable {
       case CONNECTED:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(true);
+         passwordField.setEnabled(true);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          nicknameField.setEnabled(false);
@@ -363,6 +397,7 @@ public class Client implements Runnable {
       case BEGIN_CONNECT:
          connectButton.setEnabled(false);
          disconnectButton.setEnabled(false);
+         passwordField.setEnabled(false);
          ipField.setEnabled(false);
          portField.setEnabled(false);
          chatLine.setEnabled(false);
@@ -404,10 +439,31 @@ public class Client implements Runnable {
                in = new BufferedReader(new 
                   InputStreamReader(socket.getInputStream()));
                out = new PrintWriter(socket.getOutputStream(), true);
-               changeStatusTS(CONNECTED, true);
+               // Send password
+               if(passwordField != null) {
+		           System.out.println(PWDPREFIX + passwordField.getText());
+
+		           out.print(PWDPREFIX + passwordField.getText() + "\n\r");
+		           out.flush();
+
+		           int retryCount = 0;
+		           retryloop:
+		           while (retryCount < MAX_PWD_RETRIES) {
+		        	   if (in.ready()) {
+		        		   String res = in.readLine();
+		        		   System.out.print("This: " + res);
+		        		   if (res.equals("Correct")) {
+		        			   changeStatusNTS(CONNECTED, true);
+		        			   break retryloop;
+		        		   } else if (res.equals("Incorrect")) {
+		          			  throw new Exception("Invalid password");
+		          		   }
+		        	   }
+		           }
+               }
             }
             // If error, clean up and output an error message
-            catch (IOException e) {
+            catch (Exception e) {
                cleanUp();
                changeStatusTS(DISCONNECTED, false);
             }
@@ -416,7 +472,8 @@ public class Client implements Runnable {
             try {
                // Send data
                if (toSend.length() != 0) {
-                  out.print(toSend); out.flush();
+                  out.print(toSend);
+                  out.flush();
                   toSend.setLength(0);
                   changeStatusTS(NULL, true);
                }

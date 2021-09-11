@@ -9,6 +9,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class EchoThread extends Thread {
+	private final String PWDPREFIX = "/PWDMSG/";
+	private final String PWD = "melons";
+
     protected Socket socket;
     protected ArrayList<Socket> others;
     private Logger logger = new Logger();
@@ -17,18 +20,14 @@ public class EchoThread extends Thread {
         this.socket = clientSocket;
         this.others = others;
     }
-    
-    private boolean isDisconnected(String line) {
-    	return (line == null) || (line.equalsIgnoreCase("QUIT"));
-    }
 
     public void run() {
         InputStream inp = null;
-        BufferedReader buffer = null;
+        BufferedReader brinp = null;
         DataOutputStream out = null;
         try {
             inp = socket.getInputStream();
-            buffer = new BufferedReader(new InputStreamReader(inp));
+            brinp = new BufferedReader(new InputStreamReader(inp));
             
         } catch (IOException e) {
             return;
@@ -36,15 +35,30 @@ public class EchoThread extends Thread {
         String line;
         while (true) {
             try {
-                line = buffer.readLine();
-                if (isDisconnected(line)) {
+                line = brinp.readLine();
+                System.out.print(line);
+                if ((line == null) || line.equalsIgnoreCase("QUIT")) {
+                	// Remove connection
                     socket.close();
                 	others.remove(socket);
                     return;
+                } else if (line.startsWith(PWDPREFIX)) {
+                	// Authenticate
+                	if (line.equals(PWDPREFIX + PWD)) {
+                		out = new DataOutputStream(socket.getOutputStream());
+                    	out.writeBytes("Correct\n\r");
+                    	out.flush();
+                	} else {
+                		out = new DataOutputStream(socket.getOutputStream());
+                    	out.writeBytes("Incorrect\n\r");
+                    	out.flush();
+                	}
                 } else {
+                	// Send messages to other sockets
                 	for(Socket other : others) {
                 		System.out.println("Incoming message: "  + line);
                 		this.logger.log("server_log.txt", line);
+                		if(other.equals(socket)) continue;
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();
