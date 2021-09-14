@@ -1,10 +1,10 @@
 package spl;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-	
-	
+
 	public void log(String filename, String text) {
 		try {
 			FileWriter writer = new FileWriter(filename, true);
