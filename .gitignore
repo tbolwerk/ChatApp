@@ -1,6 +1,6 @@
 target/*
 .settings/*
 .classpath
-.project
+.idea/*
 client_log.txt
 server_log.txt
