@@ -1,5 +1,6 @@
 target/*
-/target/
+.settings/*
+.classpath
+.project
 client_log.txt
 server_log.txt
-target
