@@ -2,7 +2,7 @@ package client;
 
 import java.util.ArrayList;
 
-// https://refactoring.guru/design-patterns/factory-method
+// https://refactoring.guru/design-patterns/abstract-factory
 
 public class FeatureFactory {
 private ArrayList<Feature> features;
