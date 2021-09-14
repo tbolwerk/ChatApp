@@ -9,7 +9,7 @@ import javax.swing.*;
 
 import spl.Logger;
 
-import client.component.ColorSelection;
+
 import java.net.*;
 
 public class Client implements Runnable {
@@ -22,8 +22,8 @@ public class Client implements Runnable {
 
    // Other constants
    public final static String statusMessages[] = {
-      " Error! Could not connect!", " Disconnected",
-      " Disconnecting...", " Begin Connecting...", " Connected"
+           " Error! Could not connect!", " Disconnected",
+           " Disconnecting...", " Begin Connecting...", " Connected"
    };
    public final static Client tcpObj = new Client();
    public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
@@ -41,7 +41,7 @@ public class Client implements Runnable {
 
    // Various GUI components and info
    public static JFrame mainFrame = null;
-   public static JTextArea chatText = null;
+   public static JTextArea chatText = new JTextArea(10, 20);
    public static JTextField chatLine = null;
    public static JPanel statusBar = null;
    public static JLabel statusField = null;
@@ -53,26 +53,24 @@ public class Client implements Runnable {
    public static JButton connectButton = null;
    public static JButton disconnectButton = null;
 
-   // Custom GUI components
-   public static ColorSelection colorSelection = null;
+   //Feature factory
+   public static FeatureFactory featureFactory = new FeatureFactory();
+   private static NicknameFeature nicknameFeature;
+   private static ColorFeature colorFeature;
 
    // TCP Components
    public static ServerSocket hostServer = null;
    public static Socket socket = null;
    public static BufferedReader in = null;
    public static PrintWriter out = null;
-   
+
    private static Encrypter encrypter = new Encrypter();
    private static Logger logger = new Logger();
 
    /////////////////////////////////////////////////////////////////
 
-   private static JPanel initOptionsPane() {
+   private static JPanel initOptionsPane(JPanel optionsPane) {
       JPanel pane = null;
-      ActionAdapter buttonListener = null;
-
-      // Create an options pane
-      JPanel optionsPane = new JPanel(new GridLayout(6, 1));
 
       // IP address input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -80,64 +78,56 @@ public class Client implements Runnable {
       ipField = new JTextField(10); ipField.setText(hostIP);
       ipField.setEnabled(false);
       ipField.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-               ipField.selectAll();
-               // Should be editable only when disconnected
-               if (connectionStatus != DISCONNECTED) {
-                  changeStatusNTS(NULL, true);
-               }
-               else {
-                  hostIP = ipField.getText();
-               }
+         public void focusLost(FocusEvent e) {
+            ipField.selectAll();
+            // Should be editable only when disconnected
+            if (connectionStatus != DISCONNECTED) {
+               changeStatusNTS(NULL, true);
             }
-         });
+            else {
+               hostIP = ipField.getText();
+            }
+         }
+      });
       pane.add(ipField);
       optionsPane.add(pane);
 
       // Port input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
       pane.add(new JLabel("Port:"));
-      portField = new JTextField(10); 
+      portField = new JTextField(10);
       portField.setEditable(true);
       portField.setText((new Integer(port)).toString());
       portField.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-               // should be editable only when disconnected
-               if (connectionStatus != DISCONNECTED) {
-                  changeStatusNTS(NULL, true);
+         public void focusLost(FocusEvent e) {
+            // should be editable only when disconnected
+            if (connectionStatus != DISCONNECTED) {
+               changeStatusNTS(NULL, true);
+            }
+            else {
+               int temp;
+               try {
+                  temp = Integer.parseInt(portField.getText());
+                  port = temp;
                }
-               else {
-                  int temp;
-                  try {
-                     temp = Integer.parseInt(portField.getText());
-                     port = temp;
-                  }
-                  catch (NumberFormatException nfe) {
-                     portField.setText((new Integer(port)).toString());
-                     mainFrame.repaint();
-                  }
+               catch (NumberFormatException nfe) {
+                  portField.setText((new Integer(port)).toString());
+                  mainFrame.repaint();
                }
             }
-         });
+         }
+      });
       pane.add(portField);
       optionsPane.add(pane);
-      
-      // Nickname input
-      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-      pane.add(new JLabel("Nickname:"));
-      nicknameField = new JTextField(10);
-      nicknameField.setEditable(true);
-      nicknameField.setText("Guest " + String.valueOf(new Random().nextInt(100)));
-      pane.add(nicknameField);
-      optionsPane.add(pane);
 
-      // Color input
-      pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-      pane.add(new JLabel("Color: "));
-      colorSelection = new ColorSelection(chatText);
-      JComboBox colorSelectionBox = colorSelection.init();
-      pane.add(colorSelectionBox);
-      optionsPane.add(pane);
+
+      // ENABLE FEATURES
+      nicknameFeature = new NicknameFeature(optionsPane, null);
+      colorFeature = new ColorFeature(optionsPane, chatText);
+
+      // ADD THEM TO THE FACTORY
+      featureFactory.add(nicknameFeature);
+      featureFactory.add(colorFeature);
 
       // Password input
       pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -145,41 +135,46 @@ public class Client implements Runnable {
       passwordField = new JTextField(10);
       passwordField.setEditable(true);
       passwordField.addActionListener(new ActionAdapter() {
-    	  public void actionPreformed(ActionEvent e) {
-    		  JTextField field = (JTextField)e.getSource();
-    		  System.out.print(PWDPREFIX + field.getText());
-    		  sendString(PWDPREFIX + field.getText());
-    	  }
+         public void actionPreformed(ActionEvent e) {
+            JTextField field = (JTextField)e.getSource();
+            System.out.print(PWDPREFIX + field.getText());
+            sendString(PWDPREFIX + field.getText());
+         }
       });
       pane.add(passwordField);
       optionsPane.add(pane);
 
+      return optionsPane;
+   }
+
+   private static JPanel initConnectionButtons(JPanel optionsPane) {
+      ActionAdapter buttonListener = null;
       // Host/guest option
       buttonListener = new ActionAdapter() {
-            public void actionPerformed(ActionEvent e) {
-               if (connectionStatus != DISCONNECTED) {
-                  changeStatusNTS(NULL, true);
-               }
-               else {
-            	   ipField.setEnabled(true);
-               }
+         public void actionPerformed(ActionEvent e) {
+            if (connectionStatus != DISCONNECTED) {
+               changeStatusNTS(NULL, true);
             }
-         };
+            else {
+               ipField.setEnabled(true);
+            }
+         }
+      };
 
       // Connect/disconnect buttons
       JPanel buttonPane = new JPanel(new GridLayout(1, 2));
       buttonListener = new ActionAdapter() {
-            public void actionPerformed(ActionEvent e) {
-               // Request a connection initiation
-               if (e.getActionCommand().equals("connect")) {
-                  changeStatusNTS(BEGIN_CONNECT, true);
-               }
-               // Disconnect
-               else {
-                  changeStatusNTS(DISCONNECTING, true);
-               }
+         public void actionPerformed(ActionEvent e) {
+            // Request a connection initiation
+            if (e.getActionCommand().equals("connect")) {
+               changeStatusNTS(BEGIN_CONNECT, true);
             }
-         };
+            // Disconnect
+            else {
+               changeStatusNTS(DISCONNECTING, true);
+            }
+         }
+      };
       connectButton = new JButton("Connect");
       connectButton.setMnemonic(KeyEvent.VK_C);
       connectButton.setActionCommand("connect");
@@ -193,7 +188,6 @@ public class Client implements Runnable {
       buttonPane.add(connectButton);
       buttonPane.add(disconnectButton);
       optionsPane.add(buttonPane);
-
       return optionsPane;
    }
 
@@ -201,6 +195,15 @@ public class Client implements Runnable {
 
    // Initialize all the GUI components and display the frame
    private static void initGUI() {
+
+      //Setup feature factory
+      // Create an options pane
+      JPanel optionsPane = new JPanel(new GridLayout(6, 1));
+      // Set up the options pane
+      optionsPane = initOptionsPane(optionsPane);
+      featureFactory.init();
+      optionsPane = initConnectionButtons(optionsPane);
+
       // Set up the status bar
       statusField = new JLabel();
       statusField.setText(statusMessages[DISCONNECTED]);
@@ -213,34 +216,37 @@ public class Client implements Runnable {
 
       // Set up the chat pane
       JPanel chatPane = new JPanel(new BorderLayout());
-      chatText = new JTextArea(10, 20);
+
       chatText.setLineWrap(true);
       chatText.setEditable(false);
       chatText.setForeground(Color.BLUE);
       JScrollPane chatTextPane = new JScrollPane(chatText,
-         JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+              JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+              JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
       chatLine = new JTextField();
       chatLine.setEnabled(false);
       chatLine.addActionListener(new ActionAdapter() {
-            public void actionPerformed(ActionEvent e) {
-               String s = chatLine.getText();
-               if (!s.equals("")) {
+         public void actionPerformed(ActionEvent e) {
+            String s = chatLine.getText();
+            if (!s.equals("")) {
 //                  appendToChatBox("OUTGOING: " + s + "\n");
-                  chatLine.selectAll();
+               chatLine.selectAll();
 
-                  // Send the string
-                  String encryptedContent = encrypter.encrypt(nicknameField.getText() + ": " + s);
-                  sendString(encryptedContent);
+               // Send the string
+               String username =  "Guest " + String.valueOf(new Random().nextInt(100));
+               if(nicknameFeature != null && !nicknameFeature.disabled()) {
+                  username = nicknameFeature.getNickname();
                }
+               String encryptedContent = encrypter.encrypt(username + ": " + s);
+               sendString(encryptedContent);
             }
-         });
+         }
+      });
       chatPane.add(chatLine, BorderLayout.SOUTH);
       chatPane.add(chatTextPane, BorderLayout.CENTER);
       chatPane.setPreferredSize(new Dimension(200, 300));
 
-      // Set up the options pane
-      JPanel optionsPane = initOptionsPane();
+
 
       // Set up the main pane
       JPanel mainPane = new JPanel(new BorderLayout());
@@ -256,6 +262,8 @@ public class Client implements Runnable {
       mainFrame.setLocation(200, 200);
       mainFrame.pack();
       mainFrame.setVisible(true);
+
+
    }
 
    /////////////////////////////////////////////////////////////////
@@ -364,47 +372,47 @@ public class Client implements Runnable {
    // accordingly
    public void run() {
       switch (connectionStatus) {
-      case DISCONNECTED:
-         connectButton.setEnabled(true);
-         disconnectButton.setEnabled(false);
-         passwordField.setEnabled(true);
-         ipField.setEnabled(true);
-         portField.setEnabled(true);
-         nicknameField.setEnabled(true);
-         chatLine.setText(""); 
-         chatLine.setEnabled(false);
-         statusColor.setBackground(Color.red);
-         break;
-      case DISCONNECTING:
-         connectButton.setEnabled(false);
-         disconnectButton.setEnabled(false);
-         passwordField.setEnabled(false);
-         ipField.setEnabled(false);
-         portField.setEnabled(false);
-         chatLine.setEnabled(false);
-         statusColor.setBackground(Color.orange);
-         break;
-      case CONNECTED:
-         connectButton.setEnabled(false);
-         disconnectButton.setEnabled(true);
-         passwordField.setEnabled(true);
-         ipField.setEnabled(false);
-         portField.setEnabled(false);
-         nicknameField.setEnabled(false);
-         chatLine.setEnabled(true);
-         statusColor.setBackground(Color.green);
-         break;
-      case BEGIN_CONNECT:
-         connectButton.setEnabled(false);
-         disconnectButton.setEnabled(false);
-         passwordField.setEnabled(false);
-         ipField.setEnabled(false);
-         portField.setEnabled(false);
-         chatLine.setEnabled(false);
-         chatLine.grabFocus();
-         statusColor.setBackground(Color.orange);
-         break;
+         case DISCONNECTED:
+            connectButton.setEnabled(true);
+            disconnectButton.setEnabled(false);
+            passwordField.setEnabled(true);
+            ipField.setEnabled(true);
+            portField.setEnabled(true);
+            chatLine.setText("");
+            chatLine.setEnabled(false);
+            statusColor.setBackground(Color.red);
+            break;
+         case DISCONNECTING:
+            connectButton.setEnabled(false);
+            disconnectButton.setEnabled(false);
+            passwordField.setEnabled(false);
+            ipField.setEnabled(false);
+            portField.setEnabled(false);
+            chatLine.setEnabled(false);
+            statusColor.setBackground(Color.orange);
+            break;
+         case CONNECTED:
+            connectButton.setEnabled(false);
+            disconnectButton.setEnabled(true);
+            passwordField.setEnabled(true);
+            ipField.setEnabled(false);
+            portField.setEnabled(false);
+            chatLine.setEnabled(true);
+            statusColor.setBackground(Color.green);
+            break;
+         case BEGIN_CONNECT:
+            connectButton.setEnabled(false);
+            disconnectButton.setEnabled(false);
+            passwordField.setEnabled(false);
+            ipField.setEnabled(false);
+            portField.setEnabled(false);
+            chatLine.setEnabled(false);
+            chatLine.grabFocus();
+            statusColor.setBackground(Color.orange);
+            break;
       }
+
+      featureFactory.run(ConnectionStatus.get(connectionStatus));
 
       // Make sure that the button/text field states are consistent
       // with the internal states
@@ -432,88 +440,88 @@ public class Client implements Runnable {
          catch (InterruptedException e) {}
 
          switch (connectionStatus) {
-         case BEGIN_CONNECT:
-            try {
-               // Try to connect to the server
-               socket = new Socket(hostIP, port);
-               in = new BufferedReader(new 
-                  InputStreamReader(socket.getInputStream()));
-               out = new PrintWriter(socket.getOutputStream(), true);
-               // Send password
-               if(passwordField != null) {
-		           System.out.println(PWDPREFIX + passwordField.getText());
+            case BEGIN_CONNECT:
+               try {
+                  // Try to connect to the server
+                  socket = new Socket(hostIP, port);
+                  in = new BufferedReader(new
+                          InputStreamReader(socket.getInputStream()));
+                  out = new PrintWriter(socket.getOutputStream(), true);
+                  // Send password
+                  if(passwordField != null) {
+                     System.out.println(PWDPREFIX + passwordField.getText());
 
-		           out.print(PWDPREFIX + passwordField.getText() + "\n\r");
-		           out.flush();
+                     out.print(PWDPREFIX + passwordField.getText() + "\n\r");
+                     out.flush();
 
-		           int retryCount = 0;
-		           retryloop:
-		           while (retryCount < MAX_PWD_RETRIES) {
-		        	   if (in.ready()) {
-		        		   String res = in.readLine();
-		        		   System.out.print("This: " + res);
-		        		   if (res.equals("Correct")) {
-		        			   changeStatusNTS(CONNECTED, true);
-		        			   break retryloop;
-		        		   } else if (res.equals("Incorrect")) {
-		          			  throw new Exception("Invalid password");
-		          		   }
-		        	   }
-		           }
-               }
-            }
-            // If error, clean up and output an error message
-            catch (Exception e) {
-               cleanUp();
-               changeStatusTS(DISCONNECTED, false);
-            }
-            break;
-         case CONNECTED:
-            try {
-               // Send data
-               if (toSend.length() != 0) {
-                  out.print(toSend);
-                  out.flush();
-                  toSend.setLength(0);
-                  changeStatusTS(NULL, true);
-               }
-
-               // Receive data
-               if (in.ready()) {
-                  s = in.readLine();
-                  if ((s != null) &&  (s.length() != 0)) {
-                     // Check if it is the end of a transmission
-                     if (s.equals(END_CHAT_SESSION)) {
-                        changeStatusTS(DISCONNECTING, true);
-                     }
-
-                     // Otherwise, receive what text
-                     else {
-                    	logger.log("client_log.txt", s);
-                    	String decryptedContent = encrypter.encrypt(s);
-                        appendToChatBox(decryptedContent + "\n");
-                        changeStatusTS(NULL, true);
+                     int retryCount = 0;
+                     retryloop:
+                     while (retryCount < MAX_PWD_RETRIES) {
+                        if (in.ready()) {
+                           String res = in.readLine();
+                           System.out.print("This: " + res);
+                           if (res.equals("Correct")) {
+                              changeStatusNTS(CONNECTED, true);
+                              break retryloop;
+                           } else if (res.equals("Incorrect")) {
+                              throw new Exception("Invalid password");
+                           }
+                        }
                      }
                   }
                }
-            }
-            catch (IOException e) {
+               // If error, clean up and output an error message
+               catch (Exception e) {
+                  cleanUp();
+                  changeStatusTS(DISCONNECTED, false);
+               }
+               break;
+            case CONNECTED:
+               try {
+                  // Send data
+                  if (toSend.length() != 0) {
+                     out.print(toSend);
+                     out.flush();
+                     toSend.setLength(0);
+                     changeStatusTS(NULL, true);
+                  }
+
+                  // Receive data
+                  if (in.ready()) {
+                     s = in.readLine();
+                     if ((s != null) &&  (s.length() != 0)) {
+                        // Check if it is the end of a transmission
+                        if (s.equals(END_CHAT_SESSION)) {
+                           changeStatusTS(DISCONNECTING, true);
+                        }
+
+                        // Otherwise, receive what text
+                        else {
+                           logger.log("client_log.txt", s);
+                           String decryptedContent = encrypter.encrypt(s);
+                           appendToChatBox(decryptedContent + "\n");
+                           changeStatusTS(NULL, true);
+                        }
+                     }
+                  }
+               }
+               catch (IOException e) {
+                  cleanUp();
+                  changeStatusTS(DISCONNECTED, false);
+               }
+               break;
+
+            case DISCONNECTING:
+               // Tell other chatter to disconnect as well
+               out.print(END_CHAT_SESSION);
+               out.flush();
+
+               // Clean up (close all streams/sockets)
                cleanUp();
-               changeStatusTS(DISCONNECTED, false);
-            }
-            break;
+               changeStatusTS(DISCONNECTED, true);
+               break;
 
-         case DISCONNECTING:
-            // Tell other chatter to disconnect as well
-            out.print(END_CHAT_SESSION); 
-            out.flush();
-
-            // Clean up (close all streams/sockets)
-            cleanUp();
-            changeStatusTS(DISCONNECTED, true);
-            break;
-
-         default: break; // do nothing
+            default: break; // do nothing
          }
       }
    }
