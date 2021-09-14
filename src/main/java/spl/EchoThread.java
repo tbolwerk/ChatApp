@@ -58,7 +58,6 @@ public class EchoThread extends Thread {
                 	for(Socket other : others) {
                 		System.out.println("Incoming message: "  + line);
                 		this.logger.log("server_log.txt", line);
-                		if(other.equals(socket)) continue;
                 		out = new DataOutputStream(other.getOutputStream());
                 		out.writeBytes(line + "\n\r");
                         out.flush();
