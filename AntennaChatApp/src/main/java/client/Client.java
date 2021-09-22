@@ -70,7 +70,7 @@ public class Client implements Runnable {
 		int gridSize = 4;
 
 		//#if Color
-		gridSize++;
+//@		gridSize++;
 		//#endif
 		//#if Authentication
 		gridSize++;
@@ -136,12 +136,12 @@ public class Client implements Runnable {
 
 		// Color input
 		//#if Color
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Color: "));
-		colorSelection = new ColorSelection(chatText);
-		JComboBox colorSelectionBox = colorSelection.init();
-		pane.add(colorSelectionBox);
-		optionsPane.add(pane);
+//@		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+//@		pane.add(new JLabel("Color: "));
+//@		colorSelection = new ColorSelection(chatText);
+//@		JComboBox colorSelectionBox = colorSelection.init();
+//@		pane.add(colorSelectionBox);
+//@		optionsPane.add(pane);
 		//#endif
 
 		// Password input
@@ -237,7 +237,7 @@ public class Client implements Runnable {
 					// Send the string
 					String content = nicknameField.getText() + ": " + s;
 					//#if Encryption
-					content = encrypter.encrypt(content);
+//@					content = encrypter.encrypt(content);
 					//#endif
 					sendString(content);
 				}
@@ -512,7 +512,7 @@ public class Client implements Runnable {
 								//#endif
 								String content = s;
 								//#if Encryption
-								content = encrypter.encrypt(s);
+//@								content = encrypter.encrypt(s);
 								//#endif
 								appendToChatBox(content + "\n");
 								changeStatusTS(NULL, true);
