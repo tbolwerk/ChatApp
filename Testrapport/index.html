@@ -1,0 +1,51 @@
+<html>
+
+	<body>
+		<h1> Index </h1>
+		<ul>
+			<li><a href="#base"> Base app </a></li>
+			<li><a href="#auth"> Authentication feature </a></li>
+			<li><a href="#log_encryption"> Log and encryption </a></li>
+			<li><a href="#color"> Color feature </a></li>
+			
+		</ul>
+		<h1> Test rapport Chatapp feature selection </h1>
+		<p> 
+We have used the antenna preprocessing tool, by adding #if CONDITION ... #endif, we made sure to encapsulate each feature. A set of different combinations will be tested and the results will be shared in this document.
+		For each manually test we made sure the config file and application are shown on the image for each test case. In the image shown there will be a selection panel for:</p>
+		<ul>
+			<li> authentication </li>
+			<li> encryption </li>
+			<li> color </li>
+			<li> logging </li>
+		</ul>
+
+		we run the application with the given configuration shown on the image. The result is the running application.
+		<section id="base">
+		<h2> Base Chatapp </h2>
+		<p> The app without any feature enabled </p>
+		<img src="base.png" alt="base"/>
+		</section>
+		<section id"auth">
+		<h2> Authentication feature enabled </h2>
+		<p> The app only with authentication enabled, should show login by password.</p>
+		<img src="authentication.png" alt="authentication"/>
+		</section>
+		
+		<section id="log_encryption">
+		<h2> Logging and encryption feature enabled </h2>
+		<p> Showing encryption is hard so we enable logging to show it encrypts all communication and also showing the logging function. Keep in mind both can still be disabled seperatly but makes it harder to show the working logging function.</p>
+		<img src="encryption_logging.png" alt="encryption_logging"/>
+		<p> the logs are saved in a seperate log file see underneath.</p>
+		<img src="log.png" alt="log"/>
+		</section>
+
+<section id="color">
+		<h2>  color feature enabled </h2>
+		<p> The app only with color enabled, should show color feature dropdown.</p>
+		<img src="color.png" alt="color"/>
+</section>
+	</body>
+
+</html>
+
