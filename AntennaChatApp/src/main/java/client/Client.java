@@ -231,16 +231,16 @@ public class Client implements Runnable {
 		
 		// Set up the chat pane
 //		#if GUI
-//@		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
-//@		chatUI = gui;
-//@		JPanel chatPane = gui.initGUI();
-//@		chatLine = gui.chatLine;
-//@		chatText = gui.chatText;
-//@		mainPane.add(chatPane, BorderLayout.CENTER);
+		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
+		chatUI = gui;
+		JPanel chatPane = gui.initGUI();
+		chatLine = gui.chatLine;
+		chatText = gui.chatText;
+		mainPane.add(chatPane, BorderLayout.CENTER);
 //		#endif
 		
 		//#if CLI
-		chatUI = new ChatCLI();
+//@		chatUI = new ChatCLI();
 		//#endif
 
 		
@@ -373,8 +373,8 @@ public class Client implements Runnable {
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
 			//#if GUI
-//@			chatLine.setText("");
-//@			chatLine.setEnabled(false);
+			chatLine.setText("");
+			chatLine.setEnabled(false);
 			//#endif
 			statusColor.setBackground(Color.red);
 			break;
@@ -387,7 +387,7 @@ public class Client implements Runnable {
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			//#if GUI
-//@			chatLine.setEnabled(false);
+			chatLine.setEnabled(false);
 			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
@@ -401,7 +401,7 @@ public class Client implements Runnable {
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
 			//#if GUI
-//@			chatLine.setEnabled(true);
+			chatLine.setEnabled(true);
 			//#endif
 			statusColor.setBackground(Color.green);
 			break;
@@ -414,8 +414,8 @@ public class Client implements Runnable {
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			//#if GUI
-//@			chatLine.setEnabled(false);
-//@			chatLine.grabFocus();
+			chatLine.setEnabled(false);
+			chatLine.grabFocus();
 			//#endif
 			statusColor.setBackground(Color.orange);
 			break;

@@ -6,6 +6,6 @@
 	<feature name="Color"/>
 	<feature manual="selected" name="Logging"/>
 	<feature automatic="selected" manual="selected" name="ChatUI"/>
-	<feature name="GUI"/>
-	<feature manual="selected" name="CLI"/>
+	<feature manual="selected" name="GUI"/>
+	<feature name="CLI"/>
 </configuration>
