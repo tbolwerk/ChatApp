@@ -72,7 +72,7 @@ public class Client implements Runnable {
 		int gridSize = 4;
 
 		//#if Color
-//@		gridSize++;
+		gridSize++;
 		//#endif
 		//#if Authentication
 		gridSize++;
@@ -219,8 +219,6 @@ public class Client implements Runnable {
 		statusBar.add(statusColor, BorderLayout.WEST);
 		statusBar.add(statusField, BorderLayout.CENTER);
 
-
-		
 		// Set up the options pane
 		JPanel optionsPane = initOptionsPane();
 
@@ -243,7 +241,6 @@ public class Client implements Runnable {
 //@		chatUI = new ChatCLI();
 		//#endif
 
-		
 		// Set up the main frame
 		mainFrame = new JFrame("Simple TCP Chat");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -372,10 +369,12 @@ public class Client implements Runnable {
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
-			//#if GUI
+			
+      //#if GUI
 			chatLine.setText("");
 			chatLine.setEnabled(false);
 			//#endif
+
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
