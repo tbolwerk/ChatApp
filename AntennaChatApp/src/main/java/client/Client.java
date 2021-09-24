@@ -61,6 +61,8 @@ public class Client implements Runnable {
 
 	private static Encrypter encrypter = new Encrypter();
 	private static Logger logger = new Logger();
+	
+	private static IChat chatUI = null;
 
 	/////////////////////////////////////////////////////////////////
 
@@ -217,36 +219,6 @@ public class Client implements Runnable {
 		statusBar.add(statusColor, BorderLayout.WEST);
 		statusBar.add(statusField, BorderLayout.CENTER);
 
-		// Set up the chat pane
-		JPanel chatPane = new JPanel(new BorderLayout());
-		chatText = new JTextArea(10, 20);
-		chatText.setLineWrap(true);
-		chatText.setEditable(false);
-		chatText.setForeground(Color.BLUE);
-		JScrollPane chatTextPane = new JScrollPane(chatText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		chatLine = new JTextField();
-		chatLine.setEnabled(false);
-		chatLine.addActionListener(new ActionAdapter() {
-			public void actionPerformed(ActionEvent e) {
-				String s = chatLine.getText();
-				if (!s.equals("")) {
-//                  appendToChatBox("OUTGOING: " + s + "\n");
-					chatLine.selectAll();
-
-					// Send the string
-					String content = nicknameField.getText() + ": " + s;
-					//#if Encryption
-					content = encrypter.encrypt(content);
-					//#endif
-					sendString(content);
-				}
-			}
-		});
-		chatPane.add(chatLine, BorderLayout.SOUTH);
-		chatPane.add(chatTextPane, BorderLayout.CENTER);
-		chatPane.setPreferredSize(new Dimension(200, 300));
-
 		// Set up the options pane
 		JPanel optionsPane = initOptionsPane();
 
@@ -254,7 +226,20 @@ public class Client implements Runnable {
 		JPanel mainPane = new JPanel(new BorderLayout());
 		mainPane.add(statusBar, BorderLayout.SOUTH);
 		mainPane.add(optionsPane, BorderLayout.WEST);
+		
+		// Set up the chat pane
+//		#if GUI
+		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
+		chatUI = gui;
+		JPanel chatPane = gui.initGUI();
+		chatLine = gui.chatLine;
+		chatText = gui.chatText;
 		mainPane.add(chatPane, BorderLayout.CENTER);
+//		#endif
+		
+		//#if CLI
+//@		chatUI = new ChatCLI();
+		//#endif
 
 		// Set up the main frame
 		mainFrame = new JFrame("Simple TCP Chat");
@@ -384,8 +369,12 @@ public class Client implements Runnable {
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
+			
+      //#if GUI
 			chatLine.setText("");
 			chatLine.setEnabled(false);
+			//#endif
+
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
@@ -396,7 +385,9 @@ public class Client implements Runnable {
 			//#endif
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
+			//#if GUI
 			chatLine.setEnabled(false);
+			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		case CONNECTED:
@@ -408,7 +399,9 @@ public class Client implements Runnable {
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
+			//#if GUI
 			chatLine.setEnabled(true);
+			//#endif
 			statusColor.setBackground(Color.green);
 			break;
 		case BEGIN_CONNECT:
@@ -419,8 +412,10 @@ public class Client implements Runnable {
 			//#endif
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
+			//#if GUI
 			chatLine.setEnabled(false);
 			chatLine.grabFocus();
+			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		}
@@ -430,7 +425,7 @@ public class Client implements Runnable {
 		ipField.setText(hostIP);
 		portField.setText((new Integer(port)).toString());
 		statusField.setText(statusString);
-		chatText.append(toAppend.toString());
+		chatUI.append(toAppend.toString());
 		toAppend.setLength(0);
 
 		mainFrame.repaint();
