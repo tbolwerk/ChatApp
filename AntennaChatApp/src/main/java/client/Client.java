@@ -138,12 +138,12 @@ public class Client implements Runnable {
 
 		// Color input
 		//#if Color
-//@		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//@		pane.add(new JLabel("Color: "));
-//@		colorSelection = new ColorSelection(chatText);
-//@		JComboBox colorSelectionBox = colorSelection.init();
-//@		pane.add(colorSelectionBox);
-//@		optionsPane.add(pane);
+		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		pane.add(new JLabel("Color: "));
+		colorSelection = new ColorSelection(chatText);
+		JComboBox colorSelectionBox = colorSelection.init();
+		pane.add(colorSelectionBox);
+		optionsPane.add(pane);
 		//#endif
 
 		// Password input
@@ -507,7 +507,7 @@ public class Client implements Runnable {
 								//#endif
 								String content = s;
 								//#if Encryption
-//@								content = encrypter.encrypt(s);
+								content = encrypter.encrypt(s);
 								//#endif
 								appendToChatBox(content + "\n");
 								changeStatusTS(NULL, true);

@@ -15,7 +15,6 @@ public class ChatGUI implements IChat {
 	public static JTextArea chatText = null;
 	public static JTextField chatLine = null;
 	
-	
 	private JTextField nicknameField;
 	private Encrypter encrypter;
 	private static StringBuffer toSend;
@@ -44,7 +43,7 @@ public class ChatGUI implements IChat {
 					// Send the string
 					String content = nicknameField.getText() + ": " + s;
 					//#if Encryption
-//@					content = encrypter.encrypt(content);
+					content = encrypter.encrypt(content);
 					//#endif
 					sendString(content);
 				}
