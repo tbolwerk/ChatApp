@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class ColorSelection implements IGUIComponent {
+public class ColorSelection implements IGUIComponent, IColor {
 	int startIndex = 0;
 	String[] colorNames = { "blue", "red", "green" };
 	private JTextArea chatText = null;
@@ -23,7 +23,7 @@ public class ColorSelection implements IGUIComponent {
 		return pane;
 	}
 	
-	public String codeToName(Color code) {
+	private String codeToName(Color code) {
 		if (code.toString() == Color.RED.toString()) {
 			return "red";
 		} else if (code.toString() == Color.BLUE.toString()) {
@@ -35,7 +35,7 @@ public class ColorSelection implements IGUIComponent {
 		}
 	}
 	
-	public Color nameToCode(String name) {
+	private Color nameToCode(String name) {
 		switch(name) {
 			case "red":
 				return Color.RED;

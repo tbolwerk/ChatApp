@@ -1,5 +1,7 @@
 package main.java.client.component;
 
-public interface IColor {
+import javax.swing.JPanel;
 
+public interface IColor {
+	public JPanel createGuiComponent();
 }

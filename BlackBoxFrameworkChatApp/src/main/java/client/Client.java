@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import main.java.client.component.*;
 import main.java.client.component.Authentication.ClientPasswordAuthenticator;
+import main.java.client.component.Authentication.IAuthenticationInput;
 import main.java.client.component.Authentication.IClientAuthenticator;
 import main.java.client.component.Authentication.PasswordInput;
 import main.java.spl.Logger;
@@ -51,10 +52,6 @@ public class Client implements Runnable {
 	public static JButton connectButton = null;
 	public static JButton disconnectButton = null;
 
-	// Custom GUI components
-	public static ColorSelection colorSelection = null;
-	public static PasswordInput passwordInput = null;
-
 	// TCP Components
 	public static ServerSocket hostServer = null;
 	public static Socket socket = null;
@@ -62,22 +59,23 @@ public class Client implements Runnable {
 	public static PrintWriter out = null;
 
 	private static Encrypter encrypter = new Encrypter();
-	private static IClientAuthenticator clientAuthenticator = new ClientPasswordAuthenticator();
 	
 	private static IChat chatUI = null;
 
 	//Constuctor/////////////////////////////////////////////////////
 	
-	IAuthentication authentication;
-	IColor color;
+	IAuthenticationInput authenticationInput;
+	IClientAuthenticator clientAuthenticator;
+	IColor colorSelection;
 	IEncrypter encryptor;
 	ILogger logger; 
 	IChat chat; 
 	IUI ui;
 	
-	public Client(IAuthentication authentication, IColor color,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
-		this.authentication = authentication;
-		this.color = color;
+	public Client(IAuthenticationInput authenticationInput, IClientAuthenticator clientAuthenticator, IColor colorSelection,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
+		this.authenticationInput = authenticationInput;
+		this.clientAuthenticator = clientAuthenticator;
+		this.colorSelection = colorSelection;
 		this.encryptor = encryptor;
 		this.logger = logger;
 		this.chat = chat;
@@ -153,7 +151,7 @@ public class Client implements Runnable {
 		optionsPane.add(pane);
 
 		// Password input
-		pane = passwordInput.createGuiComponent();
+		pane = authenticationInput.createGuiComponent();
 		optionsPane.add(pane);
 
 		// Host/guest option
@@ -300,7 +298,7 @@ public class Client implements Runnable {
 	/////////////////////////////////////////////////////////////////
 
 	// Add text to send-buffer
-	private static void sendString(String s) {
+	public static void sendString(String s) {
 		synchronized (toSend) {
 			toSend.append(s + "\n");
 		}
@@ -352,7 +350,7 @@ public class Client implements Runnable {
 		case DISCONNECTED:
 			connectButton.setEnabled(true);
 			disconnectButton.setEnabled(false);
-			passwordInput.setEnabled(true);
+			authenticationInput.setEnabled(true);
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
@@ -364,7 +362,7 @@ public class Client implements Runnable {
 		case DISCONNECTING:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			passwordInput.setEnabled(false);
+			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			chatLine.setEnabled(false);
@@ -373,7 +371,7 @@ public class Client implements Runnable {
 		case CONNECTED:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(true);
-			passwordInput.setEnabled(true);
+			authenticationInput.setEnabled(true);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
@@ -383,7 +381,7 @@ public class Client implements Runnable {
 		case BEGIN_CONNECT:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			passwordInput.setEnabled(false);
+			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			chatLine.setEnabled(false);
@@ -424,7 +422,7 @@ public class Client implements Runnable {
 					socket = new Socket(hostIP, port);
 					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					out = new PrintWriter(socket.getOutputStream(), true);
-					String password = passwordInput.getTextField().getText();
+					String password = authenticationInput.getPassword();
 					if (clientAuthenticator.authenticate(out, in, password)) {
 						changeStatusNTS(CONNECTED, true);
 					} else {
