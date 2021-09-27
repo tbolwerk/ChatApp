@@ -36,14 +36,12 @@ public class EchoThread extends Thread {
 		while (true) {
 			try {
 				line = brinp.readLine();
-				System.out.print(line);
 				if ((line == null) || line.equalsIgnoreCase("QUIT")) {
 					// Remove connection
 					socket.close();
 					others.remove(socket);
 					return;
 				} 
-				//#if Authentication
 				else if (line.startsWith(PWDPREFIX)) {
 					// Authenticate
 					if (line.equals(PWDPREFIX + PWD)) {
@@ -56,14 +54,10 @@ public class EchoThread extends Thread {
 						out.flush();
 					}
 				} 
-				//#endif
 				else {
 					// Send messages to other sockets
 					for (Socket other : others) {
-						System.out.println("Incoming message: " + line);
-						//#if Logging
 						this.logger.log("server_log.txt", line);
-						//#endif
 						out = new DataOutputStream(other.getOutputStream());
 						out.writeBytes(line + "\n\r");
 						out.flush();

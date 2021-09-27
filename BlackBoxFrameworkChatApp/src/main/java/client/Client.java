@@ -63,7 +63,7 @@ public class Client implements Runnable {
 	private static Logger logger = new Logger();
 	
 	private static IChat chatUI = null;
-	
+
 	//Constuctor/////////////////////////////////////////////////////
 	
 	IAuthentication authentication;
@@ -86,14 +86,7 @@ public class Client implements Runnable {
 	private static JPanel initOptionsPane() {
 		JPanel pane = null;
 		ActionAdapter buttonListener = null;
-		int gridSize = 4;
-
-		//#if Color
-		gridSize++;
-		//#endif
-		//#if Authentication
-		gridSize++;
-		//#endif
+		int gridSize = 6;
 
 		// Create an options pane
 		JPanel optionsPane = new JPanel(new GridLayout(gridSize, 1));
@@ -154,17 +147,14 @@ public class Client implements Runnable {
 		optionsPane.add(pane);
 
 		// Color input
-		//#if Color
 		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Color: "));
 		colorSelection = new ColorSelection(chatText);
 		JComboBox colorSelectionBox = colorSelection.init();
 		pane.add(colorSelectionBox);
 		optionsPane.add(pane);
-		//#endif
 
 		// Password input
-		//#if Authentication
 		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Password:"));
 		passwordField = new JTextField(10);
@@ -172,13 +162,11 @@ public class Client implements Runnable {
 		passwordField.addActionListener(new ActionAdapter() {
 			public void actionPreformed(ActionEvent e) {
 				JTextField field = (JTextField) e.getSource();
-				System.out.print(PWDPREFIX + field.getText());
 				sendString(PWDPREFIX + field.getText());
 			}
 		});
 		pane.add(passwordField);
 		optionsPane.add(pane);
-		//#endif
 
 		// Host/guest option
 		buttonListener = new ActionAdapter() {
@@ -245,18 +233,14 @@ public class Client implements Runnable {
 		mainPane.add(optionsPane, BorderLayout.WEST);
 		
 		// Set up the chat pane
-//		#if GUI
 		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
 		chatUI = gui;
 		JPanel chatPane = gui.initGUI();
 		chatLine = gui.chatLine;
 		chatText = gui.chatText;
 		mainPane.add(chatPane, BorderLayout.CENTER);
-//		#endif
 		
-		//#if CLI
-//@		chatUI = new ChatCLI();
-		//#endif
+		chatUI = new ChatCLI();
 
 		// Set up the main frame
 		mainFrame = new JFrame("Simple TCP Chat");
@@ -380,59 +364,43 @@ public class Client implements Runnable {
 		case DISCONNECTED:
 			connectButton.setEnabled(true);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
 			passwordField.setEnabled(true);
-			//#endif
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
 			
-      //#if GUI
 			chatLine.setText("");
 			chatLine.setEnabled(false);
-			//#endif
 
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
 			passwordField.setEnabled(false);
-			//#endif
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(false);
-			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		case CONNECTED:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(true);
-			//#if Authentication
 			passwordField.setEnabled(true);
-			//#endif
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(true);
-			//#endif
 			statusColor.setBackground(Color.green);
 			break;
 		case BEGIN_CONNECT:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
 			passwordField.setEnabled(false);
-			//#endif
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(false);
 			chatLine.grabFocus();
-			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		}
@@ -471,7 +439,6 @@ public class Client implements Runnable {
 					out = new PrintWriter(socket.getOutputStream(), true);
 					// Send password
 					if (passwordField != null) {
-						//#if Authentication
 						out.print(PWDPREFIX + passwordField.getText() + "\n\r");
 						out.flush();
 
@@ -487,7 +454,6 @@ public class Client implements Runnable {
 								}
 							}
 						}
-						//#endif
 					} else {
 						changeStatusNTS(CONNECTED, true);
 					}
@@ -519,13 +485,9 @@ public class Client implements Runnable {
 
 							// Otherwise, receive what text
 							else {
-								//#if Logging
 								logger.log("client_log.txt", s);
-								//#endif
 								String content = s;
-								//#if Encryption
 								content = encrypter.encrypt(s);
-								//#endif
 								appendToChatBox(content + "\n");
 								changeStatusTS(NULL, true);
 							}
