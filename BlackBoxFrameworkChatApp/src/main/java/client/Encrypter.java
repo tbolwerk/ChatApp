@@ -1,6 +1,6 @@
 package main.java.client;
 
-public class Encrypter {
+public class Encrypter implements IEncrypter {
 	public String encrypt(String message) {
 		String msg = rot13(message);
 		msg = reverseMessage(msg);
