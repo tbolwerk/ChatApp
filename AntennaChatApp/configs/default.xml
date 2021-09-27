@@ -7,5 +7,5 @@
 	<feature manual="selected" name="Logging"/>
 	<feature automatic="selected" manual="selected" name="ChatUI"/>
 	<feature manual="selected" name="GUI"/>
-	<feature name="CLI"/>
+	<feature automatic="unselected" name="CLI"/>
 </configuration>

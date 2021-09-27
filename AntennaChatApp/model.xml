@@ -14,10 +14,10 @@
 			<feature name="Encryption"/>
 			<feature name="Color"/>
 			<feature name="Logging"/>
-			<and abstract="true" name="ChatUI">
+			<alt abstract="true" name="ChatUI">
 				<feature name="GUI"/>
 				<feature name="CLI"/>
-			</and>
+			</alt>
 		</and>
 	</struct>
 </featureModel>
