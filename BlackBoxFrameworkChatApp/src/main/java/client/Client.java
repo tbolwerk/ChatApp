@@ -63,7 +63,24 @@ public class Client implements Runnable {
 	private static Logger logger = new Logger();
 	
 	private static IChat chatUI = null;
-
+	
+	//Constuctor/////////////////////////////////////////////////////
+	
+	IAuthentication authentication;
+	IColor color;
+	IEncrypter encryptor;
+	ILogger logger; 
+	IChat chat; 
+	IUI ui;
+	
+	public Client(IAuthentication authentication, IColor color,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
+		this.authentication = authentication;
+		this.color = color;
+		this.encryptor = encryptor;
+		this.logger = logger;
+		this.chat = chat;
+		this.ui = ui;
+	}
 	/////////////////////////////////////////////////////////////////
 
 	private static JPanel initOptionsPane() {
@@ -434,7 +451,7 @@ public class Client implements Runnable {
 	/////////////////////////////////////////////////////////////////
 
 	// The main procedure
-	public static void main(String args[]) {
+	public void start() {
 		String s;
 
 		initGUI();

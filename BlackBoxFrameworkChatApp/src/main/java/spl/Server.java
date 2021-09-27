@@ -18,8 +18,18 @@ class Server {
 	public final static int NULL = 0;
 
 	public static StringBuffer toSend = new StringBuffer("");
+	
+	/// Constructor////////////////////////////////
+	
+	ILogger logger;
+	IAuthentication authentication;
+	
+	public Server(IAuthentication authentication, ILogger logger) {
+		this.authentication = authentication;
+		this.logger = logger;
+	}
 
-	public static void main(String args[]) {
+	public void start() {
 		try {
 
 			System.out.println("Starting listening on port: " + 1234);
