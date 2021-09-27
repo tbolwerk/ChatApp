@@ -19,7 +19,7 @@ class Server {
 
 	public static StringBuffer toSend = new StringBuffer("");
 
-	public void start() {
+	public static void main(String args[]) {
 		try {
 
 			System.out.println("Starting listening on port: " + 1234);
