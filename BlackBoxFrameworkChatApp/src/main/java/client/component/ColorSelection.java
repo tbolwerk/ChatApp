@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class ColorSelection implements ActionListener {
+public class ColorSelection implements IGUIComponent {
 	int startIndex = 0;
 	String[] colorNames = { "blue", "red", "green" };
 	private JTextArea chatText = null;
@@ -13,11 +13,14 @@ public class ColorSelection implements ActionListener {
 		this.chatText = chatText;
 	}
 
-	public JComboBox init() {
+	public JPanel createGuiComponent() {
+		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		pane.add(new JLabel("Color: "));
 		JComboBox colorSelectionBox = new JComboBox(colorNames);
 		colorSelectionBox.setSelectedIndex(startIndex);
-		colorSelectionBox.addActionListener(this);
-		return colorSelectionBox;
+		colorSelectionBox.addActionListener(selectActionAdapter);
+		pane.add(colorSelectionBox);
+		return pane;
 	}
 	
 	public String codeToName(Color code) {
@@ -44,14 +47,16 @@ public class ColorSelection implements ActionListener {
 				return null;
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		JComboBox cb = (JComboBox)e.getSource();
-		Color selectedItem = nameToCode((String)cb.getSelectedItem());
-		if (chatText != null) {
-			chatText.setForeground(selectedItem);
-			chatText.repaint();
+	
+	// Actions
+	private ActionAdapter selectActionAdapter = new ActionAdapter() {
+		public void actionPreformed(ActionEvent e) {
+			JComboBox cb = (JComboBox)e.getSource();
+			Color selectedItem = nameToCode((String)cb.getSelectedItem());
+			if (chatText != null) {
+				chatText.setForeground(selectedItem);
+				chatText.repaint();
+			}
 		}
-	}
+	};
 }

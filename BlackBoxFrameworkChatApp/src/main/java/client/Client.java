@@ -6,7 +6,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import main.java.client.component.ColorSelection;
+import main.java.client.component.*;
+import main.java.client.component.Authentication.ClientPasswordAuthenticator;
+import main.java.client.component.Authentication.IClientAuthenticator;
+import main.java.client.component.Authentication.PasswordInput;
 import main.java.spl.Logger;
 
 import java.net.*;
@@ -24,8 +27,6 @@ public class Client implements Runnable {
 			" Begin Connecting...", " Connected" };
 	public final static Client tcpObj = new Client();
 	public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
-	public final static String PWDPREFIX = "/PWDMSG/";
-	public final static int MAX_PWD_RETRIES = 1000;
 
 	// Connection state info
 	public static String hostIP = "localhost";
@@ -46,12 +47,13 @@ public class Client implements Runnable {
 	public static JTextField ipField = null;
 	public static JTextField portField = null;
 	public static JTextField nicknameField = null;
-	public static JTextField passwordField = null;
+	
 	public static JButton connectButton = null;
 	public static JButton disconnectButton = null;
 
 	// Custom GUI components
 	public static ColorSelection colorSelection = null;
+	public static PasswordInput passwordInput = null;
 
 	// TCP Components
 	public static ServerSocket hostServer = null;
@@ -60,7 +62,7 @@ public class Client implements Runnable {
 	public static PrintWriter out = null;
 
 	private static Encrypter encrypter = new Encrypter();
-	private static Logger logger = new Logger();
+	private static IClientAuthenticator clientAuthenticator = new ClientPasswordAuthenticator();
 	
 	private static IChat chatUI = null;
 
@@ -147,25 +149,11 @@ public class Client implements Runnable {
 		optionsPane.add(pane);
 
 		// Color input
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Color: "));
-		colorSelection = new ColorSelection(chatText);
-		JComboBox colorSelectionBox = colorSelection.init();
-		pane.add(colorSelectionBox);
+		pane = colorSelection.createGuiComponent();
 		optionsPane.add(pane);
 
 		// Password input
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Password:"));
-		passwordField = new JTextField(10);
-		passwordField.setEditable(true);
-		passwordField.addActionListener(new ActionAdapter() {
-			public void actionPreformed(ActionEvent e) {
-				JTextField field = (JTextField) e.getSource();
-				sendString(PWDPREFIX + field.getText());
-			}
-		});
-		pane.add(passwordField);
+		pane = passwordInput.createGuiComponent();
 		optionsPane.add(pane);
 
 		// Host/guest option
@@ -364,11 +352,10 @@ public class Client implements Runnable {
 		case DISCONNECTED:
 			connectButton.setEnabled(true);
 			disconnectButton.setEnabled(false);
-			passwordField.setEnabled(true);
+			passwordInput.setEnabled(true);
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
-			
 			chatLine.setText("");
 			chatLine.setEnabled(false);
 
@@ -377,7 +364,7 @@ public class Client implements Runnable {
 		case DISCONNECTING:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			passwordField.setEnabled(false);
+			passwordInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			chatLine.setEnabled(false);
@@ -386,7 +373,7 @@ public class Client implements Runnable {
 		case CONNECTED:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(true);
-			passwordField.setEnabled(true);
+			passwordInput.setEnabled(true);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
@@ -396,7 +383,7 @@ public class Client implements Runnable {
 		case BEGIN_CONNECT:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			passwordField.setEnabled(false);
+			passwordInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			chatLine.setEnabled(false);
@@ -437,25 +424,12 @@ public class Client implements Runnable {
 					socket = new Socket(hostIP, port);
 					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					out = new PrintWriter(socket.getOutputStream(), true);
-					// Send password
-					if (passwordField != null) {
-						out.print(PWDPREFIX + passwordField.getText() + "\n\r");
-						out.flush();
-
-						int retryCount = 0;
-						retryloop: while (retryCount < MAX_PWD_RETRIES) {
-							if (in.ready()) {
-								String res = in.readLine();
-								if (res.equals("Correct")) {
-									changeStatusNTS(CONNECTED, true);
-									break retryloop;
-								} else if (res.equals("Incorrect")) {
-									throw new Exception("Invalid password");
-								}
-							}
-						}
-					} else {
+					String password = passwordInput.getTextField().getText();
+					if (clientAuthenticator.authenticate(out, in, password)) {
 						changeStatusNTS(CONNECTED, true);
+					} else {
+						cleanUp();
+						changeStatusTS(DISCONNECTED, false);
 					}
 				}
 				// If error, clean up and output an error message
@@ -515,13 +489,3 @@ public class Client implements Runnable {
 		}
 	}
 }
-
-////////////////////////////////////////////////////////////////////
-
-// Action adapter for easy event-listener coding
-class ActionAdapter implements ActionListener {
-	public void actionPerformed(ActionEvent e) {
-	}
-}
-
-////////////////////////////////////////////////////////////////////

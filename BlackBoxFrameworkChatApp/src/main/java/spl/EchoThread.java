@@ -8,13 +8,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class EchoThread extends Thread {
-	private final String PWDPREFIX = "/PWDMSG/";
-	private final String PWD = "melons";
+import main.java.client.component.Authentication.IServerAuthenticator;
+import main.java.client.component.Authentication.ServerPasswordAuthenticator;
 
+public class EchoThread extends Thread {
 	protected Socket socket;
 	protected ArrayList<Socket> others;
 	private Logger logger = new Logger();
+	private IServerAuthenticator authenticator = new ServerPasswordAuthenticator();
 	
 	public EchoThread(Socket clientSocket, ArrayList<Socket> others) {
 		this.socket = clientSocket;
@@ -42,17 +43,9 @@ public class EchoThread extends Thread {
 					others.remove(socket);
 					return;
 				} 
-				else if (line.startsWith(PWDPREFIX)) {
-					// Authenticate
-					if (line.equals(PWDPREFIX + PWD)) {
-						out = new DataOutputStream(socket.getOutputStream());
-						out.writeBytes("Correct\n\r");
-						out.flush();
-					} else {
-						out = new DataOutputStream(socket.getOutputStream());
-						out.writeBytes("Incorrect\n\r");
-						out.flush();
-					}
+				else if (authenticator.shouldAuthenticate(line)) {
+					out = new DataOutputStream(socket.getOutputStream());
+					authenticator.authenticate(line, out);
 				} 
 				else {
 					// Send messages to other sockets
