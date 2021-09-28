@@ -62,24 +62,22 @@ public class Client implements Runnable {
 	
 	private static IChat chatUI = null;
 
-	//Constuctor/////////////////////////////////////////////////////
+	// Constuctor /////////////////////////////////////////////////////
 	
-	IAuthenticationInput authenticationInput;
+	private static IAuthenticationInput authenticationInput;
 	IClientAuthenticator clientAuthenticator;
-	IColor colorSelection;
+	private static IColor colorSelection;
 	IEncrypter encryptor;
 	ILogger logger; 
 	IChat chat; 
-	IUI ui;
 	
-	public Client(IAuthenticationInput authenticationInput, IClientAuthenticator clientAuthenticator, IColor colorSelection,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
-		this.authenticationInput = authenticationInput;
+	public Client(IAuthenticationInput authenticationInput, IClientAuthenticator clientAuthenticator, IColor colorSelection,IEncrypter encryptor, ILogger logger, IChat chat) {
+		Client.authenticationInput = authenticationInput;
 		this.clientAuthenticator = clientAuthenticator;
-		this.colorSelection = colorSelection;
+		Client.colorSelection = colorSelection;
 		this.encryptor = encryptor;
 		this.logger = logger;
 		this.chat = chat;
-		this.ui = ui;
 	}
 	/////////////////////////////////////////////////////////////////
 
