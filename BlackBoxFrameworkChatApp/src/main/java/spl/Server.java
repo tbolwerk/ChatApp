@@ -5,6 +5,8 @@ import java.net.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
+import main.java.client.component.Authentication.IServerAuthenticator;
+
 class Server {
 
 	// TCP components
@@ -22,10 +24,10 @@ class Server {
 	/// Constructor////////////////////////////////
 	
 	ILogger logger;
-	IAuthentication authentication;
+	IServerAuthenticator serverAuthenticator;
 	
-	public Server(IAuthentication authentication, ILogger logger) {
-		this.authentication = authentication;
+	public Server(IServerAuthenticator serverAuthenticator, ILogger logger) {
+		this.serverAuthenticator = serverAuthenticator;
 		this.logger = logger;
 	}
 
