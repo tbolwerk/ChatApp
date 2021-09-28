@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import main.java.client.component.ActionAdapter;
+
 public class ChatGUI implements IChat {
 
 	public static JTextArea chatText = null;

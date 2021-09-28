@@ -8,13 +8,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class EchoThread extends Thread {
-	private final String PWDPREFIX = "/PWDMSG/";
-	private final String PWD = "melons";
+import main.java.client.component.Authentication.IServerAuthenticator;
+import main.java.client.component.Authentication.ServerPasswordAuthenticator;
 
+public class EchoThread extends Thread {
 	protected Socket socket;
 	protected ArrayList<Socket> others;
 	private Logger logger = new Logger();
+	private IServerAuthenticator authenticator = new ServerPasswordAuthenticator();
 	
 	public EchoThread(Socket clientSocket, ArrayList<Socket> others) {
 		this.socket = clientSocket;
@@ -36,34 +37,20 @@ public class EchoThread extends Thread {
 		while (true) {
 			try {
 				line = brinp.readLine();
-				System.out.print(line);
 				if ((line == null) || line.equalsIgnoreCase("QUIT")) {
 					// Remove connection
 					socket.close();
 					others.remove(socket);
 					return;
 				} 
-				//#if Authentication
-				else if (line.startsWith(PWDPREFIX)) {
-					// Authenticate
-					if (line.equals(PWDPREFIX + PWD)) {
-						out = new DataOutputStream(socket.getOutputStream());
-						out.writeBytes("Correct\n\r");
-						out.flush();
-					} else {
-						out = new DataOutputStream(socket.getOutputStream());
-						out.writeBytes("Incorrect\n\r");
-						out.flush();
-					}
+				else if (authenticator.shouldAuthenticate(line)) {
+					out = new DataOutputStream(socket.getOutputStream());
+					authenticator.authenticate(line, out);
 				} 
-				//#endif
 				else {
 					// Send messages to other sockets
 					for (Socket other : others) {
-						System.out.println("Incoming message: " + line);
-						//#if Logging
 						this.logger.log("server_log.txt", line);
-						//#endif
 						out = new DataOutputStream(other.getOutputStream());
 						out.writeBytes(line + "\n\r");
 						out.flush();

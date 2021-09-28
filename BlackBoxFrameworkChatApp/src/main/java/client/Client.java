@@ -6,7 +6,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import main.java.client.component.ColorSelection;
+import main.java.client.component.*;
+import main.java.client.component.Authentication.ClientPasswordAuthenticator;
+import main.java.client.component.Authentication.IAuthenticationInput;
+import main.java.client.component.Authentication.IClientAuthenticator;
+import main.java.client.component.Authentication.PasswordInput;
 import main.java.spl.Logger;
 
 import java.net.*;
@@ -24,8 +28,6 @@ public class Client implements Runnable {
 			" Begin Connecting...", " Connected" };
 	public final static Client tcpObj = new Client();
 	public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
-	public final static String PWDPREFIX = "/PWDMSG/";
-	public final static int MAX_PWD_RETRIES = 1000;
 
 	// Connection state info
 	public static String hostIP = "localhost";
@@ -46,12 +48,9 @@ public class Client implements Runnable {
 	public static JTextField ipField = null;
 	public static JTextField portField = null;
 	public static JTextField nicknameField = null;
-	public static JTextField passwordField = null;
+	
 	public static JButton connectButton = null;
 	public static JButton disconnectButton = null;
-
-	// Custom GUI components
-	public static ColorSelection colorSelection = null;
 
 	// TCP Components
 	public static ServerSocket hostServer = null;
@@ -60,22 +59,23 @@ public class Client implements Runnable {
 	public static PrintWriter out = null;
 
 	private static Encrypter encrypter = new Encrypter();
-	private static Logger logger = new Logger();
 	
 	private static IChat chatUI = null;
-	
+
 	//Constuctor/////////////////////////////////////////////////////
 	
-	IAuthentication authentication;
-	IColor color;
+	IAuthenticationInput authenticationInput;
+	IClientAuthenticator clientAuthenticator;
+	IColor colorSelection;
 	IEncrypter encryptor;
 	ILogger logger; 
 	IChat chat; 
 	IUI ui;
 	
-	public Client(IAuthentication authentication, IColor color,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
-		this.authentication = authentication;
-		this.color = color;
+	public Client(IAuthenticationInput authenticationInput, IClientAuthenticator clientAuthenticator, IColor colorSelection,IEncrypter encryptor, ILogger logger, IChat chat, IUI ui) {
+		this.authenticationInput = authenticationInput;
+		this.clientAuthenticator = clientAuthenticator;
+		this.colorSelection = colorSelection;
 		this.encryptor = encryptor;
 		this.logger = logger;
 		this.chat = chat;
@@ -86,14 +86,7 @@ public class Client implements Runnable {
 	private static JPanel initOptionsPane() {
 		JPanel pane = null;
 		ActionAdapter buttonListener = null;
-		int gridSize = 4;
-
-		//#if Color
-		gridSize++;
-		//#endif
-		//#if Authentication
-		gridSize++;
-		//#endif
+		int gridSize = 6;
 
 		// Create an options pane
 		JPanel optionsPane = new JPanel(new GridLayout(gridSize, 1));
@@ -154,31 +147,12 @@ public class Client implements Runnable {
 		optionsPane.add(pane);
 
 		// Color input
-		//#if Color
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Color: "));
-		colorSelection = new ColorSelection(chatText);
-		JComboBox colorSelectionBox = colorSelection.init();
-		pane.add(colorSelectionBox);
+		pane = colorSelection.createGuiComponent();
 		optionsPane.add(pane);
-		//#endif
 
 		// Password input
-		//#if Authentication
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Password:"));
-		passwordField = new JTextField(10);
-		passwordField.setEditable(true);
-		passwordField.addActionListener(new ActionAdapter() {
-			public void actionPreformed(ActionEvent e) {
-				JTextField field = (JTextField) e.getSource();
-				System.out.print(PWDPREFIX + field.getText());
-				sendString(PWDPREFIX + field.getText());
-			}
-		});
-		pane.add(passwordField);
+		pane = authenticationInput.createGuiComponent();
 		optionsPane.add(pane);
-		//#endif
 
 		// Host/guest option
 		buttonListener = new ActionAdapter() {
@@ -245,18 +219,14 @@ public class Client implements Runnable {
 		mainPane.add(optionsPane, BorderLayout.WEST);
 		
 		// Set up the chat pane
-//		#if GUI
 		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
 		chatUI = gui;
 		JPanel chatPane = gui.initGUI();
 		chatLine = gui.chatLine;
 		chatText = gui.chatText;
 		mainPane.add(chatPane, BorderLayout.CENTER);
-//		#endif
 		
-		//#if CLI
-//@		chatUI = new ChatCLI();
-		//#endif
+		chatUI = new ChatCLI();
 
 		// Set up the main frame
 		mainFrame = new JFrame("Simple TCP Chat");
@@ -328,7 +298,7 @@ public class Client implements Runnable {
 	/////////////////////////////////////////////////////////////////
 
 	// Add text to send-buffer
-	private static void sendString(String s) {
+	public static void sendString(String s) {
 		synchronized (toSend) {
 			toSend.append(s + "\n");
 		}
@@ -380,59 +350,42 @@ public class Client implements Runnable {
 		case DISCONNECTED:
 			connectButton.setEnabled(true);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
-			passwordField.setEnabled(true);
-			//#endif
+			authenticationInput.setEnabled(true);
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
 			nicknameField.setEnabled(true);
-			
-      //#if GUI
 			chatLine.setText("");
 			chatLine.setEnabled(false);
-			//#endif
 
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
-			passwordField.setEnabled(false);
-			//#endif
+			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(false);
-			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		case CONNECTED:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(true);
-			//#if Authentication
-			passwordField.setEnabled(true);
-			//#endif
+			authenticationInput.setEnabled(true);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
 			nicknameField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(true);
-			//#endif
 			statusColor.setBackground(Color.green);
 			break;
 		case BEGIN_CONNECT:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			//#if Authentication
-			passwordField.setEnabled(false);
-			//#endif
+			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			//#if GUI
 			chatLine.setEnabled(false);
 			chatLine.grabFocus();
-			//#endif
 			statusColor.setBackground(Color.orange);
 			break;
 		}
@@ -469,27 +422,12 @@ public class Client implements Runnable {
 					socket = new Socket(hostIP, port);
 					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					out = new PrintWriter(socket.getOutputStream(), true);
-					// Send password
-					if (passwordField != null) {
-						//#if Authentication
-						out.print(PWDPREFIX + passwordField.getText() + "\n\r");
-						out.flush();
-
-						int retryCount = 0;
-						retryloop: while (retryCount < MAX_PWD_RETRIES) {
-							if (in.ready()) {
-								String res = in.readLine();
-								if (res.equals("Correct")) {
-									changeStatusNTS(CONNECTED, true);
-									break retryloop;
-								} else if (res.equals("Incorrect")) {
-									throw new Exception("Invalid password");
-								}
-							}
-						}
-						//#endif
-					} else {
+					String password = authenticationInput.getPassword();
+					if (clientAuthenticator.authenticate(out, in, password)) {
 						changeStatusNTS(CONNECTED, true);
+					} else {
+						cleanUp();
+						changeStatusTS(DISCONNECTED, false);
 					}
 				}
 				// If error, clean up and output an error message
@@ -519,13 +457,9 @@ public class Client implements Runnable {
 
 							// Otherwise, receive what text
 							else {
-								//#if Logging
 								logger.log("client_log.txt", s);
-								//#endif
 								String content = s;
-								//#if Encryption
 								content = encrypter.encrypt(s);
-								//#endif
 								appendToChatBox(content + "\n");
 								changeStatusTS(NULL, true);
 							}
@@ -553,13 +487,3 @@ public class Client implements Runnable {
 		}
 	}
 }
-
-////////////////////////////////////////////////////////////////////
-
-// Action adapter for easy event-listener coding
-class ActionAdapter implements ActionListener {
-	public void actionPerformed(ActionEvent e) {
-	}
-}
-
-////////////////////////////////////////////////////////////////////
