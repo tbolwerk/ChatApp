@@ -14,18 +14,16 @@ import main.java.client.component.IGUIComponent;
 public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	public final static String PWDPREFIX = "/PWDMSG/";
 	private JTextField passwordField;
-	private Client client;
 	
-	public PasswordInput(Client client) {
-		this.client = client;
+	public PasswordInput() {
 	}
 	
-	public JPanel createGuiComponent() {
+	public JPanel createGuiComponent(Client client) {
 		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Password:"));
 		passwordField = new JTextField(10);
 		passwordField.setEditable(true);
-		passwordField.addActionListener(sendPasswordAction);
+		passwordField.addActionListener(this.createAdapter(client));
 		pane.add(passwordField);
 		return pane;
 	}
@@ -39,10 +37,15 @@ public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	}
 	
 	// Actions
-	ActionAdapter sendPasswordAction = new ActionAdapter() {
-		public void actionPreformed(ActionEvent e) {
-			JTextField field = (JTextField) e.getSource();
-			client.sendString(PWDPREFIX + field.getText());
-		}
-	};
+	
+	private ActionAdapter createAdapter(Client client) {
+		return new ActionAdapter() {
+			public void actionPerformed(ActionEvent e) {
+				JTextField field = (JTextField) e.getSource();
+				client.sendString(PWDPREFIX + field.getText());
+			}
+		};
+	}
+
+	
 }

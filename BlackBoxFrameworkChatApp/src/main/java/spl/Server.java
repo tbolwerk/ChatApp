@@ -5,6 +5,7 @@ import java.net.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
+import main.java.client.ILogger;
 import main.java.client.component.Authentication.IServerAuthenticator;
 
 class Server {
@@ -23,8 +24,8 @@ class Server {
 	
 	/// Constructor////////////////////////////////
 	
-	ILogger logger;
-	IServerAuthenticator serverAuthenticator;
+	private ILogger logger;
+	private IServerAuthenticator serverAuthenticator;
 	
 	public Server(IServerAuthenticator serverAuthenticator, ILogger logger) {
 		this.serverAuthenticator = serverAuthenticator;

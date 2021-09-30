@@ -26,7 +26,7 @@ public class Client implements Runnable {
 	// Other constants
 	public final static String statusMessages[] = { " Error! Could not connect!", " Disconnected", " Disconnecting...",
 			" Begin Connecting...", " Connected" };
-	public final static Client tcpObj = new Client();
+	public static Client tcpObj;
 	public final static String END_CHAT_SESSION = "QUIT"; // Indicates the end of a session
 
 	// Connection state info
@@ -35,19 +35,17 @@ public class Client implements Runnable {
 	public static int connectionStatus = DISCONNECTED;
 	public static String statusString = statusMessages[connectionStatus];
 	public static StringBuffer toAppend = new StringBuffer("");
-	public static StringBuffer toSend = new StringBuffer("");
+	public static StringBuffer toSend = null;
 	public static String serverSecret = "";
 
 	// Various GUI components and info
+	public static JPanel optionsPane = null;
 	public static JFrame mainFrame = null;
-	public static JTextArea chatText = null;
-	public static JTextField chatLine = null;
 	public static JPanel statusBar = null;
 	public static JLabel statusField = null;
 	public static JTextField statusColor = null;
 	public static JTextField ipField = null;
 	public static JTextField portField = null;
-	public static JTextField nicknameField = null;
 	
 	public static JButton connectButton = null;
 	public static JButton disconnectButton = null;
@@ -62,22 +60,29 @@ public class Client implements Runnable {
 	
 	private static IChat chatUI = null;
 
-	// Constuctor /////////////////////////////////////////////////////
+	// Constructor /////////////////////////////////////////////////////
 	
 	private static IAuthenticationInput authenticationInput;
 	IClientAuthenticator clientAuthenticator;
 	private static IColor colorSelection;
 	IEncrypter encryptor;
 	ILogger logger; 
-	IChat chat; 
 	
-	public Client(IAuthenticationInput authenticationInput, IClientAuthenticator clientAuthenticator, IColor colorSelection,IEncrypter encryptor, ILogger logger, IChat chat) {
+	public Client(
+			IAuthenticationInput authenticationInput, 
+			IClientAuthenticator clientAuthenticator, 
+			IColor colorSelection,
+			IEncrypter encryptor, 
+			ILogger logger, 
+			IChat chat
+		) {
 		Client.authenticationInput = authenticationInput;
 		this.clientAuthenticator = clientAuthenticator;
 		Client.colorSelection = colorSelection;
 		this.encryptor = encryptor;
 		this.logger = logger;
-		this.chat = chat;
+		Client.chatUI = chat;
+		tcpObj = this;
 	}
 	/////////////////////////////////////////////////////////////////
 
@@ -87,7 +92,7 @@ public class Client implements Runnable {
 		int gridSize = 6;
 
 		// Create an options pane
-		JPanel optionsPane = new JPanel(new GridLayout(gridSize, 1));
+		optionsPane = new JPanel(new GridLayout(gridSize, 1));
 
 		// IP address input
 		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -135,21 +140,12 @@ public class Client implements Runnable {
 		pane.add(portField);
 		optionsPane.add(pane);
 
-		// Nickname input
-		pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		pane.add(new JLabel("Nickname:"));
-		nicknameField = new JTextField(10);
-		nicknameField.setEditable(true);
-		nicknameField.setText("Guest " + String.valueOf(new Random().nextInt(100)));
-		pane.add(nicknameField);
-		optionsPane.add(pane);
-
 		// Color input
-		pane = colorSelection.createGuiComponent();
+		pane = colorSelection.createGuiComponent(tcpObj);
 		optionsPane.add(pane);
 
 		// Password input
-		pane = authenticationInput.createGuiComponent();
+		pane = authenticationInput.createGuiComponent(tcpObj);
 		optionsPane.add(pane);
 
 		// Host/guest option
@@ -217,15 +213,10 @@ public class Client implements Runnable {
 		mainPane.add(optionsPane, BorderLayout.WEST);
 		
 		// Set up the chat pane
-		ChatGUI gui = new ChatGUI(nicknameField, encrypter, toSend);
-		chatUI = gui;
-		JPanel chatPane = gui.initGUI();
-		chatLine = gui.chatLine;
-		chatText = gui.chatText;
+		JPanel chatPane = chatUI.createGuiComponent(tcpObj);
+		toSend = chatUI.getSendBuffer();
 		mainPane.add(chatPane, BorderLayout.CENTER);
 		
-		chatUI = new ChatCLI();
-
 		// Set up the main frame
 		mainFrame = new JFrame("Simple TCP Chat");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -351,10 +342,7 @@ public class Client implements Runnable {
 			authenticationInput.setEnabled(true);
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
-			nicknameField.setEnabled(true);
-			chatLine.setText("");
-			chatLine.setEnabled(false);
-
+			chatUI.onDisconnected();
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
@@ -363,7 +351,7 @@ public class Client implements Runnable {
 			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			chatLine.setEnabled(false);
+			chatUI.onDisconnecting();
 			statusColor.setBackground(Color.orange);
 			break;
 		case CONNECTED:
@@ -372,8 +360,7 @@ public class Client implements Runnable {
 			authenticationInput.setEnabled(true);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			nicknameField.setEnabled(false);
-			chatLine.setEnabled(true);
+			chatUI.onConnected();
 			statusColor.setBackground(Color.green);
 			break;
 		case BEGIN_CONNECT:
@@ -382,8 +369,7 @@ public class Client implements Runnable {
 			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
-			chatLine.setEnabled(false);
-			chatLine.grabFocus();
+			chatUI.onConnecting();
 			statusColor.setBackground(Color.orange);
 			break;
 		}

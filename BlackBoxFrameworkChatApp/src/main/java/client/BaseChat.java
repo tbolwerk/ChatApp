@@ -2,17 +2,12 @@ package main.java.client;
 
 import javax.swing.JPanel;
 
-public class ChatCLI extends BaseChat {
-	
-	@Override
-	public void append(String s) {
-		System.out.println(s);
-	}
+public class BaseChat implements IChat {
 
 	@Override
 	public JPanel createGuiComponent(Client client) {
 		// TODO Auto-generated method stub
-		return new JPanel();
+		return null;
 	}
 
 	@Override
@@ -36,5 +31,18 @@ public class ChatCLI extends BaseChat {
 	@Override
 	public void onConnecting() {
 		// TODO Auto-generated method stub
+		
 	}
+
+	@Override
+	public void append(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public StringBuffer getSendBuffer() {
+		return new StringBuffer("");
+	}
+
 }

@@ -2,10 +2,12 @@ package main.java.client.component.Authentication;
 
 import javax.swing.JPanel;
 
+import main.java.client.Client;
+
 public class AuthenticationInputStub implements IAuthenticationInput {
 
 	@Override
-	public JPanel createGuiComponent() {
+	public JPanel createGuiComponent(Client client) {
 		return new JPanel();
 	}
 
