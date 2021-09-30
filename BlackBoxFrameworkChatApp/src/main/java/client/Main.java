@@ -18,13 +18,12 @@ public class Main {
 		
 		// Provide features by adding corresponding interfaces
 		
-		IAuthenticationInput ai = new PasswordInput();
-//		IClientAuthenticator ca = new ClientStubAuthenticator();
+//		IAuthenticationInput ai = new PasswordInput();
+		IAuthenticationInput ai = new AuthenticationInputStub();
 		
 		IClientAuthenticator ca = new ClientPasswordAuthenticator(); 
 //		IClientAuthenticator ca = new ClientStubAuthenticator();
 
-		
 		IColor cs = new ColorSelectionStub();
 //		IColor cs = new ColorSelection();
 		
@@ -34,9 +33,10 @@ public class Main {
 //		ILogger l = new LoggerStub();
 		ILogger l = new Logger();
 		
-		IChat gc = new ChatGUI(cs, e);
-		IChat c = new ChatCLI();
-		Client client = new Client(ai, ca, cs, e, l, gc);
+		IChat c = new ChatGUI(cs, e);
+//		IChat c = new ChatCLI();
+
+		Client client = new Client(ai, ca, cs, e, l, c);
 		client.start();
 	}
 	

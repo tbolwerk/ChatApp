@@ -1,5 +1,6 @@
 package main.java.spl;
 import main.java.client.ILogger;
+import main.java.client.LoggerStub;
 import main.java.client.component.Authentication.IServerAuthenticator;
 import main.java.client.component.Authentication.ServerPasswordAuthenticator;
 import main.java.client.component.Authentication.ServerStubAuthenticator;
@@ -11,6 +12,7 @@ public class Main {
 //		IServerAuthenticator auth = new ServerStubAuthenticator();
 		
 		ILogger log = new Logger();
+//		ILogger log = new LoggerStub();
 		
 		Server server = new Server(auth, log);
 		server.start();
