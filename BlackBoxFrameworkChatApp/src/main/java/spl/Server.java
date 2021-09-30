@@ -34,14 +34,13 @@ class Server {
 
 	public void start() {
 		try {
-
 			System.out.println("Starting listening on port: " + 1234);
 			hostServer = new ServerSocket(1234);
 
 			while (true) {
 				socket = hostServer.accept();
 				socketPool.add(socket);
-				new EchoThread(socket, socketPool).start();
+				new EchoThread(socket, socketPool, this.logger, this.serverAuthenticator).start();
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

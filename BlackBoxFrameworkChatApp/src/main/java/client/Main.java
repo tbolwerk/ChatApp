@@ -17,7 +17,10 @@ public class Main {
 		// Provide features by adding corresponding interfaces
 		
 		IAuthenticationInput ai = new PasswordInput();
-		IClientAuthenticator ca = new ClientStubAuthenticator(); // new ClientPasswordAuthenticator(); 
+//		IClientAuthenticator ca = new ClientStubAuthenticator();
+		IClientAuthenticator ca = new ClientPasswordAuthenticator(); 
+
+		
 		IColor cs = new ColorSelectionStub();
 		IEncrypter e = new Encrypter(); // new EncrypterStub(); 
 		ILogger l = new LoggerStub();

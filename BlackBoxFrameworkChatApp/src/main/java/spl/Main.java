@@ -7,7 +7,9 @@ import main.java.spl.Server;
 
 public class Main {
 	public static void main(String args[]) {
-		IServerAuthenticator auth = new ServerStubAuthenticator(); // new ServerPasswordAuthenticator();
+		IServerAuthenticator auth = new ServerPasswordAuthenticator();
+//		IServerAuthenticator auth = new ServerStubAuthenticator();
+		
 		ILogger log = new Logger();
 		
 		Server server = new Server(auth, log);
