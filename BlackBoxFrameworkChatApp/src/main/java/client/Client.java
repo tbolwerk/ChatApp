@@ -339,36 +339,36 @@ public class Client implements Runnable {
 		case DISCONNECTED:
 			connectButton.setEnabled(true);
 			disconnectButton.setEnabled(false);
-			authenticationInput.setEnabled(true);
 			ipField.setEnabled(true);
 			portField.setEnabled(true);
+			authenticationInput.onDisconnected();
 			chatUI.onDisconnected();
 			statusColor.setBackground(Color.red);
 			break;
 		case DISCONNECTING:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
+			authenticationInput.onDisconnecting();
 			chatUI.onDisconnecting();
 			statusColor.setBackground(Color.orange);
 			break;
 		case CONNECTED:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(true);
-			authenticationInput.setEnabled(true);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
+			authenticationInput.onConnected();
 			chatUI.onConnected();
 			statusColor.setBackground(Color.green);
 			break;
 		case BEGIN_CONNECT:
 			connectButton.setEnabled(false);
 			disconnectButton.setEnabled(false);
-			authenticationInput.setEnabled(false);
 			ipField.setEnabled(false);
 			portField.setEnabled(false);
+			authenticationInput.onConnecting();
 			chatUI.onConnecting();
 			statusColor.setBackground(Color.orange);
 			break;

@@ -11,10 +11,13 @@ public class ColorSelection implements IGUIComponent, IColor {
 	String[] colorNames = { "blue", "red", "green" };
 	private JTextArea chatText = null;
 	
-	public ColorSelection(JTextArea chatText) {
-		this.chatText = chatText;
+	public ColorSelection() {
 	}
 
+	public void setChatText(JTextArea text) {
+		this.chatText = text;
+	}
+	
 	public JPanel createGuiComponent(Client client) {
 		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Color: "));
@@ -52,7 +55,7 @@ public class ColorSelection implements IGUIComponent, IColor {
 	
 	// Actions
 	private ActionAdapter selectActionAdapter = new ActionAdapter() {
-		public void actionPreformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox)e.getSource();
 			Color selectedItem = nameToCode((String)cb.getSelectedItem());
 			if (chatText != null) {

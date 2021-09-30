@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import main.java.client.component.ActionAdapter;
+import main.java.client.component.IColor;
 
 public class ChatGUI extends BaseChat {
 
@@ -24,8 +25,10 @@ public class ChatGUI extends BaseChat {
 	
 	private static JTextField nicknameField;
 	private IEncrypter encrypter;
-
-	public ChatGUI(IEncrypter encrypter) {
+	private IColor color;
+	
+	public ChatGUI(IColor color, IEncrypter encrypter) {
+		this.color = color;
 		this.encrypter = encrypter;
 	}
 	
@@ -60,6 +63,9 @@ public class ChatGUI extends BaseChat {
 		chatText.setForeground(Color.BLUE);
 		JScrollPane chatTextPane = new JScrollPane(chatText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		this.color.setChatText(chatText);
+
 		chatLine = new JTextField();
 		chatLine.setEnabled(false);
 		chatLine.addActionListener(new ActionAdapter() {

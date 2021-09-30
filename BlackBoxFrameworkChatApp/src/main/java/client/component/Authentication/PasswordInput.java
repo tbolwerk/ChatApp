@@ -21,10 +21,10 @@ public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	public JPanel createGuiComponent(Client client) {
 		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Password:"));
-		passwordField = new JTextField(10);
-		passwordField.setEditable(true);
-		passwordField.addActionListener(this.createAdapter(client));
-		pane.add(passwordField);
+		this.passwordField = new JTextField(10);
+		this.passwordField.setEditable(true);
+		this.passwordField.addActionListener(this.createAdapter(client));
+		pane.add(this.passwordField);
 		return pane;
 	}
 	
@@ -33,7 +33,9 @@ public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	}
 
 	public void setEnabled(boolean b) {
-		passwordField.setEnabled(b);
+		System.out.println("HI IM ENABLING");
+		System.out.println(b);
+		this.passwordField.setEnabled(b);
 	}
 	
 	// Actions
@@ -45,6 +47,28 @@ public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 				client.sendString(PWDPREFIX + field.getText());
 			}
 		};
+	}
+
+	@Override
+	public void onDisconnected() {
+		passwordField.setEnabled(true);
+		
+	}
+
+	@Override
+	public void onDisconnecting() {
+		passwordField.setEnabled(false);
+	}
+
+	@Override
+	public void onConnected() {
+		passwordField.setEnabled(false);
+		
+	}
+
+	@Override
+	public void onConnecting() {
+		passwordField.setEnabled(false);
 	}
 
 	

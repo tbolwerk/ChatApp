@@ -1,6 +1,7 @@
 package main.java.client;
 
 import main.java.client.Client;
+import main.java.client.component.ColorSelection;
 import main.java.client.component.ColorSelectionStub;
 import main.java.client.component.IColor;
 import main.java.client.component.Authentication.AuthenticationInputStub;
@@ -9,6 +10,7 @@ import main.java.client.component.Authentication.ClientStubAuthenticator;
 import main.java.client.component.Authentication.IAuthenticationInput;
 import main.java.client.component.Authentication.IClientAuthenticator;
 import main.java.client.component.Authentication.PasswordInput;
+import main.java.spl.Logger;
 
 public class Main {
 	
@@ -18,14 +20,20 @@ public class Main {
 		
 		IAuthenticationInput ai = new PasswordInput();
 //		IClientAuthenticator ca = new ClientStubAuthenticator();
+		
 		IClientAuthenticator ca = new ClientPasswordAuthenticator(); 
+//		IClientAuthenticator ca = new ClientStubAuthenticator();
 
 		
-		IColor cs = new ColorSelectionStub();
-		IEncrypter e = new Encrypter(); // new EncrypterStub(); 
-		ILogger l = new LoggerStub();
+//		IColor cs = new ColorSelectionStub();
+		IColor cs = new ColorSelection();
 		
-		IChat gc = new ChatGUI(e);
+		IEncrypter e = new Encrypter(); // new EncrypterStub(); 
+		
+//		ILogger l = new LoggerStub();
+		ILogger l = new Logger();
+		
+		IChat gc = new ChatGUI(cs, e);
 		IChat c = new ChatCLI();
 		Client client = new Client(ai, ca, cs, e, l, gc);
 		client.start();
