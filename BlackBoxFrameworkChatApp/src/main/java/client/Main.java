@@ -25,10 +25,11 @@ public class Main {
 //		IClientAuthenticator ca = new ClientStubAuthenticator();
 
 		
-//		IColor cs = new ColorSelectionStub();
-		IColor cs = new ColorSelection();
+		IColor cs = new ColorSelectionStub();
+//		IColor cs = new ColorSelection();
 		
-		IEncrypter e = new Encrypter(); // new EncrypterStub(); 
+//		IEncrypter e = new Encrypter();
+		IEncrypter e = new EncrypterStub();
 		
 //		ILogger l = new LoggerStub();
 		ILogger l = new Logger();

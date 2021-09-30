@@ -56,7 +56,7 @@ public class Client implements Runnable {
 	public static BufferedReader in = null;
 	public static PrintWriter out = null;
 
-	private static Encrypter encrypter = new Encrypter();
+	private static IEncrypter encrypter;
 	
 	private static IChat chatUI = null;
 
@@ -65,21 +65,20 @@ public class Client implements Runnable {
 	private static IAuthenticationInput authenticationInput;
 	IClientAuthenticator clientAuthenticator;
 	private static IColor colorSelection;
-	IEncrypter encryptor;
 	ILogger logger; 
 	
 	public Client(
 			IAuthenticationInput authenticationInput, 
 			IClientAuthenticator clientAuthenticator, 
 			IColor colorSelection,
-			IEncrypter encryptor, 
+			IEncrypter encrypter, 
 			ILogger logger, 
 			IChat chat
 		) {
 		Client.authenticationInput = authenticationInput;
 		this.clientAuthenticator = clientAuthenticator;
 		Client.colorSelection = colorSelection;
-		this.encryptor = encryptor;
+		Client.encrypter = encrypter;
 		this.logger = logger;
 		Client.chatUI = chat;
 		tcpObj = this;
