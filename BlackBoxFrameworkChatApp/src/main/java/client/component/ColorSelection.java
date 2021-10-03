@@ -4,16 +4,21 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
+import main.java.client.Client;
+
 public class ColorSelection implements IGUIComponent, IColor {
 	int startIndex = 0;
 	String[] colorNames = { "blue", "red", "green" };
 	private JTextArea chatText = null;
 	
-	public ColorSelection(JTextArea chatText) {
-		this.chatText = chatText;
+	public ColorSelection() {
 	}
 
-	public JPanel createGuiComponent() {
+	public void setChatText(JTextArea text) {
+		this.chatText = text;
+	}
+	
+	public JPanel createGuiComponent(Client client) {
 		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Color: "));
 		JComboBox colorSelectionBox = new JComboBox(colorNames);
@@ -50,7 +55,7 @@ public class ColorSelection implements IGUIComponent, IColor {
 	
 	// Actions
 	private ActionAdapter selectActionAdapter = new ActionAdapter() {
-		public void actionPreformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox)e.getSource();
 			Color selectedItem = nameToCode((String)cb.getSelectedItem());
 			if (chatText != null) {

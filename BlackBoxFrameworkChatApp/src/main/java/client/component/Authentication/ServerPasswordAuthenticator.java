@@ -11,13 +11,15 @@ public class ServerPasswordAuthenticator implements IServerAuthenticator {
 		return message.startsWith(PWDPREFIX);
 	}
 	
-	public void authenticate(String passwordSubmission, DataOutputStream out) throws IOException {
+	public boolean authenticate(String passwordSubmission, DataOutputStream out) throws IOException {
 		if (passwordSubmission.equals(PWDPREFIX + PWD)) {
 			out.writeBytes("Correct\n\r");
 			out.flush();
+			return true;
 		} else {
 			out.writeBytes("Incorrect\n\r");
 			out.flush();
+			return false;
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.net.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
+import main.java.client.ILogger;
 import main.java.client.component.Authentication.IServerAuthenticator;
 
 class Server {
@@ -23,8 +24,8 @@ class Server {
 	
 	/// Constructor////////////////////////////////
 	
-	ILogger logger;
-	IServerAuthenticator serverAuthenticator;
+	private ILogger logger;
+	private IServerAuthenticator serverAuthenticator;
 	
 	public Server(IServerAuthenticator serverAuthenticator, ILogger logger) {
 		this.serverAuthenticator = serverAuthenticator;
@@ -33,14 +34,13 @@ class Server {
 
 	public void start() {
 		try {
-
 			System.out.println("Starting listening on port: " + 1234);
 			hostServer = new ServerSocket(1234);
 
 			while (true) {
 				socket = hostServer.accept();
 				socketPool.add(socket);
-				new EchoThread(socket, socketPool).start();
+				new EchoThread(socket, socketPool, this.logger, this.serverAuthenticator).start();
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -3,7 +3,9 @@ package main.java.spl;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Logger {
+import main.java.client.ILogger;
+
+public class Logger implements ILogger {
 
 	public void log(String filename, String text) {
 		try {

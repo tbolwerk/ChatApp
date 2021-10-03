@@ -14,19 +14,17 @@ import main.java.client.component.IGUIComponent;
 public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	public final static String PWDPREFIX = "/PWDMSG/";
 	private JTextField passwordField;
-	private Client client;
 	
-	public PasswordInput(Client client) {
-		this.client = client;
+	public PasswordInput() {
 	}
 	
-	public JPanel createGuiComponent() {
+	public JPanel createGuiComponent(Client client) {
 		JPanel pane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pane.add(new JLabel("Password:"));
-		passwordField = new JTextField(10);
-		passwordField.setEditable(true);
-		passwordField.addActionListener(sendPasswordAction);
-		pane.add(passwordField);
+		this.passwordField = new JTextField(10);
+		this.passwordField.setEditable(true);
+		this.passwordField.addActionListener(this.createAdapter(client));
+		pane.add(this.passwordField);
 		return pane;
 	}
 	
@@ -35,14 +33,43 @@ public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	}
 
 	public void setEnabled(boolean b) {
-		passwordField.setEnabled(b);
+		System.out.println("HI IM ENABLING");
+		System.out.println(b);
+		this.passwordField.setEnabled(b);
 	}
 	
 	// Actions
-	ActionAdapter sendPasswordAction = new ActionAdapter() {
-		public void actionPreformed(ActionEvent e) {
-			JTextField field = (JTextField) e.getSource();
-			client.sendString(PWDPREFIX + field.getText());
-		}
-	};
+	
+	private ActionAdapter createAdapter(Client client) {
+		return new ActionAdapter() {
+			public void actionPerformed(ActionEvent e) {
+				JTextField field = (JTextField) e.getSource();
+				client.sendString(PWDPREFIX + field.getText());
+			}
+		};
+	}
+
+	@Override
+	public void onDisconnected() {
+		passwordField.setEnabled(true);
+		
+	}
+
+	@Override
+	public void onDisconnecting() {
+		passwordField.setEnabled(false);
+	}
+
+	@Override
+	public void onConnected() {
+		passwordField.setEnabled(false);
+		
+	}
+
+	@Override
+	public void onConnecting() {
+		passwordField.setEnabled(false);
+	}
+
+	
 }

@@ -8,18 +8,26 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import main.java.client.ILogger;
 import main.java.client.component.Authentication.IServerAuthenticator;
 import main.java.client.component.Authentication.ServerPasswordAuthenticator;
 
 public class EchoThread extends Thread {
 	protected Socket socket;
 	protected ArrayList<Socket> others;
-	private Logger logger = new Logger();
-	private IServerAuthenticator authenticator = new ServerPasswordAuthenticator();
+	private ILogger logger;
+	private IServerAuthenticator authenticator;
 	
-	public EchoThread(Socket clientSocket, ArrayList<Socket> others) {
+	public EchoThread(
+			Socket clientSocket,
+			ArrayList<Socket> others,
+			ILogger logger,
+			IServerAuthenticator authenticator
+			) {
 		this.socket = clientSocket;
 		this.others = others;
+		this.logger = logger;
+		this.authenticator = authenticator;
 	}
 
 	public void run() {
@@ -45,7 +53,9 @@ public class EchoThread extends Thread {
 				} 
 				else if (authenticator.shouldAuthenticate(line)) {
 					out = new DataOutputStream(socket.getOutputStream());
-					authenticator.authenticate(line, out);
+					if (!authenticator.authenticate(line, out)) {
+						others.remove(socket);
+					}
 				} 
 				else {
 					// Send messages to other sockets

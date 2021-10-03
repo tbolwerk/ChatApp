@@ -5,5 +5,5 @@ import java.io.IOException;
 
 public interface IServerAuthenticator {
 	public boolean shouldAuthenticate(String message);
-	public void authenticate(String proof, DataOutputStream out) throws IOException;
+	public boolean authenticate(String proof, DataOutputStream out) throws IOException;
 }
