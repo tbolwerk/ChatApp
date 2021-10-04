@@ -14,18 +14,19 @@ import main.java.spl.Logger;
 
 public class Main {
 	
+	final static boolean hasAuth = false;
+	
 	public static void main(String args[]) {
-		
-		// Provide features by adding corresponding interfaces
-		
-//		IAuthenticationInput ai = new PasswordInput();
 		IAuthenticationInput ai = new AuthenticationInputStub();
-		
-		IClientAuthenticator ca = new ClientPasswordAuthenticator(); 
-//		IClientAuthenticator ca = new ClientStubAuthenticator();
-
-		IColor cs = new ColorSelectionStub();
-//		IColor cs = new ColorSelection();
+		IClientAuthenticator ca = new ClientStubAuthenticator();
+		// Provide features by adding corresponding interfaces
+		if(hasAuth) {
+			  ai = new PasswordInput();
+			  ca = new ClientPasswordAuthenticator(); 
+		}
+	
+//		IColor cs = new ColorSelectionStub();
+		IColor cs = new ColorSelection();
 		
 //		IEncrypter e = new Encrypter();
 		IEncrypter e = new EncrypterStub();
