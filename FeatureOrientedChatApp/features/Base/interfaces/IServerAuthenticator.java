@@ -1,5 +1,4 @@
-package main.java.client.component.Authentication;
-
+package Base.interfaces;
 import java.io.DataOutputStream;
 import java.io.IOException;
 

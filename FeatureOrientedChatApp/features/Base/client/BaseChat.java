@@ -1,4 +1,6 @@
-package client;
+package Base.client;
+
+import Base.interfaces.IChat;
 
 import javax.swing.JPanel;
 

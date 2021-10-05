@@ -1,4 +1,6 @@
-package main.java.client.component.Authentication;
+package Base.stubs;
+
+import Base.interfaces.IServerAuthenticator;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

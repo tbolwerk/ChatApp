@@ -1,10 +1,14 @@
-package main.java.client.component;
+package Color.client;
 
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
-import main.java.client.Client;
+import Base.client.ActionAdapter;
+import Base.client.Client;
+import Base.interfaces.IColor;
+import Base.interfaces.IGUIComponent;
+
 
 public class ColorSelection implements IGUIComponent, IColor {
 	int startIndex = 0;

@@ -1,4 +1,6 @@
-package main.java.client.component.Authentication;
+package Base.stubs;
+
+import Base.interfaces.IClientAuthenticator;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;

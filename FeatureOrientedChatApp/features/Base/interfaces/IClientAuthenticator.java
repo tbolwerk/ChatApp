@@ -1,5 +1,4 @@
-package main.java.client.component.Authentication;
-
+package Base.interfaces;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;

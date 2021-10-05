@@ -1,8 +1,9 @@
-package main.java.client.component.Authentication;
+package Authentication.client;
+
+import Base.client.Client;
 
 import javax.swing.JPanel;
 
-import main.java.client.Client;
 
 public class AuthenticationInputStub implements IAuthenticationInput {
 

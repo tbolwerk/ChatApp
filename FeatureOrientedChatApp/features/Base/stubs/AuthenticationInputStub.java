@@ -1,8 +1,10 @@
-package main.java.client.component.Authentication;
+package Base.stubs;
 
 import javax.swing.JPanel;
 
-import main.java.client.Client;
+import Base.interfaces.IAuthenticationInput;
+import Base.client.Client;
+
 
 public class AuthenticationInputStub implements IAuthenticationInput {
 

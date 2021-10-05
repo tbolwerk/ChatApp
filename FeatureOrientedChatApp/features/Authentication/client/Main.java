@@ -1,4 +1,4 @@
-package client;
+package Authentication.client;
 
 /**
  * TODO description

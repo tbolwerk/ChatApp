@@ -1,5 +1,8 @@
 package main.java.client;
 
+import Base.client.BaseChat;
+import Base.client.Client;
+
 import javax.swing.JPanel;
 
 public class ChatCLI extends BaseChat {

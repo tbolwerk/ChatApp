@@ -1,4 +1,4 @@
-package client;
+package GUI.client;
 
 /**
  * TODO description

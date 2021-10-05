@@ -1,4 +1,4 @@
-package main.java.client.component;
+package Base.interfaces;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;

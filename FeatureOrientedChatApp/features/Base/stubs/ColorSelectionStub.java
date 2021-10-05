@@ -1,9 +1,12 @@
-package main.java.client.component;
+package Base.stubs;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import main.java.client.Client;
+import Base.client.Client;
+import Base.interfaces.IColor;
+
+
 
 public class ColorSelectionStub implements IColor {
 

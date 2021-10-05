@@ -1,8 +1,8 @@
-package main.java.client.component;
+package Base.interfaces;
+
+import Base.client.Client;
 
 import javax.swing.JPanel;
-
-import main.java.client.Client;
 
 public interface IGUIComponent {
 	public JPanel createGuiComponent(Client client);

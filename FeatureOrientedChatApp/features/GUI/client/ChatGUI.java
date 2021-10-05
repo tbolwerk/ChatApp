@@ -1,4 +1,4 @@
-package main.java.client;
+package GUI.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,8 +13,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import Base.client.BaseChat;
+import Base.client.Client;
+import Base.interfaces.IColor;
+import Base.interfaces.IEncrypter;
 import main.java.client.component.ActionAdapter;
-import main.java.client.component.IColor;
 
 public class ChatGUI extends BaseChat {
 

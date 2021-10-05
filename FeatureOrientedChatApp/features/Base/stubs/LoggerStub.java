@@ -1,4 +1,6 @@
-package main.java.client;
+package Base.stubs;
+
+import Base.interfaces.ILogger;
 
 public class LoggerStub implements ILogger {
 

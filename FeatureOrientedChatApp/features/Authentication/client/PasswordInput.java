@@ -1,4 +1,4 @@
-package main.java.client.component.Authentication;
+package Authentication.client;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -7,9 +7,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import main.java.client.Client;
-import main.java.client.component.ActionAdapter;
-import main.java.client.component.IGUIComponent;
+import Base.client.ActionAdapter;
+import Base.client.Client;
+import Base.interfaces.IAuthenticationInput;
+import Base.interfaces.IGUIComponent;
 
 public class PasswordInput implements IGUIComponent, IAuthenticationInput {
 	public final static String PWDPREFIX = "/PWDMSG/";

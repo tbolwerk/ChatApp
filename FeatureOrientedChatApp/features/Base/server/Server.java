@@ -1,12 +1,13 @@
-package main.java.spl;
+package Base.server;
+
+import Base.interfaces.ILogger;
+import Base.interfaces.IServerAuthenticator;
 
 import java.io.*;
 import java.net.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
-import main.java.client.ILogger;
-import main.java.client.component.Authentication.IServerAuthenticator;
 
 class Server {
 

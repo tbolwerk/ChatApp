@@ -1,6 +1,4 @@
-package main.java.client;
-
-import main.java.client.component.IGUIComponent;
+package Base.interfaces;
 
 public interface IChat extends IGUIComponent, IGUIStateComponent {
 	public void append(String s);
