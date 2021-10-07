@@ -21,12 +21,18 @@ public class Main {
 		return ca;
 	}	
 	
+	protected static IColor initColor() {
+		IColor c = new ColorSelectionStub();
+		
+		return c;
+	}
+	
 	public static void main(String args[]) {
 		IAuthenticationInput ai = initAuthenticationInput();
 		IClientAuthenticator ca = initClientAuthenticator();
 		// Provide features by adding corresponding interfaces
 
-		IColor cs = new ColorSelectionStub();
+		IColor cs = initColor();
 //		IColor cs = new ColorSelection();
 		
 //		IEncrypter e = new Encrypter();

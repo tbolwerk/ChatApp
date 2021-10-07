@@ -6,4 +6,5 @@
 	<feature automatic="unselected" name="CLI"/>
 	<feature manual="selected" name="GUI"/>
 	<feature manual="selected" name="Authentication"/>
+	<feature manual="selected" name="Color"/>
 </configuration>

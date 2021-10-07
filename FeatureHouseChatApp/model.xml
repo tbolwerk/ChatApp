@@ -16,6 +16,7 @@
 					<feature name="GUI"/>
 				</alt>
 				<feature name="Authentication"/>
+				<feature name="Color"/>
 			</and>
 		</and>
 	</struct>
