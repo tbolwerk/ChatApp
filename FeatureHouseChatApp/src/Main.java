@@ -36,6 +36,13 @@ public   class  Main {
 	}
 
 	
+	protected static IEncrypter initEncrypter  () {
+		IEncrypter e = new Encrypter();
+		
+		return e;
+	}
+
+	
 	
 	public static void main(String args[]) {
 		IAuthenticationInput ai = initAuthenticationInput();
@@ -46,7 +53,7 @@ public   class  Main {
 //		IColor cs = new ColorSelection();
 		
 //		IEncrypter e = new Encrypter();
-		IEncrypter e = new EncrypterStub();
+		IEncrypter e = initEncrypter();
 		
 		ILogger l = new LoggerStub();
 //		ILogger l = new Logger();

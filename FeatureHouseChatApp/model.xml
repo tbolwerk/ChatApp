@@ -17,6 +17,7 @@
 				</alt>
 				<feature name="Authentication"/>
 				<feature name="Color"/>
+				<feature name="Encryption"/>
 			</and>
 		</and>
 	</struct>
