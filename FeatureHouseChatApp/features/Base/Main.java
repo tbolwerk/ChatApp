@@ -3,6 +3,10 @@ public class Main {
 	
 	final static boolean hasAuth = false;
 	
+	protected static INotifier initNotifier() {
+		INotifier n = new NotifierStub();
+		return n;
+	}
 	
 	protected static IChat initGUI(IColor cs,IEncrypter e) {
 		IChat gui = null;
@@ -49,8 +53,10 @@ public class Main {
 		
 		IChat c = initGUI(cs, e);
 //		IChat c = new ChatCLI();
+		
+		INotifier n = initNotifier();
 
-		Client client = new Client(ai, ca, cs, e, l, c);
+		Client client = new Client(ai, ca, cs, e, l, c, n);
 		client.start();
 	}
 	
