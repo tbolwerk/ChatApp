@@ -18,6 +18,7 @@
 				<feature name="Authentication"/>
 				<feature name="Color"/>
 				<feature name="Encryption"/>
+				<feature name="Notifier"/>
 			</and>
 		</and>
 	</struct>

@@ -125,6 +125,9 @@ public  class  Client  implements Runnable {
 	ILogger logger;
 
 	 
+	INotifier notifier;
+
+	
 	
 	public Client(
 			IAuthenticationInput authenticationInput, 
@@ -132,13 +135,15 @@ public  class  Client  implements Runnable {
 			IColor colorSelection,
 			IEncrypter encrypter, 
 			ILogger logger, 
-			IChat chat
+			IChat chat,
+			INotifier notifier
 		) {
 		Client.authenticationInput = authenticationInput;
 		this.clientAuthenticator = clientAuthenticator;
 		Client.colorSelection = colorSelection;
 		Client.encrypter = encrypter;
 		this.logger = logger;
+		this.notifier = notifier;
 		Client.chatUI = chat;
 		tcpObj = this;
 	}
@@ -500,6 +505,7 @@ public  class  Client  implements Runnable {
 				try {
 					// Send data
 					if (toSend.length() != 0) {
+						notifier.doNotify();
 						out.print(toSend);
 						out.flush();
 						toSend.setLength(0);
@@ -518,6 +524,7 @@ public  class  Client  implements Runnable {
 							// Otherwise, receive what text
 							else {
 								logger.log("client_log.txt", s);
+								notifier.doNotify();
 								String content = s;
 								content = encrypter.encrypt(s);
 								appendToChatBox(content + "\n");
