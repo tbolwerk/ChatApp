@@ -1,10 +1,13 @@
 /**
  * TODO description
  */
+
+
+
 public   class  Main {
 	
 	
-	final static boolean hasAuth  = false;
+	final static boolean hasAuth = false;
 
 	
 	protected static IChat initGUI  (IColor cs,IEncrypter e) {
@@ -14,30 +17,31 @@ public   class  Main {
 
 	
 	
-	
-	protected static IAuthenticationInput initAuthenticationInput  () {
-		IAuthenticationInput ai = new PasswordInput();
+	protected static IAuthenticationInput initAuthenticationInput() {
+		IAuthenticationInput ai = new AuthenticationInputStub();
 		
 		return ai;
 	}
 
 	
-	protected static IClientAuthenticator initClientAuthenticator  () {
-		IClientAuthenticator ca = new ClientPasswordAuthenticator();
+	protected static IClientAuthenticator initClientAuthenticator() {
+		IClientAuthenticator ca = new ClientStubAuthenticator();
 		
 		return ca;
 	}
 
+		
 	
-	protected static IColor initColor  () {
-		IColor c = new ColorSelection();
+	protected static IColor initColor() {
+		IColor c = new ColorSelectionStub();
 		
 		return c;
 	}
 
 	
-	protected static IEncrypter initEncrypter  () {
-		IEncrypter e = new Encrypter();
+	
+	protected static IEncrypter initEncrypter() {
+		IEncrypter e = new EncrypterStub();
 		
 		return e;
 	}
