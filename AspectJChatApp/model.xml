@@ -10,7 +10,6 @@
 	</properties>
 	<struct>
 		<and abstract="true" mandatory="true" name="AspectJChatApp">
-			<feature name="Base"/>
 			<feature name="Logging"/>
 		</and>
 	</struct>
