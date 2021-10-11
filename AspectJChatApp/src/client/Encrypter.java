@@ -1,12 +1,11 @@
-public  class  Encrypter  implements IEncrypter {
-	
+package client;
+
+public class Encrypter {
 	public String encrypt(String message) {
 		String msg = rot13(message);
 		msg = reverseMessage(msg);
 		return msg;
 	}
-
-	
 	
 	private String rot13(String message) {
 		System.out.println("Encrypting: " + message);
@@ -22,8 +21,6 @@ public  class  Encrypter  implements IEncrypter {
 		}
 		return String.valueOf(rot13Chars);
 	}
-
-	
 	
 	private String reverseMessage(String message) {
 		char[] chars = message.toCharArray();
@@ -33,6 +30,4 @@ public  class  Encrypter  implements IEncrypter {
 		}
 		return String.valueOf(reverseChars);
 	}
-
-
 }
