@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/Header';
 import SoundForm from './features/mp3/components/SoundForm/SoundForm';
+import SoundContainer from './features/play-control/components/SoundContainer/SoundContainer';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         title={'Soundboard'}
       />
       <SoundForm />
+      <SoundContainer />
     </div>
   );
 }
