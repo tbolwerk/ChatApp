@@ -3,7 +3,7 @@ import { createFeature, fassetValidations } from 'feature-u';
 
 import _baseUI from './feature';
 
-import MainLayout from './comp/MainLayout';
+import MainLayout from './component/MainLayout';
 
 export default createFeature({
   name: 'baseUI',
