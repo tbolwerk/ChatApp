@@ -1,4 +1,3 @@
 export interface IDataObject {
-    id: string;
-  }
-  
+  id: string;
+}
