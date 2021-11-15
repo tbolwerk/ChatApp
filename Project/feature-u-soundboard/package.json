@@ -43,6 +43,7 @@
     "lint": "eslint --ext .tsx --ext .ts src/",
     "format": "prettier --check ./src",
     "pretty": "prettier --write ./src",
+    "model": "tplant -A -i src/interfaces/**/*.ts -o models/model.svg",
     "clean": "yarn rimraf node_modules"
   },
   "eslintConfig": {
