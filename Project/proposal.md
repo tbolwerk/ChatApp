@@ -1,4 +1,4 @@
-# Proposal: Soundboard app software product line refactor
+# Proposal: Soundboard app software product line
 *Written by: Twan, Tuan-anh and Stef*
 
 In this document we propose our subject for the final project of software product lines. In this proposal we want to create a new project from scratch with a feature oriented approach.
