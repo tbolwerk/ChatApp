@@ -1,22 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from 'react';
 import './App.css';
-import Header from './components/Header';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </header>
-      <Header
-        sections={[
-          { title: 'categories', url: '#' },
-          { title: 'theme', url: '#' },
-        ]}
-        title={'Soundboard'}
-      />
-    </div>
-  );
-}
+import ReactDOM from 'react-dom';
+import { launchApp } from 'feature-u';
+import features from './features';
+// import aspects      from 'aspects';
+// import {splash}     from 'util/SplashScreen';
 
-export default App;
+// launch our app, exposing the Fassets object (facilitating cross-feature-communication)
+export default launchApp({
+  // *4*
+
+  features, // *1*
+  // aspects,                         // *2*
+
+  registerRootAppElm(rootAppElm: React.DOMElement<React.DOMAttributes<Element>, Element>) {
+    // *3*
+    ReactDOM.render(rootAppElm, document.getElementById('root'));
+  },
+
+  // showStatus(msg='', err=null) {   // *5*
+  // splash(msg, err);
+  // },
+});
