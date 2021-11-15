@@ -13,10 +13,11 @@
 			<and name="Base">
 				<alt abstract="true" mandatory="true" name="UI">
 					<feature name="CLI"/>
-					<feature name="GUI"/>
+					<and name="GUI">
+						<feature name="Color"/>
+					</and>
 				</alt>
 				<feature name="Authentication"/>
-				<feature name="Color"/>
 				<feature name="Encryption"/>
 				<feature name="Notifier"/>
 			</and>

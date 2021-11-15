@@ -41,19 +41,10 @@ public class Main {
 		IAuthenticationInput ai = initAuthenticationInput();
 		IClientAuthenticator ca = initClientAuthenticator();
 		// Provide features by adding corresponding interfaces
-
 		IColor cs = initColor();
-//		IColor cs = new ColorSelection();
-		
-//		IEncrypter e = new Encrypter();
 		IEncrypter e = initEncrypter();
-		
 		ILogger l = new LoggerStub();
-//		ILogger l = new Logger();
-		
-		IChat c = initGUI(cs, e);
-//		IChat c = new ChatCLI();
-		
+		IChat c = initGUI(cs, e);	
 		INotifier n = initNotifier();
 
 		Client client = new Client(ai, ca, cs, e, l, c, n);

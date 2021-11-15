@@ -3,10 +3,10 @@
 	<feature automatic="selected" name="FeatureHouseChatApp"/>
 	<feature automatic="selected" manual="selected" name="Base"/>
 	<feature automatic="selected" name="UI"/>
-	<feature automatic="unselected" name="CLI"/>
-	<feature manual="selected" name="GUI"/>
-	<feature manual="selected" name="Authentication"/>
-	<feature manual="selected" name="Color"/>
-	<feature manual="selected" name="Encryption"/>
-	<feature manual="selected" name="Notifier"/>
+	<feature manual="selected" name="CLI"/>
+	<feature automatic="unselected" name="GUI"/>
+	<feature name="Color"/>
+	<feature name="Authentication"/>
+	<feature name="Encryption"/>
+	<feature name="Notifier"/>
 </configuration>
