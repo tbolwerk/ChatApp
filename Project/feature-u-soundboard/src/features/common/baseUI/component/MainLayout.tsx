@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
-
+import { Grid } from '@mui/material';
+import MediaControlCard from '../../../categories/component/MediaControlCard';
 export default function MainLayout({ children }) {
   return (
     <div className="App">
@@ -14,7 +15,7 @@ export default function MainLayout({ children }) {
         ]}
         title={'Soundboard'}
       />
-      {/* {children} */}
+      {children}
     </div>
   );
 }

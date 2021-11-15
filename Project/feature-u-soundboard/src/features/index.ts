@@ -1,2 +1,4 @@
 import baseUI from './common/baseUI/feature';
-export default [baseUI];
+import categories from './categories/feature';
+
+export default [categories, baseUI];
