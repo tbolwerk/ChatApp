@@ -10,17 +10,14 @@ import features from './features';
 
 // launch our app, exposing the Fassets object (facilitating cross-feature-communication)
 export default launchApp({
-  // *4*
-
-  features, // *1*
-  // aspects,                         // *2*
+  features,
+  // aspects,
 
   registerRootAppElm(rootAppElm: React.DOMElement<React.DOMAttributes<Element>, Element>) {
-    // *3*
     ReactDOM.render(rootAppElm, document.getElementById('root'));
   },
 
-  // showStatus(msg='', err=null) {   // *5*
+  // showStatus(msg='', err=null) {
   // splash(msg, err);
   // },
 });
