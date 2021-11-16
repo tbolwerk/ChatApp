@@ -5,6 +5,10 @@ import './App.css';
 import ReactDOM from 'react-dom';
 import { launchApp } from 'feature-u';
 import features from './features';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 // import aspects      from 'aspects';
 // import {splash}     from 'util/SplashScreen';
 
