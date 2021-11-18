@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 export default {
   skipPreflightCheck: process.env.SKIP_PREFLIGHT_CHECK,
   disableEslintPlugin: process.env.DISABLE_ESLINT_PLUGIN,

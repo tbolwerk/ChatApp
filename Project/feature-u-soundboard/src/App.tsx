@@ -5,9 +5,7 @@ import './App.css';
 import ReactDOM from 'react-dom';
 import { launchApp } from 'feature-u';
 import features from './features';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { createReducerAspect } from 'feature-redux';
 
 // import aspects      from 'aspects';
 // import {splash}     from 'util/SplashScreen';
@@ -15,7 +13,7 @@ dotenv.config();
 // launch our app, exposing the Fassets object (facilitating cross-feature-communication)
 export default launchApp({
   features,
-  // aspects,
+  // aspects: [],
 
   registerRootAppElm(rootAppElm: React.DOMElement<React.DOMAttributes<Element>, Element>) {
     ReactDOM.render(rootAppElm, document.getElementById('root'));

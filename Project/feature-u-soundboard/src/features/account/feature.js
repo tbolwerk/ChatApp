@@ -3,22 +3,25 @@ import { createFeature, fassetValidations } from 'feature-u';
 
 import _account from './feature';
 
-import MainLayout from './component/MainLayout';
+import HeaderAuthenticationButton from './components/HeaderAuthenticationButton';
+import Auth0Provider from './components/Auth0Provider';
 
 export default createFeature({
   name: 'account',
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'account.headerAuthenticationButton': HeaderAuthenticationButton,
+      'account.auth0Provider': Auth0Provider,
+    },
 
     defineUse: {},
 
     use: [],
   },
 
-  // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <MainLayout> {curRootAppElm} </MainLayout>;
+    return <>{curRootAppElm}</>;
   },
 });
