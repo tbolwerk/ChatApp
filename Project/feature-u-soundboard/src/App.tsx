@@ -1,26 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from 'react';
 import './App.css';
-import Header from './components/Header';
-import SoundForm from './features/mp3/components/SoundForm/SoundForm';
-import SoundContainer from './features/play-control/components/SoundContainer/SoundContainer';
+import ReactDOM from 'react-dom';
+import { launchApp } from 'feature-u';
+import features from './features';
+// import aspects      from 'aspects';
+// import {splash}     from 'util/SplashScreen';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </header>
-      <Header
-        sections={[
-          { title: 'categories', url: '#' },
-          { title: 'theme', url: '#' },
-        ]}
-        title={'Soundboard'}
-      />
-      <SoundForm />
-      <SoundContainer />
-    </div>
-  );
-}
+// launch our app, exposing the Fassets object (facilitating cross-feature-communication)
+export default launchApp({
+  features,
+  // aspects,
 
-export default App;
+  registerRootAppElm(rootAppElm: React.DOMElement<React.DOMAttributes<Element>, Element>) {
+    ReactDOM.render(rootAppElm, document.getElementById('root'));
+  },
+
+  // showStatus(msg='', err=null) {
+  // splash(msg, err);
+  // },
+});
