@@ -18,7 +18,7 @@ const categories = [
   { title: 'Sports', imageUrl: null },
 ];
 
-function onHoverCard(e: { target: { style: { cursor: string } } }) {
+function onHoverCard(e: any) {
   e.target.style.cursor = 'pointer';
 }
 

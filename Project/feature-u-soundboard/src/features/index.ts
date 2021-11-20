@@ -1,4 +1,4 @@
 import baseUI from './common/baseUI/feature';
 import categories from './categories/feature';
-
-export default [categories, baseUI];
+import sounds from './sounds/feature';
+export default [sounds, /* categories ,*/ baseUI];
