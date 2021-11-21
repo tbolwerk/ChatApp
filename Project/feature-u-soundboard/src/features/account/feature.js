@@ -3,7 +3,7 @@ import { createFeature, fassetValidations } from 'feature-u';
 
 import _account from './feature';
 
-import HeaderAuthenticationButton from './components/HeaderAuthenticationButton';
+import HeaderAccountGroup from './components/HeaderAccountGroup';
 import Auth0Provider from './components/Auth0Provider';
 
 export default createFeature({
@@ -12,7 +12,7 @@ export default createFeature({
   // our public face ...
   fassets: {
     define: {
-      'account.headerAuthenticationButton': HeaderAuthenticationButton,
+      'account.HeaderAccountGroup': HeaderAccountGroup,
       'account.auth0Provider': Auth0Provider,
     },
 

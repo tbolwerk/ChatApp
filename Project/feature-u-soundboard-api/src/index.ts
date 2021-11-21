@@ -1,6 +1,13 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 import express from "express";
 import { registerAccount } from "./controllers/accountController";
 import { Request, Response } from "express";
+import config from "./dotenv.config";
+
+const port = config.port || 3000
 
 const app = express();
 

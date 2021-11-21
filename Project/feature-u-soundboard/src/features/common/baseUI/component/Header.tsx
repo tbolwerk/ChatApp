@@ -18,7 +18,7 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
-  const HeaderAuthenticationButton = useFassets('account.headerAuthenticationButton');
+  const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
 
   return (
     <React.Fragment>
@@ -35,7 +35,7 @@ export default function Header(props: HeaderProps) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <HeaderAuthenticationButton />
+        <HeaderAccountGroup />
       </Toolbar>
       <Toolbar
         component="nav"

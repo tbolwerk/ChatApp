@@ -4,9 +4,8 @@ import { useFassets } from 'feature-u';
 
 export default function MainLayout({ children }) {
   const Auth0Provider = useFassets('account.auth0Provider');
-  console.log(useFassets());
 
-  const wrapInAuth0Provider = (children) => <Auth0Provider>{children}</Auth0Provider>;
+  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
 
   const layout = (
     <div className="App">

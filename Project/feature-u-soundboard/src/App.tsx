@@ -5,7 +5,6 @@ import './App.css';
 import ReactDOM from 'react-dom';
 import { launchApp } from 'feature-u';
 import features from './features';
-import { createReducerAspect } from 'feature-redux';
 
 // import aspects      from 'aspects';
 // import {splash}     from 'util/SplashScreen';
