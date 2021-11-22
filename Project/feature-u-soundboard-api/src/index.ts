@@ -19,7 +19,7 @@ app.post("/register", (req: Request, res: Response) => {
     res.end();
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
     // tslint:disable-next-line: no-console
-    console.log("Server running on port 3000");
+    console.log(`Server running on port ${port}`);
 });
