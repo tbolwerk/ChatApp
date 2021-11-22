@@ -4,6 +4,7 @@ import SoundOverview from './component/SoundOverview';
 
 export default createFeature({
   name: 'sounds',
+  enabled: true,
 
   // our public face ...
   fassets: {
