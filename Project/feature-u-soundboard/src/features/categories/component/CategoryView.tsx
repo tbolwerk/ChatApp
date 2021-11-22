@@ -25,11 +25,10 @@ function onHoverCard(e: any) {
 
 function offHoverCard(e: any) {}
 
-export default function CategoryView({ Child }) {
-  const [showChild, setShowChild] = useState(false);
-
-  return showChild ? (
-    <Child />
+export default function CategoryView({ Category }) {
+  const [selectedCategory, setSelectedCategory] = useState('');
+  return selectedCategory != '' ? (
+    <Category category={selectedCategory} />
   ) : (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {Array.from(categories).map((category, index) => (
@@ -37,7 +36,7 @@ export default function CategoryView({ Child }) {
           <Card
             onMouseOver={onHoverCard}
             onMouseOut={offHoverCard}
-            onClick={(e) => setShowChild(true)}>
+            onClick={(e) => setSelectedCategory(category.title)}>
             <CardContent sx={{ flex: '1 0 auto' }}>
               <Typography>{category.title}</Typography>
               <CardMedia
