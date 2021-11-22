@@ -11,10 +11,11 @@ export default createFeature({
 
     defineUse: {},
 
-    use: [],
+    use: [['sounds.*', { required: true, type: fassetValidations.comp }]],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <CategoryView> {curRootAppElm} </CategoryView>;
+    console.log(fassets.sounds.SoundOverview);
+    return <CategoryView Child={fassets.sounds.SoundOverview}> </CategoryView>;
   },
 });

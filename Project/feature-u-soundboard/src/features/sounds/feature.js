@@ -7,7 +7,9 @@ export default createFeature({
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'sounds.SoundOverview': SoundOverview,
+    },
 
     defineUse: {},
 

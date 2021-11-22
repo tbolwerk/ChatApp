@@ -3,6 +3,9 @@ import { CardContent, Grid, Typography } from '@mui/material';
 // import MediaControlCard from './MediaControlCard';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
+
+let showChild = true;
+
 const categories = [
   { title: 'Games', imageUrl: null },
   { title: 'Movies', imageUrl: null },
@@ -24,12 +27,14 @@ function onHoverCard(e: any) {
 
 function offHoverCard(e: any) {}
 
-function onClickCard(e: { target: any }) {
-  alert(e.target);
+function onClickCard(e: any) {
+  showChild = true;
 }
 
-export default function CategoryView() {
-  return (
+export default function CategoryView({ Child }) {
+  return showChild ? (
+    <Child />
+  ) : (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {Array.from(categories).map((category, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
