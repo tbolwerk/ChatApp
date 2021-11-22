@@ -3,14 +3,7 @@ import { createFeature, fassetValidations } from 'feature-u';
 
 import _home from './feature';
 import featureName from './featureName';
-import HomePage from './component/HomePage';
-
-const featurePathUrl = '/';
-
-const route = {
-  url: featurePathUrl,
-  content: HomePage,
-};
+import route from './route';
 
 export default createFeature({
   name: featureName,

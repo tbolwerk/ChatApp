@@ -8,10 +8,6 @@ export default function MainLayout() {
   const routes: Array<IRoute> = useFassets('*.route.component');
   const linkComponents: Array<React.ComponentClass<any>> = useFassets('*.link.component');
 
-  const UploadForm = useFassets('upload.form');
-
-  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
-
   return (
     <div className="layout">
       <header className="App-header">
@@ -21,12 +17,9 @@ export default function MainLayout() {
       <main>
         <Routes>
           {routes.map(({ url, Content }: IRoute, index) => (
-            <Route key={index} path={url} element={Content} />
+            <Route key={index} path={url} element={<Content />} />
           ))}
         </Routes>
-        <h1>start</h1>
-        {routes[0].Content}
-        <h1>end</h1>
       </main>
     </div>
   );
