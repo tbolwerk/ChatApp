@@ -1,6 +1,13 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 import express from "express";
 import { registerAccount } from "./controllers/accountController";
 import { Request, Response } from "express";
+import config from "./dotenv.config";
+
+const port = config.port || 3000
 
 const app = express();
 
@@ -12,7 +19,7 @@ app.post("/register", (req: Request, res: Response) => {
     res.end();
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
     // tslint:disable-next-line: no-console
-    console.log("Server running on port 3000");
+    console.log(`Server running on port ${port}`);
 });

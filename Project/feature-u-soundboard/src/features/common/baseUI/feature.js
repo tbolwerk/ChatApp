@@ -4,13 +4,16 @@ import { createFeature, fassetValidations } from 'feature-u';
 import _baseUI from './feature';
 
 import MainLayout from './component/MainLayout';
+import Loading from './component/Loading';
 
 export default createFeature({
   name: 'baseUI',
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'common.loading': Loading,
+    },
 
     defineUse: {},
 

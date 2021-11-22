@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { useFassets } from 'feature-u';
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -16,6 +17,8 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
+
+  const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
 
   return (
     <React.Fragment>
@@ -32,9 +35,7 @@ export default function Header(props: HeaderProps) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
+        <HeaderAccountGroup />
       </Toolbar>
       <Toolbar
         component="nav"
