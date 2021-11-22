@@ -14,6 +14,7 @@
             ]
         }
     },
+    "files": ["@types/custom.request.d.ts"],
     "include": [
         "src/**/*"
     ]
