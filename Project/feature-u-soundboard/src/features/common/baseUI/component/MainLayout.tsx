@@ -1,9 +1,13 @@
 import React from 'react';
 import Header from './Header';
-import { Grid } from '@mui/material';
-import MediaControlCard from '../../../categories/component/MediaControlCard';
+import { useFassets } from 'feature-u';
+
 export default function MainLayout({ children }) {
-  return (
+  const Auth0Provider = useFassets('account.auth0Provider');
+
+  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
+
+  const layout = (
     <div className="App">
       <header className="App-header">
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -18,6 +22,8 @@ export default function MainLayout({ children }) {
       {children}
     </div>
   );
+
+  return Auth0Provider ? wrapInAuth0Provider(layout) : layout;
 }
 
 // MainLayout.propTypes = {
