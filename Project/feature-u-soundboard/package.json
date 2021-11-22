@@ -16,11 +16,15 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "axios": "^0.24.0",
+    "@types/react-router": "^5.1.17",
+    "@types/react-router-dom": "^5.3.2",
     "feature-redux": "^3.0.0",
     "feature-u": "^3.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
+    "react-router": "^6.0.2",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "^4.0.3",
     "redux": "^4.1.2",
     "typescript": "^4.1.2",
@@ -84,7 +88,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn model"
+      "pre-commit": "lint-staged"
     }
   }
 }

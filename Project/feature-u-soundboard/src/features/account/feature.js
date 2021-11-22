@@ -2,9 +2,18 @@ import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
 
 import _account from './feature';
+import featureName from './featureName';
 
 import HeaderAccountGroup from './components/HeaderAccountGroup';
 import Auth0Provider from './components/Auth0Provider';
+import AccountPage from './components/AccountPage';
+
+const featurePathUrl = `/${featureName}`;
+
+const route = {
+  url: featurePathUrl,
+  content: AccountPage,
+};
 
 export default createFeature({
   name: 'account',
@@ -12,11 +21,13 @@ export default createFeature({
   // our public face ...
   fassets: {
     define: {
-      'account.HeaderAccountGroup': HeaderAccountGroup,
-      'account.auth0Provider': Auth0Provider,
+      [`${featureName}.HeaderAccountGroup`]: HeaderAccountGroup,
+      [`${featureName}.auth0Provider`]: Auth0Provider,
     },
 
-    defineUse: {},
+    defineUse: {
+      [`${featureName}.route.component`]: route,
+    },
 
     use: [],
   },

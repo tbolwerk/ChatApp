@@ -1,24 +1,28 @@
 import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
 
-import _baseUI from './feature';
-
-import MainLayout from './component/MainLayout';
-import Loading from './component/Loading';
+import _home from './feature';
 import featureName from './featureName';
+import HomePage from './component/HomePage';
+
+const featurePathUrl = '/';
+
+const route = {
+  url: featurePathUrl,
+  content: HomePage,
+};
 
 export default createFeature({
   name: featureName,
 
   fassets: {
-    define: {
-      [`${featureName}.loading`]: Loading,
-      [`${featureName}.mainLayout`]: MainLayout,
+    define: {},
+
+    defineUse: {
+      [`${featureName}.route.component`]: route,
     },
 
-    defineUse: {},
-
-    use: ['*.route.component'],
+    use: [],
   },
 
   appWillStart({ fassets, curRootAppElm }) {
