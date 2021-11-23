@@ -10,8 +10,6 @@ const upload = multer({ dest: 'uploads/' })
 import config from "./dotenv.config";
 import cors from 'cors';
 import {authenticateJWT} from "./middleware/authenticateJWT";
-import {IRequest} from "./interfaces/IRequest";
-import {IUser} from "./interfaces/IUser";
 
 const port = config.port || 3000;
 
@@ -30,11 +28,15 @@ app.use(express.urlencoded());
 
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
     const { name } = req.body;
-    soundController.save(name, req.file.filename, req.user.email);
-    const file = req.file;
-
-    res.send(file);
-    // res.end();
+    if (req.file) {
+        soundController.save(name, req.file.filename, req.user.email);
+        return res.json({
+            message: "Uploaded."
+        })
+    }
+    res.status(400).json({
+        message: "Missing name or sound."
+    });
 });
 
 app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
