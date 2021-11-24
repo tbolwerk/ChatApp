@@ -1,5 +1,5 @@
 import baseUI from './common/baseUI/feature';
-import categories from './categories/feature';
 import playControl from './play-control/feature';
+import account from './account/feature';
 
-export default [playControl, baseUI];
+export default [playControl, account, baseUI];
