@@ -14,25 +14,28 @@ const SoundContainer = () => {
       url: 'https://www.mboxdrive.com/7th.mp3',
     },
   ]);
-  const { getIdTokenClaims } = useAuth0();
+  const { user, getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     const getSounds = async () => {
       try {
         const token = await getIdTokenClaims();
-        const res = await Axios.get(`${config.apiEndpoint}/sounds`, {
-          headers: {
-            authorization: `Bearer ${token.__raw}`,
-          },
-        });
-        console.log(res);
+        console.log(config.apiEndpoint);
+        if (token) {
+          const res = await Axios.get(`${config.apiEndpoint}/sounds`, {
+            headers: {
+              authorization: `Bearer ${token.__raw}`,
+            },
+          });
+          console.log(res);
+        }
       } catch (e) {
         throw e;
       }
     };
 
     getSounds().catch((e) => console.log(e));
-  }, []);
+  }, [user]);
 
   const renderSoundButtons = () => {
     return sounds.map((s) => {

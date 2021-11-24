@@ -25,6 +25,7 @@ app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded());
 
+app.use('/uploads', express.static('uploads'))
 
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
     const { name } = req.body;
@@ -41,10 +42,7 @@ app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
 
 app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
     soundController.get(req.user.email)
-        .then((data) => res.json({
-            data
-        }))
-    res.end();
+        .then((data) => res.json(data))
 })
 
 app.post("/register", (req: Request, res: Response) => {

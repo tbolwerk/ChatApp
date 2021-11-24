@@ -9,15 +9,11 @@ export const insertSound = (name: string, path: string, username: string) => {
 }
 
 export const getSounds = (user: string) => {
-    return new Promise((res) => {
+    return new Promise((resolve) => {
         useDb((db) => {
-            const stmt = db.prepare("SELECT * FROM sounds WHERE user = ?");
-            stmt.run([user], (result => {
-                // tslint:disable-next-line: no-console
-                console.log(result);
-            }));
-            stmt.finalize();
+            db.all("SELECT * FROM sounds WHERE user = ?", [user], (err, rows) => {
+                resolve(rows);
+            })
         });
     });
-
 }
