@@ -1,8 +1,5 @@
 import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import { useFassets } from 'feature-u';
@@ -19,6 +16,7 @@ export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
   const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
+  const Searchbar = useFassets('search.Searchbar');
 
   return (
     <React.Fragment>
@@ -32,9 +30,7 @@ export default function Header(props: HeaderProps) {
           sx={{ flex: 1 }}>
           {title}
         </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
+        <Searchbar />
         <HeaderAccountGroup />
       </Toolbar>
       <Toolbar
