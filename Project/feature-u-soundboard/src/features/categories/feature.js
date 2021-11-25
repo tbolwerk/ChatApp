@@ -6,6 +6,7 @@ import featureName from './featureName';
 import route from './route';
 export default createFeature({
   name: featureName,
+  enabled: true,
 
   // our public face ...
   fassets: {
@@ -15,10 +16,12 @@ export default createFeature({
       [`${featureName}.route.component`]: route,
     },
 
-    use: [],
+    use: [['sounds.*', { required: true, type: fassetValidations.comp }]],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <CategoryView> {curRootAppElm} </CategoryView>;
+    return (
+      <CategoryView Category={fassets.sounds.SoundOverview}> {{ curRootAppElm }} </CategoryView>
+    );
   },
 });
