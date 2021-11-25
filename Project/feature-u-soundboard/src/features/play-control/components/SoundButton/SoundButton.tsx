@@ -25,7 +25,6 @@ const SoundButton = (props: Props) => {
   };
 
   const handlePlayStop = () => {
-    // TODO: Play sound
     audio.volume = 0.1;
     if (playing) {
       setPlaying(false);
