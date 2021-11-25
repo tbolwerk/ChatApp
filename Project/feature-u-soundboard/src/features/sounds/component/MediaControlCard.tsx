@@ -10,7 +10,12 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-export default function MediaControlCard() {
+interface MediaControlCardProps {
+  title: string;
+  imageUrl: string;
+}
+
+export default function MediaControlCard(props: MediaControlCardProps) {
   const theme = useTheme();
 
   return (
@@ -18,7 +23,7 @@ export default function MediaControlCard() {
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography component="div" variant="h5">
-            Live From Space
+            {props.title}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" component="div">
             Mac Miller
@@ -39,7 +44,7 @@ export default function MediaControlCard() {
       <CardMedia
         component="img"
         sx={{ width: 151 }}
-        image="http://www.fortitudemagazine.co.uk/wp-content/uploads/2013/12/Mac-Miller-Live-From-Space.png"
+        image={props.imageUrl}
         alt="Live from space album cover"
       />
     </Card>
