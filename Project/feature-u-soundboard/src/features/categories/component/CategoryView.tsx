@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CardContent, Grid, Typography } from '@mui/material';
-// import MediaControlCard from './MediaControlCard';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 
+//TODO: change to database call and seed this data on creation of database.
 const categories = [
   { title: 'Games', imageUrl: null },
   { title: 'Movies', imageUrl: null },
