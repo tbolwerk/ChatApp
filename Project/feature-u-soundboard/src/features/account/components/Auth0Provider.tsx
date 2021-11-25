@@ -3,8 +3,6 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import config from '../../../dotenv.config';
 
 const Auth0Wrapper = (props: { children: React.ReactChild }) => {
-  console.log(config);
-  console.log(process.env);
   return (
     <Auth0Provider
       domain={config.auth0Domain}
