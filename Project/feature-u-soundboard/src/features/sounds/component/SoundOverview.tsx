@@ -16,7 +16,7 @@ export default function SoundOverview({ category }) {
   const params = Object.fromEntries(urlSearchParams.entries());
   const filteredSounds = sounds.filter(
     (x) =>
-      params.search !== undefined && x.title.toUpperCase().includes(params.search.toUpperCase()),
+      params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
   );
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
