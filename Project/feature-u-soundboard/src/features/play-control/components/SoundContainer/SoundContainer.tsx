@@ -15,11 +15,13 @@ const SoundContainer = () => {
       try {
         const token = await getIdTokenClaims();
         if (token) {
+          console.log(config.apiEndpoint);
           const res = await Axios.get<Array<ISound>>(`${config.apiEndpoint}/sounds`, {
             headers: {
               authorization: `Bearer ${token.__raw}`,
             },
           });
+          console.log(res);
           setSounds(
             res.data.map((s) => {
               s.path = `${config.apiEndpoint}/${s.path}`;
@@ -28,6 +30,8 @@ const SoundContainer = () => {
           );
         }
       } catch (e) {
+        console.log('OIJWWIERJOIEWR');
+        console.log(e);
         throw e;
       }
     };
