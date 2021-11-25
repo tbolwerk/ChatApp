@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ISound } from '../../interfaces/ISound';
 import { Button } from '@mui/material';
 import styles from './SoundButton.module.css';
@@ -9,9 +9,9 @@ type Props = {
 };
 
 const SoundButton = (props: Props) => {
-  const { name, url } = props.sound;
+  const { name, path } = props.sound;
 
-  const [audio] = useState(new Audio(url));
+  const [audio] = useState(new Audio(path));
   const [playing, setPlaying] = useState<boolean>(false);
 
   const renderIcon = () => {
@@ -20,7 +20,7 @@ const SoundButton = (props: Props) => {
 
   const handlePlayStop = () => {
     // TODO: Play sound
-    audio.volume = 0.2;
+    audio.volume = 0.1;
     if (playing) {
       setPlaying(false);
       audio.pause();

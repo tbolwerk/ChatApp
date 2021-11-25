@@ -1,5 +1,5 @@
 export interface ISound {
-  id: string;
+  user: string;
   name: string;
-  url: string;
+  path: string;
 }

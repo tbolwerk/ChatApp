@@ -7,27 +7,25 @@ import Axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const SoundContainer = () => {
-  const [sounds, setSounds] = useState<Array<ISound>>([
-    {
-      id: '43',
-      name: 'Johnny',
-      url: 'https://www.mboxdrive.com/7th.mp3',
-    },
-  ]);
+  const [sounds, setSounds] = useState<Array<ISound>>([]);
   const { user, getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     const getSounds = async () => {
       try {
         const token = await getIdTokenClaims();
-        console.log(config.apiEndpoint);
         if (token) {
-          const res = await Axios.get(`${config.apiEndpoint}/sounds`, {
+          const res = await Axios.get<Array<ISound>>(`${config.apiEndpoint}/sounds`, {
             headers: {
               authorization: `Bearer ${token.__raw}`,
             },
           });
-          console.log(res);
+          setSounds(
+            res.data.map((s) => {
+              s.path = `${config.apiEndpoint}/${s.path}`;
+              return s;
+            }),
+          );
         }
       } catch (e) {
         throw e;
@@ -39,7 +37,7 @@ const SoundContainer = () => {
 
   const renderSoundButtons = () => {
     return sounds.map((s) => {
-      return <SoundButton key={s.id} sound={s} />;
+      return <SoundButton key={s.path} sound={s} />;
     });
   };
 

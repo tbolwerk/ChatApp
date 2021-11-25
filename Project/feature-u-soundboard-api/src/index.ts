@@ -10,6 +10,7 @@ const upload = multer({ dest: 'uploads/' })
 import config from "./dotenv.config";
 import cors from 'cors';
 import {authenticateJWT} from "./middleware/authenticateJWT";
+import path from "path";
 
 const port = config.port || 3000;
 
@@ -21,11 +22,12 @@ const options: cors.CorsOptions = {
     origin: allowedOrigins
 };
 
+app.use(express.static('uploads'))
+
 app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.use('/uploads', express.static('uploads'))
 
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
     const { name } = req.body;
