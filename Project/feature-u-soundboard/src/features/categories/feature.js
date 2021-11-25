@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
 import CategoryView from './component/CategoryView';
-
+import featureName from './featureName';
+import route from './route';
 export default createFeature({
-  name: 'categories',
+  name: featureName,
 
   // our public face ...
   fassets: {
     define: {},
 
-    defineUse: {},
+    defineUse: {
+      [`${featureName}.route.component`]: route,
+    },
 
     use: [],
   },
