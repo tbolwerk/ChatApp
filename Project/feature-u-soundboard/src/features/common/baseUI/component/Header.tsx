@@ -30,8 +30,8 @@ export default function Header(props: HeaderProps) {
           sx={{ flex: 1 }}>
           {title}
         </Typography>
-        <Searchbar />
-        <HeaderAccountGroup />
+        {Searchbar && <Searchbar />}
+        {HeaderAccountGroup && <HeaderAccountGroup />}
       </Toolbar>
       <Toolbar
         component="nav"
