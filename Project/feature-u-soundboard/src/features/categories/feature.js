@@ -20,8 +20,6 @@ export default createFeature({
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return (
-      <CategoryView Category={fassets.sounds.SoundOverview}> {{ curRootAppElm }} </CategoryView>
-    );
+    return <CategoryView> {{ curRootAppElm }} </CategoryView>;
   },
 });
