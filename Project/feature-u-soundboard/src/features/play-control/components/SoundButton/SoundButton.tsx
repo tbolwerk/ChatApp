@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ISound } from '../../interfaces/ISound';
 import { Button } from '@mui/material';
 import styles from './SoundButton.module.css';
@@ -13,6 +13,12 @@ const SoundButton = (props: Props) => {
 
   const [audio] = useState(new Audio(path));
   const [playing, setPlaying] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleEnd = () => setPlaying(false);
+    audio.addEventListener('ended', handleEnd);
+    return () => audio.removeEventListener('ended', handleEnd);
+  }, []);
 
   const renderIcon = () => {
     return playing ? <Pause /> : <PlayArrow />;
