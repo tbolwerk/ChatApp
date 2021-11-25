@@ -47,11 +47,6 @@ app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
     res.end();
 })
 
-app.post("/register", (req: Request, res: Response) => {
-    registerAccount(req.body.username, req.body.password);
-    res.end();
-});
-
 app.listen(port, () => {
     // tslint:disable-next-line: no-console
     console.log(`Server running on port ${port}`);
