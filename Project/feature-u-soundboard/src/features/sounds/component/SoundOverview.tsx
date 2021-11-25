@@ -11,12 +11,13 @@ export default function SoundOverview({ category }) {
     { title: 'lightning' },
     { title: 'sirene' },
   ];
+
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
-  const filteredSounds = sounds.filter((x) =>
-    x.title.toUpperCase().includes(params.search.toUpperCase()),
+  const filteredSounds = sounds.filter(
+    (x) =>
+      params.search !== undefined && x.title.toUpperCase().includes(params.search.toUpperCase()),
   );
-  filteredSounds;
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {filteredSounds.map((sound, index) => (

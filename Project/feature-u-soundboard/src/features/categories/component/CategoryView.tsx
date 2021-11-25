@@ -20,8 +20,8 @@ const categories = [
 ];
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
-const filteredCategories = categories.filter((x) =>
-  x.title.toUpperCase().includes(params.search.toUpperCase()),
+const filteredCategories = categories.filter(
+  (x) => params.search !== undefined && x.title.toUpperCase().includes(params.search.toUpperCase()),
 );
 
 function onHoverCard(e: any) {
