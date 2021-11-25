@@ -7,7 +7,9 @@ export default createFeature({
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'play.soundContainer': SoundContainer,
+    },
 
     defineUse: {},
 
@@ -16,6 +18,6 @@ export default createFeature({
 
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <SoundContainer> {curRootAppElm} </SoundContainer>;
+    return <> {curRootAppElm} </>;
   },
 });
