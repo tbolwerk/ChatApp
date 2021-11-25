@@ -4,6 +4,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import { useFassets } from 'feature-u';
+import { Link } from 'react-router-dom';
+import { Container } from '@mui/material';
 
 interface HeaderProps {
   sections: ReadonlyArray<React.ComponentClass<any>>;
@@ -18,15 +20,13 @@ export default function Header(props: HeaderProps) {
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 1 }}>
-          {title}
-        </Typography>
+        <Container sx={{ flex: 1 }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Typography component="h2" variant="h5" align="center" color="black" noWrap>
+              {title}
+            </Typography>
+          </Link>
+        </Container>
         <IconButton>
           <SearchIcon />
         </IconButton>
