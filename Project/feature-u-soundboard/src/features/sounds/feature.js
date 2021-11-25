@@ -1,23 +1,23 @@
 import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
-import CategoryView from './component/CategoryView';
+import SoundOverview from './component/SoundOverview';
 
 export default createFeature({
-  name: 'categories',
+  name: 'sounds',
   enabled: true,
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'sounds.SoundOverview': SoundOverview,
+    },
 
     defineUse: {},
 
-    use: [['sounds.*', { required: true, type: fassetValidations.comp }]],
+    use: [],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return (
-      <CategoryView Category={fassets.sounds.SoundOverview}> {{ curRootAppElm }} </CategoryView>
-    );
+    return <SoundOverview> {curRootAppElm} </SoundOverview>;
   },
 });
