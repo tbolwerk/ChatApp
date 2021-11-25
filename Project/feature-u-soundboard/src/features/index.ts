@@ -3,4 +3,4 @@ import soundUpload from './soundUpload/feature';
 import categories from './categories/feature';
 import account from './account/feature';
 
-export default [soundUpload, account, baseUI];
+export default [categories, soundUpload, account, baseUI];
