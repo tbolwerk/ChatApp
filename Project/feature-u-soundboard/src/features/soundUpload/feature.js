@@ -3,11 +3,13 @@ import { createFeature } from 'feature-u';
 import SoundForm from './components/SoundForm/SoundForm';
 
 export default createFeature({
-  name: 'mp3',
+  name: 'upload',
 
   // our public face ...
   fassets: {
-    define: {},
+    define: {
+      'upload.form': SoundForm,
+    },
 
     defineUse: {},
 
@@ -15,6 +17,6 @@ export default createFeature({
   },
 
   appWillStart({ fassets, curRootAppElm }) {
-    return <SoundForm>{curRootAppElm}</SoundForm>;
+    return <>{curRootAppElm}</>;
   },
 });
