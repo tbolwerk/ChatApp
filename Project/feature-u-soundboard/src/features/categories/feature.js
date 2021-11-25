@@ -4,7 +4,7 @@ import CategoryView from './component/CategoryView';
 
 export default createFeature({
   name: 'categories',
-  enabled: true,
+  enabled: false,
 
   // our public face ...
   fassets: {
