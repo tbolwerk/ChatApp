@@ -8,7 +8,7 @@ import Auth0Provider from './components/Auth0Provider';
 
 export default createFeature({
   name: 'account',
-
+  enabled: true,
   // our public face ...
   fassets: {
     define: {
