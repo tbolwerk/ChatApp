@@ -10,6 +10,7 @@ const upload = multer({ dest: 'uploads/' })
 import config from "./dotenv.config";
 import cors from 'cors';
 import {authenticateJWT} from "./middleware/authenticateJWT";
+import path from "path";
 
 const port = config.port || 3000;
 
@@ -20,6 +21,8 @@ const allowedOrigins = ['http://localhost:3000'];
 const options: cors.CorsOptions = {
     origin: allowedOrigins
 };
+
+app.use(express.static('uploads'))
 
 app.use(cors(options));
 app.use(express.json());
@@ -41,10 +44,7 @@ app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
 
 app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
     soundController.get(req.user.email)
-        .then((data) => res.json({
-            data
-        }))
-    res.end();
+        .then((data) => res.json(data))
 })
 
 app.listen(port, () => {

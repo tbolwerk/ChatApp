@@ -5,7 +5,7 @@ import { useFassets } from 'feature-u';
 
 export default function MainLayout({ children }) {
   const Auth0Provider = useFassets('account.auth0Provider');
-
+  const SoundContainer = useFassets('play.soundContainer');
   const UploadForm = useFassets('upload.form');
 
   const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
@@ -23,6 +23,7 @@ export default function MainLayout({ children }) {
         title={'Soundboard'}
       />
       <UploadForm />
+      <SoundContainer />
       {children}
     </div>
   );

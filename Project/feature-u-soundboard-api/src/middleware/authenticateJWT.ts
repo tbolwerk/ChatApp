@@ -9,7 +9,7 @@ export const authenticateJWT = jwt({
         jwksUri: `${process.env.AUTH0_ISSUER}/.well-known/jwks.json`
     }),
     audience: process.env.AUTH0_CLIENT_ID,
-    issuer: [process.env.AUTH0_ISSUER],
+    issuer: [`${process.env.AUTH0_ISSUER}/`],
     algorithms: ['RS256']
 });
 
