@@ -1,9 +1,12 @@
 import React from 'react';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Container, Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { useFassets } from 'feature-u';
 
 const AccountPage = () => {
   const { user } = useAuth0();
+  const SoundContainer = useFassets('play.soundContainer');
+  const SoundForm = useFassets('upload.form');
 
   const userInformation = [
     {
@@ -40,6 +43,8 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
+      <SoundForm />
+      <SoundContainer />
     </Container>
   );
 };
