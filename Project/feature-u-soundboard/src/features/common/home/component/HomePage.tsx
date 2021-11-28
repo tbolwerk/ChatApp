@@ -1,16 +1,10 @@
 import React from 'react';
-import { IRoute } from '../../../../interfaces/IRoute';
 import { useFassets } from 'feature-u';
 
 const HomePage = () => {
-  const SoundContainer = useFassets('play.soundContainer');
-  const SoundForm = useFassets('upload.form');
+  const Sounds = useFassets('sounds.SoundOverview');
 
-  return (
-    <>
-      <h1>Home</h1>
-    </>
-  );
+  return Sounds ? <Sounds /> : <h1>Home</h1>;
 };
 
 export default HomePage;

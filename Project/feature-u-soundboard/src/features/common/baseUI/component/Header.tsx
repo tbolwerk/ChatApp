@@ -28,9 +28,6 @@ export default function Header(props: HeaderProps) {
             </Typography>
           </Link>
         </Container>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
         {Searchbar && <Searchbar />}
         {HeaderAccountGroup && <HeaderAccountGroup />}
       </Toolbar>
