@@ -16,6 +16,7 @@ export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
   const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
+  const Searchbar = useFassets('search.Searchbar');
 
   return (
     <React.Fragment>
@@ -30,7 +31,8 @@ export default function Header(props: HeaderProps) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <HeaderAccountGroup />
+        {Searchbar && <Searchbar />}
+        {HeaderAccountGroup && <HeaderAccountGroup />}
       </Toolbar>
       <Toolbar
         component="nav"

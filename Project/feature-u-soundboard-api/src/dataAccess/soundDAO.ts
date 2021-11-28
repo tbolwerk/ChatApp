@@ -8,16 +8,12 @@ export const insertSound = (name: string, path: string, username: string) => {
     });
 }
 
-export const getSounds = (username: string) => {
-    return new Promise((res) => {
+export const getSounds = (user: string) => {
+    return new Promise((resolve) => {
         useDb((db) => {
-            const stmt = db.prepare("SELECT * FROM sounds WHERE username = ?");
-            stmt.run([username], (result => {
-                // tslint:disable-next-line: no-console
-                console.log(result);
-            }));
-            stmt.finalize();
+            db.all("SELECT * FROM sounds WHERE user = ?", [user], (err, rows) => {
+                resolve(rows);
+            })
         });
     });
-
 }

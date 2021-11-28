@@ -8,7 +8,7 @@ import route from './route';
 
 export default createFeature({
   name: 'account',
-
+  enabled: true,
   // our public face ...
   fassets: {
     define: {

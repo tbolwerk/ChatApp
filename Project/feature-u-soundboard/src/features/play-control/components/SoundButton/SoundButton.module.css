@@ -1,0 +1,9 @@
+.button {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  margin: 2px;
+  padding: 50px;
+}

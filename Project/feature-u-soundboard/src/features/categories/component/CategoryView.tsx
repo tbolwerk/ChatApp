@@ -18,6 +18,12 @@ const categories = [
   { title: 'Reactions', imageUrl: null },
   { title: 'Sports', imageUrl: null },
 ];
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+console.log(params.search);
+const filteredCategories = categories.filter(
+  (x) => params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
+);
 
 function onHoverCard(e: any) {
   e.target.style.cursor = 'pointer';
@@ -32,7 +38,7 @@ export default function CategoryView() {
     <Category category={selectedCategory} />
   ) : (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {Array.from(categories).map((category, index) => (
+      {Array.from(filteredCategories).map((category, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <Card
             onMouseOver={onHoverCard}
