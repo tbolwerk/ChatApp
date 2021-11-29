@@ -5,23 +5,23 @@ import _baseUI from './feature';
 
 import MainLayout from './component/MainLayout';
 import Loading from './component/Loading';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'baseUI',
+  name: featureName,
 
-  // our public face ...
   fassets: {
     define: {
-      'common.loading': Loading,
+      [`${featureName}.loading`]: Loading,
+      [`${featureName}.mainLayout`]: MainLayout,
     },
 
     defineUse: {},
 
-    use: [],
+    use: ['*.route.component'],
   },
 
-  // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <MainLayout> {curRootAppElm} </MainLayout>;
+    return <>{curRootAppElm}</>;
   },
 });

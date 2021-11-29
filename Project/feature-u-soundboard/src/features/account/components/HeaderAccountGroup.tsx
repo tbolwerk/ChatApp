@@ -3,7 +3,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import Avatar from './Avatar';
+import { Link } from 'react-router-dom';
+
 import { Grid } from '@mui/material';
+import featureName from '../featureName';
 
 const HeaderAccountGroup = () => {
   const { isAuthenticated } = useAuth0();
@@ -12,7 +15,9 @@ const HeaderAccountGroup = () => {
     <Grid spacing={2} sx={{ display: 'flex', gap: '1rem', marginLeft: '1rem' }}>
       {isAuthenticated ? (
         <>
-          <Avatar />
+          <Link to={`/${featureName}`}>
+            <Avatar />
+          </Link>
           <LogoutButton />
         </>
       ) : (

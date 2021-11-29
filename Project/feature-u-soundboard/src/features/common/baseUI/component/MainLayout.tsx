@@ -2,35 +2,26 @@
 import React from 'react';
 import Header from './Header';
 import { useFassets } from 'feature-u';
+import { Routes, Route } from 'react-router-dom';
+import { IRoute } from '../../../../interfaces/IRoute';
 
-export default function MainLayout({ children }) {
-  const Auth0Provider = useFassets('account.auth0Provider');
-  const SoundContainer = useFassets('play.soundContainer');
-  const UploadForm = useFassets('upload.form');
+export default function MainLayout() {
+  const routes: Array<IRoute> = useFassets('*.route.component');
+  const linkComponents: Array<React.ComponentClass<any>> = useFassets('*.link.component');
 
-  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
-
-  const layout = (
-    <div className="App">
+  return (
+    <div className="layout">
       <header className="App-header">
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </header>
-      <Header
-        sections={[
-          { title: 'categories', url: '#' },
-          { title: 'theme', url: '#' },
-        ]}
-        title={'Soundboard'}
-      />
-      <UploadForm />
-      <SoundContainer />
-      {children}
+      <Header sections={linkComponents} title={'Soundboard'} />
+      <main>
+        <Routes>
+          {routes.map(({ url, Content }: IRoute, index) => (
+            <Route key={index} path={url} element={<Content />} />
+          ))}
+        </Routes>
+      </main>
     </div>
   );
-
-  return Auth0Provider ? wrapInAuth0Provider(layout) : layout;
 }
-
-// MainLayout.propTypes = {
-//   children: PropTypes.node.isRequired,
-// };
