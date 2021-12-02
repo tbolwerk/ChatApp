@@ -10,10 +10,12 @@ import search from './search/feature';
 import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
 import pagination from './common/pagination/feature';
+import tts from './tts/feature';
 
 export default [
   pagination,
   voice,
+  tts,
   sounds,
   categories,
   soundUpload,
