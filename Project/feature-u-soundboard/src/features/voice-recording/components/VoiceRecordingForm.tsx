@@ -2,6 +2,10 @@ import { Button, Input, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styles from './VoiceRecordingForm.module.css';
 import { Stop } from '@mui/icons-material';
+import { useAuth0 } from '@auth0/auth0-react';
+import Axios from 'axios';
+import config from '../../../dotenv.config';
+import Loading from '../../common/baseUI/component/Loading';
 
 const VoiceRecordingForm = () => {
   const [name, setName] = useState<string>('');
@@ -10,6 +14,8 @@ const VoiceRecordingForm = () => {
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [player, setPlayer] = useState<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const { getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -55,12 +61,33 @@ const VoiceRecordingForm = () => {
   };
 
   const renderUploadButton = (): JSX.Element | undefined => {
-    const handleUpload = () => {};
+    const handleUpload = async () => {
+      try {
+        if (name && audioBlob) {
+          const token = await getIdTokenClaims();
+          const fd = new FormData();
+          fd.set('name', name);
+          fd.set('sound', audioBlob);
+          setUploading(true);
+          await Axios.post(`${config.apiEndpoint}/sounds`, fd, {
+            headers: {
+              authorization: `Bearer ${token.__raw}`,
+            },
+          });
+          setUploading(false);
+          setName('');
+        } else {
+          alert('Fill in all the fields!');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
     if (audioBlob && !recording) {
       return (
         <Button onClick={handleUpload} variant={'contained'}>
-          Upload
+          {uploading ? <Loading /> : 'Upload'}
         </Button>
       );
     }

@@ -7,6 +7,7 @@ const AccountPage = () => {
   const { user } = useAuth0();
   const SoundContainer = useFassets('play.soundContainer');
   const SoundForm = useFassets('upload.form');
+  const VoiceForm = useFassets('voice.form');
 
   const userInformation = [
     {
@@ -43,6 +44,7 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
+      <VoiceForm />
       <SoundForm />
       <SoundContainer />
     </Container>
