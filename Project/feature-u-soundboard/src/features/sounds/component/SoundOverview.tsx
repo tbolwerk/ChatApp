@@ -18,7 +18,14 @@ export default function SoundOverview({ category }) {
     (x) =>
       params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
   );
-  const MyGrid = () => (
+
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+    window.location.assign(`?page=${page}`);
+  };
+
+  return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {filteredSounds.map((sound, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
@@ -29,15 +36,7 @@ export default function SoundOverview({ category }) {
           />
         </Grid>
       ))}
+    <Pagination count={sounds.length} onChange={handleChange} />;
     </Grid>
-  );
-
-  return (
-    <Pagination
-      count={sounds.length}
-      renderItem={(item) => {
-        return <MyGrid />;
-      }}
-    />
   );
 }
