@@ -1,4 +1,4 @@
-import {getSounds, insertSound} from "../dataAccess/soundDAO";
+import {getSounds, insertSound, getAllSounds} from "../dataAccess/soundDAO";
 
 class SoundController {
     get(username:string) {
@@ -7,6 +7,10 @@ class SoundController {
 
     save(name: string, path: string, user: string) {
         insertSound(name, path, user);
+    }
+
+    getAll(){
+        return getAllSounds();
     }
 }
 

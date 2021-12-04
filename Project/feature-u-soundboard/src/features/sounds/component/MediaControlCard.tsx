@@ -9,7 +9,10 @@ import Typography from '@mui/material/Typography';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-
+import { useFassets } from 'feature-u';
+import { ISound } from '../interfaces/ISound';
+import { useEffect, useState } from 'react';
+import { Pause } from '@mui/icons-material';
 interface MediaControlCardProps {
   title: string;
   subtitle: string;
@@ -18,7 +21,37 @@ interface MediaControlCardProps {
 
 export default function MediaControlCard(props: MediaControlCardProps) {
   const theme = useTheme();
+  const sound: ISound = { name: props.title, path: props.imageUrl, user: props.subtitle };
 
+  const { name, path } = sound;
+
+  const [audio] = useState(new Audio(path));
+  const [playing, setPlaying] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleEnd = () => setPlaying(false);
+    audio.addEventListener('ended', handleEnd);
+    return () => audio.removeEventListener('ended', handleEnd);
+  }, []);
+
+  const renderIcon = () => {
+    return playing ? (
+      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+    ) : (
+      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+    );
+  };
+
+  const handlePlayStop = () => {
+    audio.volume = 0.1;
+    if (playing) {
+      setPlaying(false);
+      audio.pause();
+    } else {
+      setPlaying(true);
+      audio.play().catch((e) => console.log(e));
+    }
+  };
   return (
     <Card sx={{ display: 'flex' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -34,7 +67,7 @@ export default function MediaControlCard(props: MediaControlCardProps) {
           <IconButton aria-label="previous">
             {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
           </IconButton>
-          <IconButton aria-label="play/pause">
+          <IconButton aria-label="play/pause" onClick={handlePlayStop}>
             <PlayArrowIcon sx={{ height: 38, width: 38 }} />
           </IconButton>
           <IconButton aria-label="next">

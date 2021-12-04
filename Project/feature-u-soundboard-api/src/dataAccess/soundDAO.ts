@@ -17,3 +17,13 @@ export const getSounds = (user: string) => {
         });
     });
 }
+
+export const getAllSounds = () => {
+    return new Promise((resolve) => {
+        useDb((db) => {
+            db.all("SELECT * FROM sounds", [], (err, rows) => {
+                resolve(rows);
+            })
+        })
+    })
+}

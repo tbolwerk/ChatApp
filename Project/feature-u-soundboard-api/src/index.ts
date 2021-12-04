@@ -16,7 +16,7 @@ const port = config.port || 3000;
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000', '*'];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins
@@ -45,6 +45,10 @@ app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
 app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
     soundController.get(req.user.email)
         .then((data) => res.json(data))
+})
+
+app.get("/allsounds", (req: Request, res: Response) => {
+    soundController.getAll().then((data) => res.json(data));
 })
 
 app.listen(port, () => {

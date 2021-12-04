@@ -1,9 +1,17 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import React, { useEffect, useMemo, useState } from 'react';
+import { ISound } from '../interfaces/ISound';
+import config from '../../../dotenv.config';
+import Axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 import { Grid, Pagination } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
 
 export default function SoundOverview({ category }) {
-  const sounds = [
+  const init_sounds = [
     { title: 'scream' },
     { title: 'boo' },
     { title: 'boink' },
@@ -12,12 +20,35 @@ export default function SoundOverview({ category }) {
     { title: 'sirene' },
   ];
 
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
-  const filteredSounds = sounds.filter(
-    (x) =>
-      params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
-  );
+  const [sounds, setSounds] = useState<Array<ISound>>([]);
+  const { user, getIdTokenClaims } = useAuth0();
+
+  const filteredSounds = useMemo(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(searchParams.entries());
+    return sounds.filter(
+      (s) =>
+        params.search === undefined || s.name.toUpperCase().includes(params.search.toUpperCase()),
+    );
+  }, [sounds, window.location.search]);
+
+  useEffect(() => {
+    const getSounds = async () => {
+      try {
+        const res = await Axios.get<Array<ISound>>(`${config.apiEndpoint}/allsounds`);
+        setSounds(
+          res.data.map((s) => {
+            s.path = `${config.apiEndpoint}/${s.path}`;
+            return s;
+          }),
+        );
+      } catch (e) {
+        throw e;
+      }
+    };
+
+    getSounds().catch((e) => console.log(e));
+  }, [user]);
 
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
@@ -30,13 +61,13 @@ export default function SoundOverview({ category }) {
       {filteredSounds.map((sound, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <MediaControlCard
-            title={sound.title}
+            title={sound.name}
             subtitle={category ?? 'Sound'}
             imageUrl={`https://picsum.photos/id/${index}/1600/900`}
           />
         </Grid>
       ))}
-    <Pagination count={sounds.length} onChange={handleChange} />;
+      <Pagination count={sounds.length} onChange={handleChange} />
     </Grid>
   );
 }
