@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Grid, Pagination } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
-
+import { useFassets } from 'feature-u';
 export default function SoundOverview({ category }) {
   const sounds = [
     { title: 'scream' },
@@ -19,12 +20,7 @@ export default function SoundOverview({ category }) {
       params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
   );
 
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-    window.location.assign(`?page=${page}`);
-  };
-
+  const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {filteredSounds.map((sound, index) => (
@@ -36,7 +32,7 @@ export default function SoundOverview({ category }) {
           />
         </Grid>
       ))}
-    <Pagination count={sounds.length} onChange={handleChange} />;
+      <PaginationFeature data={sounds} />
     </Grid>
   );
 }

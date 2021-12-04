@@ -3,16 +3,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/react-in-jsx-scope */
 
+import { Pagination } from '@mui/material';
 import React from 'react';
 
 export interface Props {
   data: Array<any>;
 }
 
-export default function Pagination(props: Props) {
-  const urlPageParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlPageParams.entries());
-  const [page, setPage] = React.useState(params.page ?? '');
-  console.log(page);
-  return null;
+export default function PaginationFeature(props: Props) {
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+    window.location.assign(`?page=${page}`);
+  };
+
+  return <Pagination count={props.data.length} onChange={handleChange} />;
 }
