@@ -25,3 +25,13 @@ export const updateFavorite = (name: string, user: string, favorite: boolean) =>
         stmt.finalize();
     });
 }
+
+export const getAllSounds = () => {
+    return new Promise((resolve) => {
+        useDb((db) => {
+            db.all("SELECT * FROM sounds", [], (err, rows) => {
+                resolve(rows);
+            })
+        })
+    })
+}

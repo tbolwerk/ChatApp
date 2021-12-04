@@ -1,4 +1,4 @@
-import {getSounds, insertSound, updateFavorite} from "../dataAccess/soundDAO";
+import { getSounds, insertSound, updateFavorite, getAllSounds } from "../dataAccess/soundDAO";
 
 class SoundController {
     get(username:string) {
@@ -11,6 +11,10 @@ class SoundController {
 
     setFavorite(name: string, user: string, favorite: boolean) {
         updateFavorite(name, user, favorite);
+    }
+
+    getAll(){
+        return getAllSounds();
     }
 }
 
