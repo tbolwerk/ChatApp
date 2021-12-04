@@ -15,5 +15,9 @@ export default function PaginationFeature(props: Props) {
     window.location.assign(`?page=${value}`);
   };
 
-  return <Pagination count={props.data.length} onChange={handleChange} />;
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  const page: number = parseInt(params.page, 10) ?? 1;
+
+  return <Pagination count={props.data.length} onChange={handleChange} page={page} />;
 }
