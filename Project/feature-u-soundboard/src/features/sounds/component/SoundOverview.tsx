@@ -7,19 +7,11 @@ import { ISound } from '../interfaces/ISound';
 import config from '../../../dotenv.config';
 import Axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Grid, Pagination } from '@mui/material';
+import { Grid } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
+import { useFassets } from 'feature-u';
 
 export default function SoundOverview({ category }) {
-  const init_sounds = [
-    { title: 'scream' },
-    { title: 'boo' },
-    { title: 'boink' },
-    { title: 'donky' },
-    { title: 'lightning' },
-    { title: 'sirene' },
-  ];
-
   const [sounds, setSounds] = useState<Array<ISound>>([]);
   const { user, getIdTokenClaims } = useAuth0();
 
@@ -50,12 +42,7 @@ export default function SoundOverview({ category }) {
     getSounds().catch((e) => console.log(e));
   }, []);
 
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-    window.location.assign(`?page=${page}`);
-  };
-
+  const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {filteredSounds.map((sound, index) => (
@@ -68,7 +55,7 @@ export default function SoundOverview({ category }) {
           />
         </Grid>
       ))}
-      <Pagination count={sounds.length} onChange={handleChange} />
+      <PaginationFeature data={sounds} />
     </Grid>
   );
 }

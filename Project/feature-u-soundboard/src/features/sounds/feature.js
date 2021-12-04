@@ -15,8 +15,7 @@ export default createFeature({
     },
 
     defineUse: {},
-
-    use: [],
+    use: [['pagination.*', { required: true, type: fassetValidations.comp }]],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
