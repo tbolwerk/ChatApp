@@ -15,15 +15,6 @@ export default function SoundOverview({ category }) {
   const [sounds, setSounds] = useState<Array<ISound>>([]);
   const { user, getIdTokenClaims } = useAuth0();
 
-  const filteredSounds = useMemo(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(searchParams.entries());
-    return sounds.filter(
-      (s) =>
-        params.search === undefined || s.name.toUpperCase().includes(params.search.toUpperCase()),
-    );
-  }, [sounds, window.location.search]);
-
   useEffect(() => {
     const getSounds = async () => {
       try {
@@ -41,11 +32,23 @@ export default function SoundOverview({ category }) {
 
     getSounds().catch((e) => console.log(e));
   }, []);
+  
+  const entriesPerPage = 3;
+
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  const filteredSounds = sounds.filter(
+    (x) =>
+      params.search === undefined || x.name.toUpperCase().includes(params.search.toUpperCase()),
+  );
+  const start: number = parseInt(params.page, 10) ?? 1;
+  const end = start + entriesPerPage;
+  const pagedSounds = filteredSounds?.slice(start - 1, end - 1) ?? [];
 
   const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {filteredSounds.map((sound, index) => (
+      {pagedSounds.map((sound, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <MediaControlCard
             title={sound.name}
