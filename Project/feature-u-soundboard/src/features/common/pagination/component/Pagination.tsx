@@ -11,10 +11,8 @@ export interface Props {
 }
 
 export default function PaginationFeature(props: Props) {
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-    window.location.assign(`?page=${page}`);
+  const handleChange = (event, value: number) => {
+    window.location.assign(`?page=${value}`);
   };
 
   return <Pagination count={props.data.length} onChange={handleChange} />;
