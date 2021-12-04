@@ -19,5 +19,5 @@ export default function PaginationFeature(props: Props) {
   const params = Object.fromEntries(urlSearchParams.entries());
   const page: number = parseInt(params.page, 10) ?? 1;
 
-  return <Pagination count={props.data.length} onChange={handleChange} page={page} />;
+  return <Pagination count={props.data.length - 1} onChange={handleChange} page={page} />;
 }
