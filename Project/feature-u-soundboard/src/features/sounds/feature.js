@@ -3,6 +3,8 @@
 import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
 import SoundOverview from './component/SoundOverview';
+import { link, route } from './route';
+import featureName from './featureName';
 
 export default createFeature({
   name: 'sounds',
@@ -11,10 +13,13 @@ export default createFeature({
   // our public face ...
   fassets: {
     define: {
-      'sounds.SoundOverview': SoundOverview,
+      [`${featureName}.link.component`]: link,
     },
 
-    defineUse: {},
+    defineUse: {
+      [`${featureName}.route.component`]: route,
+    },
+
     use: [['pagination.*', { required: true, type: fassetValidations.comp }]],
   },
   // inject our baseUI components into the root of our app

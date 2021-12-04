@@ -43,7 +43,8 @@ export default function SoundOverview({ category }) {
   );
   const start: number = parseInt(params.page, 10) ?? 1;
   const end = start + entriesPerPage;
-  const pagedSounds = filteredSounds?.slice(start - 1, end - 1) ?? [];
+  const pagedSounds =
+    params.page === undefined ? filteredSounds : filteredSounds?.slice(start - 1, end - 1);
 
   const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (

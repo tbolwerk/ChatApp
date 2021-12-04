@@ -19,7 +19,7 @@ export default createFeature({
       [`${featureName}.route.component`]: route,
     },
 
-    use: [['sounds.*', { required: true, type: fassetValidations.comp }]],
+    use: [],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
