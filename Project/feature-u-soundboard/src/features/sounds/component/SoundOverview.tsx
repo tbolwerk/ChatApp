@@ -59,7 +59,7 @@ export default function SoundOverview({ category }) {
           />
         </Grid>
       ))}
-      <PaginationFeature data={sounds} />
+      {PaginationFeature && <PaginationFeature data={sounds} />}
     </Grid>
   );
 }
