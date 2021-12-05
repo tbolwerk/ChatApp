@@ -19,7 +19,7 @@ export default createFeature({
       [`${featureName}.route.component`]: route,
     },
 
-    use: [],
+    use: [['pagination.*', { required: false, type: fassetValidations.comp }]],
   },
   // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {

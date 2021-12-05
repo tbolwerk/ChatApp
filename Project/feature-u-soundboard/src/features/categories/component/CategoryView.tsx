@@ -28,8 +28,7 @@ const entriesPerPage = 3;
 const start: number = parseInt(params.page, 10) ?? 1;
 const end = start + entriesPerPage;
 const pagedCategories =
-  filteredCategories?.slice(start - 1, end - 1) ?? filteredCategories?.slice(0, entriesPerPage);
-let categoriesList = pagedCategories;
+  params.page === undefined ? filteredCategories : filteredCategories?.slice(start - 1, end - 1);
 function onHoverCard(e: any) {
   e.target.style.cursor = 'pointer';
 }
@@ -39,13 +38,10 @@ function offHoverCard(e: any) {}
 export default function CategoryView() {
   // const Category = useFassets('sounds.SoundOverview');
   const PaginationFeature = useFassets('pagination.PaginationFeature');
-  if (PaginationFeature === undefined) {
-    categoriesList = filteredCategories;
-  }
   // const [selectedCategory, setSelectedCategory] = useState('');
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {Array.from(categoriesList).map((category, index) => (
+      {Array.from(pagedCategories).map((category, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <Card
             onMouseOver={onHoverCard}
@@ -63,7 +59,7 @@ export default function CategoryView() {
           </Card>
         </Grid>
       ))}
-      <PaginationFeature data={categories} />
+      {PaginationFeature && <PaginationFeature data={categories} />}
     </Grid>
   );
 }
