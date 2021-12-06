@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import express from "express";
-import { registerAccount } from "./controllers/accountController";
 import { Request, Response } from "express";
 import multer from "multer";
 import soundController from "./controllers/soundController";
@@ -10,7 +9,6 @@ const upload = multer({ dest: 'uploads/' })
 import config from "./dotenv.config";
 import cors from 'cors';
 import {authenticateJWT} from "./middleware/authenticateJWT";
-import path from "path";
 
 const port = config.port || 3000;
 
@@ -28,6 +26,12 @@ app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded());
 
+app.post("/tts", (req, res) => {
+    soundController.getTTS(req.body.text)
+        .then(() => res.json({
+            message: "ok"
+        }));
+});
 
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
     const { name } = req.body;
