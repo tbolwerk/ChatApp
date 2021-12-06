@@ -1,9 +1,8 @@
 import { getSounds, insertSound, updateFavorite, getAllSounds } from "../dataAccess/soundDAO";
 import {getAudioUrl} from "google-tts-api";
 import Axios from "axios";
-import {type} from "os";
-import { Blob } from 'buffer';
 import fs from 'fs';
+import {randomUUID} from "crypto";
 
 class SoundController {
     get(username:string) {
@@ -22,14 +21,16 @@ class SoundController {
         return getAllSounds();
     }
 
-    async getTTS(text: string) {
+    async createTTS(text: string): Promise<string> {
         try {
             const url = getAudioUrl(text);
             const res = await Axios.get(url, {
                 responseType: "arraybuffer"
             });
             const buf = Buffer.from(res.data, 'binary');
-            fs.writeFileSync(`uploads/${encodeURIComponent(text)}.mp3`, buf);
+            const fileName = `${randomUUID()}.mp3`;
+            fs.writeFileSync(`uploads/${fileName}`, buf);
+            return fileName;
         } catch (e) {
             throw e;
         }
