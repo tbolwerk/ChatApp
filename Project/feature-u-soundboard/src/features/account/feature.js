@@ -5,10 +5,11 @@ import featureName from './featureName';
 import HeaderAccountGroup from './components/HeaderAccountGroup';
 import Auth0Provider from './components/Auth0Provider';
 import route from './route';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: 'account',
-  enabled: true,
+  enabled: config.Account,
   // our public face ...
   fassets: {
     define: {

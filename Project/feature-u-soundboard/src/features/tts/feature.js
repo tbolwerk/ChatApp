@@ -1,10 +1,11 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
 import TextToSpeechForm from './components/TextToSpeechForm';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: 'tts',
-
+  enabled: config.TTS,
   // our public face ...
   fassets: {
     define: {
