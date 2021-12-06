@@ -24,7 +24,6 @@ const SoundContainer = () => {
       try {
         const token = await getIdTokenClaims();
         if (token) {
-          console.log(config.apiEndpoint);
           const res = await Axios.get<Array<ISound>>(`${config.apiEndpoint}/sounds`, {
             headers: {
               authorization: `Bearer ${token.__raw}`,

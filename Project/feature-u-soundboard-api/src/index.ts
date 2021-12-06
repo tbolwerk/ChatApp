@@ -26,11 +26,16 @@ app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.post("/tts", (req, res) => {
-    soundController.getTTS(req.body.text)
-        .then(() => res.status(200).json({
-            message: "Created TTS."
-        }));
+app.post("/tts", authenticateJWT, async (req, res) => {
+    try {
+        const file = await soundController.createTTS(req.body.text);
+        await soundController.save(req.body.text, file, req.user.email);
+        return res.json({
+            message: 'TTS created.'
+        })
+    } catch (e) {
+        res.status(500).end();
+    }
 });
 
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
