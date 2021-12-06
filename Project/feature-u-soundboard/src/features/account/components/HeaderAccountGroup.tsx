@@ -12,7 +12,7 @@ const HeaderAccountGroup = () => {
   const { isAuthenticated } = useAuth0();
 
   return (
-    <Grid spacing={2} sx={{ display: 'flex', gap: '1rem', marginLeft: '1rem' }}>
+    <Grid sx={{ display: 'flex', gap: '1rem', marginLeft: '1rem' }}>
       {isAuthenticated ? (
         <>
           <Link to={`/${featureName}`}>
