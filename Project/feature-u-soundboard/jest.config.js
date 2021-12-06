@@ -1,16 +1,16 @@
 module.exports = {
-  roots: ["<rootDir>/src"],
+  roots: ['<rootDir>/src'],
 
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    '^.+\\.tsx?$': 'ts-jest',
   },
 
   setupFilesAfterEnv: [
-    "@testing-library/react/cleanup-after-each",
-    "@testing-library/jest-dom/extend-expect"
+    '@testing-library/react/cleanup-after-each',
+    '@testing-library/jest-dom/extend-expect',
   ],
 
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
 
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"]
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
