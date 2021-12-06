@@ -28,8 +28,8 @@ app.use(express.urlencoded());
 
 app.post("/tts", (req, res) => {
     soundController.getTTS(req.body.text)
-        .then(() => res.json({
-            message: "ok"
+        .then(() => res.status(200).json({
+            message: "Created TTS."
         }));
 });
 
