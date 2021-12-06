@@ -20,16 +20,8 @@ class SoundController {
             const res = await Axios.get(url, {
                 responseType: "arraybuffer"
             });
-            console.log(url)
-            console.log(typeof res.data)
-            // const stream = fs.createWriteStream("test.mp3");
-            // const blob = new Blob([res.data], {
-            //     type: 'audio/mpeg'
-            // });
-            // stream.write(res.data);
-            // stream.end();
             const buf = Buffer.from(res.data, 'binary');
-            fs.writeFileSync(`${encodeURIComponent(text)}.mp3`, buf);
+            fs.writeFileSync(`uploads/${encodeURIComponent(text)}.mp3`, buf);
         } catch (e) {
             throw e;
         }
