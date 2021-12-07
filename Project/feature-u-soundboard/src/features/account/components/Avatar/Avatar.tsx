@@ -5,7 +5,7 @@ import { Avatar as MuiAvatar } from '@mui/material';
 const Avatar = () => {
   const { user } = useAuth0();
 
-  return <MuiAvatar alt={user.name} src={user.picture} />;
+  return <MuiAvatar alt={(user && user.name) || 'profileImage'} src={user && user.picture} />;
 };
 
 export default Avatar;

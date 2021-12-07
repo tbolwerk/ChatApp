@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from 'react';
-import { render, screen } from '@testing-library/react';
 import launchApp from '../App';
 import allFeatures from '../features';
 
@@ -17,16 +13,14 @@ import search from '../features/search/feature';
 import { AssertionError } from 'assert';
 
 jest.mock('@auth0/auth0-react', () => ({
-  Auth0Provider: ({ children }) => children,
-  withAuthenticationRequired: (component, _) => component,
-  useAuth0: () => {
-    return {
-      isLoading: false,
-      user: { sub: 'foobar' },
-      isAuthenticated: true,
-      loginWithRedirect: jest.fn(),
-    };
-  },
+  Auth0Provider: ({ children }: { children: React.ReactNode }) => children,
+  withAuthenticationRequired: (component: React.ReactNode, _) => component,
+  useAuth0: () => ({
+    isLoading: false,
+    user: { sub: 'foobar' },
+    isAuthenticated: true,
+    loginWithRedirect: jest.fn(),
+  }),
 }));
 
 describe('App feature configurations', () => {

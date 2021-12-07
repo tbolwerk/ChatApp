@@ -1,12 +1,11 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import LoginButton from './LoginButton';
-import LogoutButton from './LogoutButton';
-import Avatar from './Avatar';
+import LoginButton from '../LoginButton';
+import LogoutButton from '../LogoutButton';
+import Avatar from '../Avatar';
 import { Link } from 'react-router-dom';
-
 import { Grid } from '@mui/material';
-import featureName from '../featureName';
+import featureName from '../../featureName';
 
 const HeaderAccountGroup = () => {
   const { isAuthenticated } = useAuth0();
