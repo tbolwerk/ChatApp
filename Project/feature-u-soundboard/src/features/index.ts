@@ -8,8 +8,10 @@ import app from './common/app/feature';
 import home from './common/home/feature';
 import search from './search/feature';
 import favoriteSound from './favoriteSound/feature';
+import voice from './voice-recording/feature';
 
 export default [
+  voice,
   sounds,
   categories,
   soundUpload,

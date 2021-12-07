@@ -8,6 +8,7 @@ const AccountPage = () => {
   const SoundContainer = useFassets('play.soundContainer');
   const SoundForm = useFassets('upload.form');
   const FavoriteFilterContainer = useFassets('favoriteSound.FavoriteFilterContainer');
+  const VoiceForm = useFassets('voice.form');
 
   const userInformation = [
     {
@@ -44,6 +45,7 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
+      {VoiceForm && <VoiceForm />}
       {SoundForm && <SoundForm />}
       {FavoriteFilterContainer ? (
         <FavoriteFilterContainer>
