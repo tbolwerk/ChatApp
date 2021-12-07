@@ -44,7 +44,7 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
-      <VoiceForm />
+      {VoiceForm && <VoiceForm />}
       <SoundForm />
       <SoundContainer />
     </Container>
