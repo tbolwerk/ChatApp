@@ -46,7 +46,6 @@ const VoiceRecordingForm = () => {
         setPlaying(false);
       } else {
         setPlaying((old) => !old);
-        player.fastSeek(0);
         player.play().catch((e) => console.log(e));
       }
     };
