@@ -7,10 +7,12 @@ import account from './account/feature';
 import app from './common/app/feature';
 import home from './common/home/feature';
 import search from './search/feature';
+import pagination from './common/pagination/feature';
 import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
 
 export default [
+  pagination,
   voice,
   sounds,
   categories,
