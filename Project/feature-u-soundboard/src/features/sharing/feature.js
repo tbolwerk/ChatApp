@@ -10,7 +10,7 @@ export default createFeature({
   // our public face ...
   fassets: {
     define: {
-      [`${featureName}.shareButton`]: ShareButton,
+      [`${featureName}.ShareButton`]: ShareButton,
     },
 
     defineUse: {},

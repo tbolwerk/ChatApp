@@ -32,6 +32,7 @@ export default function MediaControlCard({
 }: MediaControlCardProps) {
   const theme = useTheme();
   const FavoriteStar = useFassets('favoriteSound.FavoriteStar');
+  const ShareButton = useFassets('sharing.ShareButton');
 
   const [audio] = useState(new Audio(sound.path));
   const [playing, setPlaying] = useState<boolean>(false);
@@ -59,14 +60,6 @@ export default function MediaControlCard({
     }
   };
 
-  const renderIcon = () => {
-    return playing ? (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    ) : (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    );
-  };
-
   return (
     <Card sx={{ display: 'flex' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -82,6 +75,7 @@ export default function MediaControlCard({
             name={sound.name}
             handleChange={handleFavoriteStarChange}
           />
+          {ShareButton && <ShareButton link={`${window.location.href}?search=${sound.name}`} />}
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton aria-label="previous">

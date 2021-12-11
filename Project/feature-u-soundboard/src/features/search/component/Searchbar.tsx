@@ -5,6 +5,7 @@ import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { useLocation } from 'react-router';
 /*
 Search is implemented in such a way every component can just parse the url to get the search parameters and do whatever needs to be done for that component
 
@@ -50,7 +51,8 @@ export default function Searchbar() {
       width: '100%',
     },
   }));
-  const urlSearchParams = new URLSearchParams(window.location.search);
+  const location = useLocation();
+  const urlSearchParams = new URLSearchParams(location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
   const [search, setSearch] = React.useState(params.search ?? '');
 
