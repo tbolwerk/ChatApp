@@ -1,9 +1,10 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
 import TextToSpeechForm from './components/TextToSpeechForm';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'tts',
+  name: featureName,
 
   // our public face ...
   fassets: {

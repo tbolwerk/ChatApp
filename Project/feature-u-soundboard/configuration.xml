@@ -1,0 +1,15 @@
+<configuration>
+    <feature name="SoundUpload" enabled="true" />
+    <feature name="VoiceRecording" enabled="true" />
+    <feature name="SoundPlayback" enabled="true" />
+    <feature name="TTS" enabled="true" />
+
+    <feature name="Search" enabled="false" />
+    <feature name="Categories" enabled="false" />
+    <feature name="Pagination" enabled="false" />
+    <feature name="Theming" enabled="false" />
+
+    <feature name="Account" enabled="false" />
+    <feature name="Sharing" enabled="false" />
+    <feature name="Favorites" enabled="false" />
+</configuration>
