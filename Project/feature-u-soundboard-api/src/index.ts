@@ -26,18 +26,6 @@ app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.post("/tts", authenticateJWT, async (req, res) => {
-    try {
-        const file = await soundController.createTTS(req.body.text);
-        await soundController.save(req.body.text, file, req.user.email);
-        return res.status(201);
-    } catch (e) {
-        res.status(500).json({
-            error: e
-        })
-    }
-});
-
 app.post("/sounds", authenticateJWT, upload.single("sound"), (req: Request, res: Response) => {
     const { name } = req.body;
     if (req.file) {
