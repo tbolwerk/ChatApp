@@ -4,11 +4,12 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { ColorModeContext } from './ThemeProvider';
+import { useColorModeContext } from './ThemeProvider';
 
 export default function ToggleUITheme() {
   const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
+  const colorMode = useColorModeContext();
+
   return (
     <Box
       sx={{

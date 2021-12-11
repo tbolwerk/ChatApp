@@ -13,7 +13,6 @@ import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
 import theme from './common/theme/feature';
 export default [
-  theme,
   tts,
   pagination,
   voice,
@@ -25,6 +24,7 @@ export default [
   account,
   favoriteSound,
   baseUI,
+  theme,
   app,
   home,
 ];

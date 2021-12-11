@@ -18,7 +18,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 const lightTheme = {
   primary: amber,
   divider: amber[200],
@@ -48,22 +47,37 @@ const getDesignTokens = (mode: PaletteMode) => ({
   },
 });
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+export const useColorModeContext = () => {
+  return React.useContext(ColorModeContext);
+};
+
 export default function ThemeWrapper(props: { children: React.ReactChild }) {
   const [mode, setMode] = React.useState<PaletteMode>('light');
+
   const colorMode = React.useMemo(
     () => ({
-      // The dark mode switch would invoke this method
       toggleColorMode: () => {
-        setMode((prevMode: PaletteMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
     [],
   );
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>props.children</ThemeProvider>
+      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
     </ColorModeContext.Provider>
   );
 }
