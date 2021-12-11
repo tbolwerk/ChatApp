@@ -17,6 +17,7 @@ export default function Header(props: HeaderProps) {
 
   const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
   const Searchbar = useFassets('search.Searchbar');
+  const ToggleUITheme = useFassets('theme.ToggleUITheme');
 
   return (
     <React.Fragment>
@@ -28,6 +29,7 @@ export default function Header(props: HeaderProps) {
             </Typography>
           </Link>
         </Container>
+        {ToggleUITheme && <ToggleUITheme />}
         {Searchbar && <Searchbar />}
         {HeaderAccountGroup && <HeaderAccountGroup />}
       </Toolbar>
