@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 0;
+}
+
+.buttonContainer button {
+  flex: 1;
+}

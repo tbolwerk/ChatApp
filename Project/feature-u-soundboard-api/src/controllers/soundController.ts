@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import {getSounds, insertSound, getAllSounds} from "../dataAccess/soundDAO";
-=======
-import {getSounds, insertSound, updateFavorite} from "../dataAccess/soundDAO";
->>>>>>> main
+import {getSounds, insertSound, getAllSounds, updateFavorite} from "../dataAccess/soundDAO";
 
 class SoundController {
     get(username:string) {
