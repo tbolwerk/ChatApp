@@ -1,6 +1,6 @@
 import React from 'react';
 import { Auth0Provider } from '@auth0/auth0-react';
-import config from '../../../../dotenv.config';
+import config from '../../../dotenv.config';
 
 const Auth0Wrapper = (props: { children: React.ReactChild }) => {
   return (
