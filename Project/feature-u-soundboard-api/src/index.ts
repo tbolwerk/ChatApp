@@ -38,7 +38,7 @@ app.post("/tts", authenticateJWT, async (req, res) => {
     }
 });
 
-app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
+app.post("/sounds", authenticateJWT, upload.single("sound"), (req: Request, res: Response) => {
     const { name } = req.body;
     if (req.file) {
         soundController.save(name, req.file.filename, req.user.email);
@@ -55,6 +55,11 @@ app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
     soundController.get(req.user.email)
         .then((data) => res.json(data))
 })
+
+app.put("/sounds/favorite", authenticateJWT, (req: Request, res: Response) => {
+    const { name, favorite } = req.body;
+    soundController.setFavorite(name, req.user.email, favorite)
+});
 
 app.listen(port, () => {
     // tslint:disable-next-line: no-console

@@ -1,14 +1,13 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
-import TextToSpeechForm from './components/TextToSpeechForm';
-import config from '../../feature_config.json';
+import PaginationFeature from './component/Pagination';
 
 export default createFeature({
-  name: 'tts',
-  enabled: config.TTS,
+  name: 'pagination',
+  // our public face ...
   fassets: {
     define: {
-      'tts.form': TextToSpeechForm,
+      'pagination.PaginationFeature': PaginationFeature,
     },
 
     defineUse: {},
