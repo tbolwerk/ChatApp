@@ -18,6 +18,15 @@ export const getSounds = (user: string) => {
     });
 }
 
+export const getAllSounds = () => {
+    return new Promise((resolve) => {
+        useDb((db) => {
+            db.all("SELECT * FROM sounds", [], (err, rows) => {
+                resolve(rows);
+            })
+        })
+    })
+}
 export const updateFavorite = (name: string, user: string, favorite: boolean) => {
     useDb((db) => {
         const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ?");
