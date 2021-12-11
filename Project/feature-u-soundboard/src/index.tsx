@@ -1,12 +1,10 @@
-// import * as dotenv from 'dotenv';
-
-// dotenv.config();
-
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import launchApp from './App';
 import reportWebVitals from './reportWebVitals';
+import features from './features';
 
-<App />;
+launchApp(features);
 reportWebVitals();
