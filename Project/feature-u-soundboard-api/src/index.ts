@@ -30,11 +30,11 @@ app.post("/tts", authenticateJWT, async (req, res) => {
     try {
         const file = await soundController.createTTS(req.body.text);
         await soundController.save(req.body.text, file, req.user.email);
-        return res.json({
-            message: 'TTS created.'
-        })
+        return res.status(201);
     } catch (e) {
-        res.status(500).end();
+        res.status(500).json({
+            error: e
+        })
     }
 });
 
@@ -42,9 +42,7 @@ app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
     const { name } = req.body;
     if (req.file) {
         soundController.save(name, req.file.filename, req.user.email);
-        return res.json({
-            message: "Uploaded."
-        })
+        return res.status(201);
     }
     res.status(400).json({
         message: "Missing name or sound."
