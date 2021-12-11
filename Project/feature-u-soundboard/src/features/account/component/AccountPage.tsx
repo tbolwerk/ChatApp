@@ -46,9 +46,9 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
+      {SoundForm && <SoundForm />}
       {TTSForm && <TTSForm />}
       {VoiceForm && <VoiceForm />}
-      {SoundForm && <SoundForm />}
       {FavoriteFilterContainer ? (
         <FavoriteFilterContainer>
           <SoundContainer />

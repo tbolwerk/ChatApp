@@ -21,6 +21,7 @@
     "@types/react-router": "^5.1.17",
     "@types/react-router-dom": "^5.3.2",
     "axios": "^0.24.0",
+    "fast-xml-parser": "^4.0.0-beta.6",
     "feature-redux": "^3.0.0",
     "feature-u": "^3.0.0",
     "react": "^17.0.2",
@@ -62,7 +63,8 @@
     "format": "prettier --check ./src",
     "pretty": "prettier --write ./src",
     "model": "tplant -A -i src/interfaces/**/*.ts -o models/model.svg",
-    "clean": "yarn rimraf node_modules"
+    "clean": "yarn rimraf node_modules",
+    "gen": "node feature.config.js"
   },
   "eslintConfig": {
     "extends": [
