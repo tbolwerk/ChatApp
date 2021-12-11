@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Pagination } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
-
+import { useFassets } from 'feature-u';
 export default function SoundOverview({ category }) {
   const sounds = [
     { title: 'scream' },
@@ -12,15 +13,23 @@ export default function SoundOverview({ category }) {
     { title: 'sirene' },
   ];
 
+  const entriesPerPage = 3;
+
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
   const filteredSounds = sounds.filter(
     (x) =>
       params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
   );
+  const start: number = parseInt(params.page, 10) ?? 1;
+  const end = start + entriesPerPage;
+  const pagedSounds =
+    params.page === undefined ? filteredSounds : filteredSounds?.slice(start - 1, end - 1);
+
+  const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {filteredSounds.map((sound, index) => (
+      {pagedSounds.map((sound, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <MediaControlCard
             title={sound.title}
@@ -29,6 +38,7 @@ export default function SoundOverview({ category }) {
           />
         </Grid>
       ))}
+      {PaginationFeature && <PaginationFeature data={sounds} />}
     </Grid>
   );
 }
