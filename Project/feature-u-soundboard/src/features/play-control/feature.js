@@ -2,15 +2,16 @@ import React from 'react';
 import { createFeature } from 'feature-u';
 import SoundContainer from './components/SoundContainer/SoundContainer';
 import config from '../../feature_config.json';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'play-control',
+  name: featureName,
   enabled: config.SoundPlayback,
 
   // our public face ...
   fassets: {
     define: {
-      'play.soundContainer': SoundContainer,
+      [`${featureName}.soundContainer`]: SoundContainer,
     },
 
     defineUse: {},

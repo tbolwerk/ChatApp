@@ -12,7 +12,7 @@ export default createFeature({
   // our public face ...
   fassets: {
     define: {
-      'tts.form': TextToSpeechForm,
+      [`${featureName}.form`]: TextToSpeechForm,
     },
 
     defineUse: {},
