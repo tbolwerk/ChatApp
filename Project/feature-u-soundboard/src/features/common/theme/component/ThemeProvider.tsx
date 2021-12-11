@@ -47,7 +47,11 @@ const getDesignTokens = (mode: PaletteMode) => ({
   },
 });
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+const ColorModeContext = React.createContext({
+  toggleColorMode: () => {
+    console.log('color mode context not set');
+  },
+});
 
 export const useColorModeContext = () => {
   return React.useContext(ColorModeContext);

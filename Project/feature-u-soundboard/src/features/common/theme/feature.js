@@ -5,12 +5,12 @@ import featureName from './featureName';
 import ThemeWrapper from './component/ThemeProvider';
 
 export default createFeature({
-  name: 'theme',
+  name: featureName,
   // our public face ...
   fassets: {
     define: {
       [`${featureName}.ToggleUITheme`]: ToggleUITheme,
-      [`${featureName}.auth0Provider`]: ThemeWrapper,
+      [`${featureName}.ThemeWrapper`]: ThemeWrapper,
     },
 
     defineUse: {},
