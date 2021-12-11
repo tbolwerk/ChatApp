@@ -6,3 +6,4 @@ build
 yarn.lock
 package-lock.json
 yarn-error.log
+feature_config.json

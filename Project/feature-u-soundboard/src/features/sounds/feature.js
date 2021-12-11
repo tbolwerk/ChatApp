@@ -3,10 +3,11 @@ import { createFeature, fassetValidations } from 'feature-u';
 import SoundOverview from './component/SoundOverview';
 import { link, route } from './route';
 import featureName from './featureName';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: 'sounds',
-  enabled: true,
+  enabled: config.SoundPlayback,
 
   // our public face ...
   fassets: {
