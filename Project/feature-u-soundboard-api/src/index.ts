@@ -14,7 +14,7 @@ const port = config.port || 3000;
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000', '*'];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins
@@ -54,10 +54,16 @@ app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
         .then((data) => res.json(data))
 })
 
+<<<<<<< HEAD
+app.get("/allsounds", (req: Request, res: Response) => {
+    soundController.getAll().then((data) => res.json(data));
+})
+=======
 app.put("/sounds/favorite", authenticateJWT, (req: Request, res: Response) => {
     const { name, favorite } = req.body;
     soundController.setFavorite(name, req.user.email, favorite)
 });
+>>>>>>> main
 
 app.listen(port, () => {
     // tslint:disable-next-line: no-console

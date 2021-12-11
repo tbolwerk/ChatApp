@@ -2,14 +2,16 @@ import React from 'react';
 import { createFeature } from 'feature-u';
 import SoundContainer from './components/SoundContainer/SoundContainer';
 import { AssertionError } from 'assert';
+import SoundButton from './components/SoundButton/SoundButton';
 
 export default createFeature({
   name: 'play-control',
-
+  enabled: true,
   // our public face ...
   fassets: {
     define: {
       'play.soundContainer': SoundContainer,
+      'play.soundButton': SoundButton,
     },
 
     defineUse: {},
