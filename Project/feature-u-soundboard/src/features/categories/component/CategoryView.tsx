@@ -20,7 +20,6 @@ const categories = [
 ];
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
-console.log(params.search);
 const filteredCategories = categories.filter(
   (x) => params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
 );
@@ -36,9 +35,8 @@ function onHoverCard(e: any) {
 function offHoverCard(e: any) {}
 
 export default function CategoryView() {
-  // const Category = useFassets('sounds.SoundOverview');
   const PaginationFeature = useFassets('pagination.PaginationFeature');
-  // const [selectedCategory, setSelectedCategory] = useState('');
+
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {Array.from(pagedCategories).map((category, index) => (

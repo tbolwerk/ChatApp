@@ -16,7 +16,6 @@ export default [
   tts,
   pagination,
   voice,
-  tts,
   sounds,
   categories,
   soundUpload,
