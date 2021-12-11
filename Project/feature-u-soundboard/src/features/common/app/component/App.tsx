@@ -6,8 +6,6 @@ const App = () => {
   const MainLayout = useFassets('baseUI.mainLayout');
   const Auth0Provider = useFassets('account.auth0Provider');
 
-  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
-
   const app = (
     <BrowserRouter>
       <div className="app">
@@ -16,7 +14,7 @@ const App = () => {
     </BrowserRouter>
   );
 
-  return Auth0Provider ? wrapInAuth0Provider(app) : app;
+  return Auth0Provider ? <Auth0Provider>{app}</Auth0Provider> : app;
 };
 
 export default App;
