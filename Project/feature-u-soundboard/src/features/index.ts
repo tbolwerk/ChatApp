@@ -7,5 +7,23 @@ import account from './account/feature';
 import app from './common/app/feature';
 import home from './common/home/feature';
 import search from './search/feature';
+import tts from './tts/feature';
+import pagination from './common/pagination/feature';
+import favoriteSound from './favoriteSound/feature';
+import voice from './voice-recording/feature';
 
-export default [sounds, categories, soundUpload, search, playControl, account, baseUI, app, home];
+export default [
+  tts,
+  pagination,
+  voice,
+  sounds,
+  categories,
+  soundUpload,
+  search,
+  playControl,
+  account,
+  favoriteSound,
+  baseUI,
+  app,
+  home,
+];

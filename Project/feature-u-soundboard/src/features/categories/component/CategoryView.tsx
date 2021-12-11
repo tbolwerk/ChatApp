@@ -23,7 +23,11 @@ const params = Object.fromEntries(urlSearchParams.entries());
 const filteredCategories = categories.filter(
   (x) => params.search === undefined || x.title.toUpperCase().includes(params.search.toUpperCase()),
 );
-
+const entriesPerPage = 3;
+const start: number = parseInt(params.page, 10) ?? 1;
+const end = start + entriesPerPage;
+const pagedCategories =
+  params.page === undefined ? filteredCategories : filteredCategories?.slice(start - 1, end - 1);
 function onHoverCard(e: any) {
   e.target.style.cursor = 'pointer';
 }
@@ -31,18 +35,17 @@ function onHoverCard(e: any) {
 function offHoverCard(e: any) {}
 
 export default function CategoryView() {
-  const Category = useFassets('sounds.SoundOverview');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  return selectedCategory != '' ? (
-    <Category category={selectedCategory} />
-  ) : (
+  // const Category = useFassets('sounds.SoundOverview');
+  const PaginationFeature = useFassets('pagination.PaginationFeature');
+  // const [selectedCategory, setSelectedCategory] = useState('');
+  return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-      {Array.from(filteredCategories).map((category, index) => (
+      {Array.from(pagedCategories).map((category, index) => (
         <Grid item xs={2} sm={4} md={4} key={index}>
           <Card
             onMouseOver={onHoverCard}
             onMouseOut={offHoverCard}
-            onClick={(e) => setSelectedCategory(category.title)}>
+            onClick={(e) => window.location.assign(`/sounds?category=${category.title}`)}>
             <CardContent sx={{ flex: '1 0 auto' }}>
               <Typography>{category.title}</Typography>
               <CardMedia
@@ -55,6 +58,7 @@ export default function CategoryView() {
           </Card>
         </Grid>
       ))}
+      {PaginationFeature && <PaginationFeature data={categories} />}
     </Grid>
   );
 }

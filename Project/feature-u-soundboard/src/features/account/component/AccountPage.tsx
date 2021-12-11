@@ -7,6 +7,9 @@ const AccountPage = () => {
   const { user } = useAuth0();
   const SoundContainer = useFassets('play.soundContainer');
   const SoundForm = useFassets('upload.form');
+  const TTSForm = useFassets('tts.form');
+  const FavoriteFilterContainer = useFassets('favoriteSound.FavoriteFilterContainer');
+  const VoiceForm = useFassets('voice.form');
 
   const userInformation = [
     {
@@ -43,8 +46,16 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
-      <SoundForm />
-      <SoundContainer />
+      {SoundForm && <SoundForm />}
+      {TTSForm && <TTSForm />}
+      {VoiceForm && <VoiceForm />}
+      {FavoriteFilterContainer ? (
+        <FavoriteFilterContainer>
+          <SoundContainer />
+        </FavoriteFilterContainer>
+      ) : (
+        SoundContainer && <SoundContainer />
+      )}
     </Container>
   );
 };
