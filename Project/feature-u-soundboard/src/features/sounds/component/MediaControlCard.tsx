@@ -34,14 +34,6 @@ export default function MediaControlCard(props: MediaControlCardProps) {
     return () => audio.removeEventListener('ended', handleEnd);
   }, []);
 
-  const renderIcon = () => {
-    return playing ? (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    ) : (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    );
-  };
-
   const handlePlayStop = () => {
     audio.volume = 1;
     if (playing) {

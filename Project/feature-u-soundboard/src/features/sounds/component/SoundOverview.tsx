@@ -10,7 +10,10 @@ import Axios from 'axios';
 import { Grid, Pagination } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
 import { useFassets } from 'feature-u';
+import { useTheme } from '@mui/material/styles';
 export default function SoundOverview({ category }) {
+  const theme = useTheme();
+
   const init_sounds = [
     { title: 'scream' },
     { title: 'boo' },

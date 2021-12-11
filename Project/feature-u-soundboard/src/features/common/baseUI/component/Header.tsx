@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { useFassets } from 'feature-u';
 import { Link } from 'react-router-dom';
 import { Container } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface HeaderProps {
   sections: ReadonlyArray<React.ComponentClass<any>>;
@@ -18,6 +19,8 @@ export default function Header(props: HeaderProps) {
   const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
   const Searchbar = useFassets('search.Searchbar');
   const ToggleUITheme = useFassets('theme.ToggleUITheme');
+
+  const theme = useTheme();
 
   return (
     <React.Fragment>

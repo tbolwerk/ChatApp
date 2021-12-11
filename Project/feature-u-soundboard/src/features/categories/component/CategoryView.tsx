@@ -3,6 +3,7 @@ import { CardContent, Grid, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import { useFassets } from 'feature-u';
+import { useTheme } from '@mui/material/styles';
 //TODO: change to database call and seed this data on creation of database.
 const categories = [
   { title: 'Games', imageUrl: null },
@@ -35,6 +36,7 @@ function onHoverCard(e: any) {
 function offHoverCard(e: any) {}
 
 export default function CategoryView() {
+  const theme = useTheme();
   // const Category = useFassets('sounds.SoundOverview');
   const PaginationFeature = useFassets('pagination.PaginationFeature');
   // const [selectedCategory, setSelectedCategory] = useState('');
