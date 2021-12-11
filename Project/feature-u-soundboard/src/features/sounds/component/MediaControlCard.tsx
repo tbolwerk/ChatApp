@@ -1,4 +1,5 @@
-import * as React from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,19 +14,27 @@ import { useFassets } from 'feature-u';
 import { ISound } from '../interfaces/ISound';
 import { useEffect, useState } from 'react';
 import { Pause } from '@mui/icons-material';
+
 interface MediaControlCardProps {
   title: string;
   subtitle: string;
   imageUrl: string;
   sound: ISound;
+  handleFavoriteChange: (sound: ISound, newSound: ISound) => void;
 }
 
-export default function MediaControlCard(props: MediaControlCardProps) {
+export default function MediaControlCard({
+  sound,
+  title,
+  subtitle,
+  imageUrl,
+  handleFavoriteChange,
+}: MediaControlCardProps) {
   const theme = useTheme();
+  const FavoriteStar = useFassets('favoriteSound.FavoriteStar');
+  const ShareButton = useFassets('sharing.ShareButton');
 
-  const { name, path } = props.sound;
-
-  const [audio] = useState(new Audio(path));
+  const [audio] = useState(new Audio(sound.path));
   const [playing, setPlaying] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,12 +43,10 @@ export default function MediaControlCard(props: MediaControlCardProps) {
     return () => audio.removeEventListener('ended', handleEnd);
   }, []);
 
-  const renderIcon = () => {
-    return playing ? (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    ) : (
-      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-    );
+  const handleFavoriteStarChange = () => {
+    const newSound = sound;
+    newSound.favorite = !sound.favorite;
+    handleFavoriteChange(sound, newSound);
   };
 
   const handlePlayStop = () => {
@@ -58,11 +65,17 @@ export default function MediaControlCard(props: MediaControlCardProps) {
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography component="div" variant="h5">
-            {props.title}
+            {title}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" component="div">
-            {props.subtitle}
+            {subtitle}
           </Typography>
+          <FavoriteStar
+            favorite={sound.favorite}
+            name={sound.name}
+            handleChange={handleFavoriteStarChange}
+          />
+          {ShareButton && <ShareButton link={`${window.location.href}?search=${sound.name}`} />}
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton aria-label="previous">
@@ -83,7 +96,7 @@ export default function MediaControlCard(props: MediaControlCardProps) {
       <CardMedia
         component="img"
         sx={{ width: 151 }}
-        image={props.imageUrl}
+        image={imageUrl}
         alt="Live from space album cover"
       />
     </Card>
