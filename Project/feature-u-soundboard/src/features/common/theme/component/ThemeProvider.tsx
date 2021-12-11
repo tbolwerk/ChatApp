@@ -48,7 +48,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
   },
 });
 
-const ThemeWrapper = (props: { children: React.ReactChild }) => {
+export default function ThemeWrapper(props: { children: React.ReactChild }) {
   const [mode, setMode] = React.useState<PaletteMode>('light');
   const colorMode = React.useMemo(
     () => ({
@@ -66,6 +66,4 @@ const ThemeWrapper = (props: { children: React.ReactChild }) => {
       <ThemeProvider theme={theme}>props.children</ThemeProvider>
     </ColorModeContext.Provider>
   );
-};
-
-export default ThemeWrapper;
+}
