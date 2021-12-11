@@ -11,10 +11,12 @@ import tts from './tts/feature';
 import pagination from './common/pagination/feature';
 import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
+import sharing from './sharing/feature';
 
 export default [
   tts,
   pagination,
+  sharing,
   voice,
   sounds,
   categories,
