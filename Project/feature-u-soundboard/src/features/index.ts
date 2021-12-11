@@ -7,12 +7,13 @@ import account from './account/feature';
 import app from './common/app/feature';
 import home from './common/home/feature';
 import search from './search/feature';
+import tts from './tts/feature';
+import pagination from './common/pagination/feature';
 import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
-import pagination from './common/pagination/feature';
-import tts from './tts/feature';
 
 export default [
+  tts,
   pagination,
   voice,
   tts,

@@ -18,14 +18,6 @@ export const getSounds = (user: string) => {
     });
 }
 
-export const updateFavorite = (name: string, user: string, favorite: boolean) => {
-    useDb((db) => {
-        const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ?");
-        stmt.run([favorite ? 1 : 0, user, name]);
-        stmt.finalize();
-    });
-}
-
 export const getAllSounds = () => {
     return new Promise((resolve) => {
         useDb((db) => {
@@ -34,4 +26,11 @@ export const getAllSounds = () => {
             })
         })
     })
+}
+export const updateFavorite = (name: string, user: string, favorite: boolean) => {
+    useDb((db) => {
+        const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ?");
+        stmt.run([favorite ? 1 : 0, user, name]);
+        stmt.finalize();
+    });
 }

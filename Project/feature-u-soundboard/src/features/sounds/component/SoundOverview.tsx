@@ -2,18 +2,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ISound } from '../interfaces/ISound';
 import config from '../../../dotenv.config';
 import Axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Grid } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
 import { useFassets } from 'feature-u';
 
 export default function SoundOverview({ category }) {
   const [sounds, setSounds] = useState<Array<ISound>>([]);
-  const { user, getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     const getSounds = async () => {
@@ -30,9 +28,8 @@ export default function SoundOverview({ category }) {
       }
     };
 
-    getSounds().catch((e) => console.log(e));
+    getSounds().catch((e) => console.error(e));
   }, []);
-  
   const entriesPerPage = 3;
 
   const urlSearchParams = new URLSearchParams(window.location.search);

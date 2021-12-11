@@ -1,4 +1,4 @@
-import { getSounds, insertSound, updateFavorite, getAllSounds } from "../dataAccess/soundDAO";
+import { getSounds, insertSound, getAllSounds, updateFavorite } from "../dataAccess/soundDAO";
 import {getAudioUrl} from "google-tts-api";
 import Axios from "axios";
 import fs from 'fs';

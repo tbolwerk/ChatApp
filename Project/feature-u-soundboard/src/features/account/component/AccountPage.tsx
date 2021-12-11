@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Container, Table, TableBody, TableCell, TableRow } from '@mui/material';
@@ -5,9 +6,7 @@ import { useFassets } from 'feature-u';
 
 const AccountPage = () => {
   const { user } = useAuth0();
-  const SoundContainer = useFassets('play.soundContainer');
   const SoundForm = useFassets('upload.form');
-  const FavoriteFilterContainer = useFassets('favoriteSound.FavoriteFilterContainer');
   const VoiceForm = useFassets('voice.form');
   const TTSForm = useFassets('tts.form');
 
@@ -46,16 +45,9 @@ const AccountPage = () => {
           ))}
         </TableBody>
       </Table>
-      {VoiceForm && <VoiceForm />}
-      {TTSForm && <TTSForm />}
       {SoundForm && <SoundForm />}
-      {FavoriteFilterContainer ? (
-        <FavoriteFilterContainer>
-          <SoundContainer />
-        </FavoriteFilterContainer>
-      ) : (
-        SoundContainer && <SoundContainer />
-      )}
+      {TTSForm && <TTSForm />}
+      {VoiceForm && <VoiceForm />}
     </Container>
   );
 };
