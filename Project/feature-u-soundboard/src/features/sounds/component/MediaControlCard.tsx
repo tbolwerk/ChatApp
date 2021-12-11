@@ -17,13 +17,13 @@ interface MediaControlCardProps {
   title: string;
   subtitle: string;
   imageUrl: string;
+  sound: ISound;
 }
 
 export default function MediaControlCard(props: MediaControlCardProps) {
   const theme = useTheme();
-  const sound: ISound = { name: props.title, path: props.imageUrl, user: props.subtitle };
 
-  const { name, path } = sound;
+  const { name, path } = props.sound;
 
   const [audio] = useState(new Audio(path));
   const [playing, setPlaying] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export default function MediaControlCard(props: MediaControlCardProps) {
   };
 
   const handlePlayStop = () => {
-    audio.volume = 0.1;
+    audio.volume = 1;
     if (playing) {
       setPlaying(false);
       audio.pause();
@@ -52,6 +52,7 @@ export default function MediaControlCard(props: MediaControlCardProps) {
       audio.play().catch((e) => console.log(e));
     }
   };
+
   return (
     <Card sx={{ display: 'flex' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -68,7 +69,11 @@ export default function MediaControlCard(props: MediaControlCardProps) {
             {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
           </IconButton>
           <IconButton aria-label="play/pause" onClick={handlePlayStop}>
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+            {playing ? (
+              <Pause sx={{ height: 38, width: 38 }} />
+            ) : (
+              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+            )}
           </IconButton>
           <IconButton aria-label="next">
             {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
