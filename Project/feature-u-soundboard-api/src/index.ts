@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 
-app.post("/sounds", authenticateJWT, upload.single("sound"), (req, res) => {
+app.post("/sounds", authenticateJWT, upload.single("sound"), (req: Request, res: Response) => {
     const { name } = req.body;
     if (req.file) {
         soundController.save(name, req.file.filename, req.user.email);
@@ -47,9 +47,16 @@ app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
         .then((data) => res.json(data))
 })
 
+<<<<<<< HEAD
 app.get("/allsounds", (req: Request, res: Response) => {
     soundController.getAll().then((data) => res.json(data));
 })
+=======
+app.put("/sounds/favorite", authenticateJWT, (req: Request, res: Response) => {
+    const { name, favorite } = req.body;
+    soundController.setFavorite(name, req.user.email, favorite)
+});
+>>>>>>> main
 
 app.listen(port, () => {
     // tslint:disable-next-line: no-console

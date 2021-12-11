@@ -1,4 +1,4 @@
-import AccountPage from './components/AccountPage';
+import AccountPage from './component/AccountPage';
 import { IRoute } from '../../interfaces/IRoute';
 import featureName from './featureName';
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
-import PaginationFeature from './component/Pagination';
+import VoiceRecordingForm from './components/VoiceRecordingForm';
 
 export default createFeature({
-  name: 'pagination',
+  name: 'voice',
+
   // our public face ...
   fassets: {
     define: {
-      'pagination.PaginationFeature': PaginationFeature,
+      'voice.form': VoiceRecordingForm,
     },
 
     defineUse: {},
@@ -15,8 +16,7 @@ export default createFeature({
     use: [],
   },
 
-  // inject our baseUI components into the root of our app
   appWillStart({ fassets, curRootAppElm }) {
-    return <> {curRootAppElm} </>;
+    return <>{curRootAppElm}</>;
   },
 });
