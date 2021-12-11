@@ -1,6 +1,5 @@
 import React from 'react';
 import { createFeature, fassetValidations } from 'feature-u';
-
 import _home from './feature';
 import featureName from './featureName';
 import route from './route';

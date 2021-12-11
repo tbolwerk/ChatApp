@@ -1,13 +1,16 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
 import PaginationFeature from './component/Pagination';
+import config from '../../../feature_config.json';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'pagination',
+  name: featureName,
+  enabled: config.Pagination,
   // our public face ...
   fassets: {
     define: {
-      'pagination.PaginationFeature': PaginationFeature,
+      [`${featureName}.PaginationFeature`]: PaginationFeature,
     },
 
     defineUse: {},
