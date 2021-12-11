@@ -48,7 +48,7 @@ export default function SoundOverview({ category }) {
     };
 
     getSounds().catch((e) => console.log(e));
-  }, [user]);
+  }, []);
 
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
@@ -64,6 +64,7 @@ export default function SoundOverview({ category }) {
             title={sound.name}
             subtitle={category ?? 'Sound'}
             imageUrl={`https://picsum.photos/id/${index}/1600/900`}
+            sound={sound}
           />
         </Grid>
       ))}
