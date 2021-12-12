@@ -3,7 +3,8 @@ import { CardContent, Grid, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import { useFassets } from 'feature-u';
-import { useTheme } from '@mui/material/styles';
+import { Navigate } from 'react-router-dom';
+
 //TODO: change to database call and seed this data on creation of database.
 const categories = [
   { title: 'Games', imageUrl: null },
@@ -37,6 +38,15 @@ function offHoverCard(e: any) {}
 
 export default function CategoryView() {
   const PaginationFeature = useFassets('pagination.PaginationFeature');
+  const [redirect, setRedirect] = useState<string>(undefined);
+
+  const handleOnCategoryClick = (title: string) => {
+    setRedirect(`/sounds?category=${title}`);
+  };
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -45,7 +55,7 @@ export default function CategoryView() {
           <Card
             onMouseOver={onHoverCard}
             onMouseOut={offHoverCard}
-            onClick={(e) => window.location.assign(`/sounds?category=${category.title}`)}>
+            onClick={() => handleOnCategoryClick(category.title)}>
             <CardContent sx={{ flex: '1 0 auto' }}>
               <Typography>{category.title}</Typography>
               <CardMedia

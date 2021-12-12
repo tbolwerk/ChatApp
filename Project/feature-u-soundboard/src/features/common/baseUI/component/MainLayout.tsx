@@ -15,8 +15,9 @@ export default function MainLayout() {
     <div
       className="layout"
       style={{
-        backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
-        color: theme.palette.mode === 'dark' ? 'white' : 'black',
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        height: '100vh',
       }}>
       <header className="App-header">
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -24,8 +25,8 @@ export default function MainLayout() {
       <Header sections={linkComponents} title={'Soundboard'} />
       <main
         style={{
-          backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
-          color: theme.palette.mode === 'dark' ? 'white' : 'black',
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.text.primary,
         }}>
         <Routes>
           {routes.map(({ url, Content }: IRoute, index) => (
