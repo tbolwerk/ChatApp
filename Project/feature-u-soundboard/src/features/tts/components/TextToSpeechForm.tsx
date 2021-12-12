@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Button, TextField, Alert, Snackbar } from '@mui/material';
 import styles from './TextToSpeechForm.module.css';
 import config from '../../../dotenv.config';
 import Axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const TextToSpeechForm = () => {
+interface Props {
+  didUpload: boolean;
+  setDidUpload: Dispatch<SetStateAction<boolean>>;
+}
+
+const TextToSpeechForm = ({ didUpload, setDidUpload }: Props) => {
   const [text, setText] = useState<string>('');
-  const [creating, setCreating] = useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const { getIdTokenClaims } = useAuth0();
+
+  const handleClose = () => {
+    setShowSnackbar(false);
+  };
 
   const handleCreate = async () => {
     try {
       if (text) {
         const token = await getIdTokenClaims();
-        setCreating(true);
         await Axios.post(
           `${config.apiEndpoint}/tts`,
           {
@@ -26,9 +34,11 @@ const TextToSpeechForm = () => {
               authorization: `Bearer ${token.__raw}`,
             },
           },
-        );
-        setCreating(false);
-        setText('');
+        ).then(() => {
+          setShowSnackbar(true);
+          setText('');
+          setDidUpload(!didUpload);
+        });
       }
     } catch (e) {
       console.log(e);
@@ -39,10 +49,15 @@ const TextToSpeechForm = () => {
     <div className={styles.form}>
       <TextField label={'Text-To-Speech'} value={text} onChange={(e) => setText(e.target.value)} />
       <div className={styles.buttonContainer}>
-        <Button disabled={creating} onClick={handleCreate} variant={'contained'}>
+        <Button onClick={handleCreate} variant={'contained'}>
           Create TTS
         </Button>
       </div>
+      <Snackbar open={showSnackbar} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Sound uploaded!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

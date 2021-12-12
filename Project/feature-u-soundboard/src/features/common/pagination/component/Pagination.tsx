@@ -5,19 +5,23 @@
 
 import { Pagination } from '@mui/material';
 import React from 'react';
-
+import { useSearchParams } from 'react-router-dom';
 export interface Props {
   data: Array<any>;
+  entrySize: number;
 }
 
-export default function PaginationFeature(props: Props) {
+export default function PaginationFeature({ data, entrySize }: Props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleChange = (event, value: number) => {
-    window.location.assign(`?page=${value}`);
+    setSearchParams(new URLSearchParams(`?page=${value}`));
   };
 
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
+  const params = Object.fromEntries(searchParams.entries());
   const page: number = parseInt(params.page, 10) ?? 1;
 
-  return <Pagination count={props.data.length - 1} onChange={handleChange} page={page} />;
+  return (
+    <Pagination count={Math.ceil(data.length / entrySize)} onChange={handleChange} page={page} />
+  );
 }

@@ -9,16 +9,20 @@ import Axios from 'axios';
 import { Grid, Box, Container } from '@mui/material';
 import MediaControlCard from './MediaControlCard';
 import { useFassets } from 'feature-u';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   category?: string;
 }
+
+const ENTRIES_PER_PAGE = 12;
 
 export default function SoundOverview({ category }: Props) {
   const FavoriteFilterButton = useFassets('favoriteSound.FavoriteFilterButton');
   const useFavoriteFilter = useFassets('favoriteSound.useFavoriteFilter');
 
   const [sounds, setSounds] = useState<Array<ISound>>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { filterOn } = useFavoriteFilter ? useFavoriteFilter() : { filterOn: false };
 
   useEffect(() => {
@@ -46,19 +50,17 @@ export default function SoundOverview({ category }: Props) {
     setSounds(newSounds);
   };
 
-  const entriesPerPage = 3;
-
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
+  const params = Object.fromEntries(searchParams.entries());
   const favoriteFilteredSounds = sounds.filter((s) => (filterOn ? s.favorite : true));
   const filteredSounds = favoriteFilteredSounds.filter(
     (s) =>
       params.search === undefined || s.name.toUpperCase().includes(params.search.toUpperCase()),
   );
-  const start: number = parseInt(params.page, 10) ?? 1;
-  const end = start + entriesPerPage;
+  const pageNumber = parseInt(params.page, 10) ?? 1;
+  const start: number = (pageNumber - 1) * ENTRIES_PER_PAGE;
+  const end = start + ENTRIES_PER_PAGE;
   const pagedSounds =
-    params.page === undefined ? filteredSounds : filteredSounds?.slice(start - 1, end - 1);
+    params.page === undefined ? filteredSounds : filteredSounds?.slice(start, end);
 
   const PaginationFeature = useFassets('pagination.PaginationFeature');
   return (
@@ -79,7 +81,7 @@ export default function SoundOverview({ category }: Props) {
       </Grid>
       <Container sx={{ width: '100%' }}>
         <Box sx={{ margin: 'auto', width: 'fit-content' }}>
-          {PaginationFeature && <PaginationFeature data={sounds} />}
+          {PaginationFeature && <PaginationFeature data={sounds} entrySize={ENTRIES_PER_PAGE} />}
         </Box>
       </Container>
     </Container>

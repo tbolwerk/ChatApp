@@ -9,10 +9,11 @@ import config from '../../../dotenv.config';
 interface Props {
   favorite: boolean;
   name: string;
+  path: string;
   handleChange: () => void;
 }
 
-const FavoriteStar = ({ favorite, name, handleChange }: Props) => {
+const FavoriteStar = ({ favorite, name, path, handleChange }: Props) => {
   const { getIdTokenClaims } = useAuth0();
 
   const toggleFavorite = async () => {
@@ -22,7 +23,7 @@ const FavoriteStar = ({ favorite, name, handleChange }: Props) => {
 
       await Axios.put(
         `${config.apiEndpoint}/sounds/favorite`,
-        { name, favorite: !favorite },
+        { name, path, favorite: !favorite },
         {
           headers: {
             authorization: `Bearer ${token.__raw}`,

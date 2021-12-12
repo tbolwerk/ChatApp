@@ -73,6 +73,7 @@ export default function MediaControlCard({
           <FavoriteStar
             favorite={sound.favorite}
             name={sound.name}
+            path={sound.path}
             handleChange={handleFavoriteStarChange}
           />
           {ShareButton && <ShareButton link={`${window.location.href}?search=${sound.name}`} />}

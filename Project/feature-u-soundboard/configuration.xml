@@ -4,12 +4,12 @@
     <feature name="SoundPlayback" enabled="true" />
     <feature name="TTS" enabled="true" />
 
-    <feature name="Search" enabled="false" />
-    <feature name="Categories" enabled="false" />
-    <feature name="Pagination" enabled="false" />
-    <feature name="Theming" enabled="false" />
+    <feature name="Search" enabled="true" />
+    <feature name="Categories" enabled="true" />
+    <feature name="Pagination" enabled="true" />
+    <feature name="Theming" enabled="true" />
 
-    <feature name="Account" enabled="false" />
-    <feature name="Sharing" enabled="false" />
-    <feature name="Favorites" enabled="false" />
+    <feature name="Account" enabled="true" />
+    <feature name="Sharing" enabled="true" />
+    <feature name="Favorites" enabled="true" />
 </configuration>
