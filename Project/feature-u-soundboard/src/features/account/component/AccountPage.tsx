@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Container, Table, TableBody, TableCell, TableRow } from '@mui/material';
 import { useFassets } from 'feature-u';
-
+import { useTheme } from '@mui/material/styles';
 const AccountPage = () => {
   const { user } = useAuth0();
   const SoundContainer = useFassets('play.soundContainer');
@@ -10,6 +10,7 @@ const AccountPage = () => {
   const TTSForm = useFassets('tts.form');
   const FavoriteFilterContainer = useFassets('favoriteSound.FavoriteFilterContainer');
   const VoiceForm = useFassets('voice.form');
+  const theme = useTheme();
 
   const userInformation = [
     {
@@ -31,7 +32,12 @@ const AccountPage = () => {
   ];
 
   return (
-    <Container sx={{ padding: '10px' }}>
+    <Container
+      sx={{ padding: '10px' }}
+      style={{
+        backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
+        color: theme.palette.mode === 'dark' ? 'white' : 'black',
+      }}>
       <h1>Account info</h1>
       {user.picture && <img src={user.picture} />}
       <Table sx={{ maxWidth: '40%' }}>
