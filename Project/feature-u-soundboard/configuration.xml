@@ -5,7 +5,7 @@
     <feature name="TTS" enabled="true" />
 
     <feature name="Search" enabled="true" />
-    <feature name="Categories" enabled="true" />
+    <feature name="Categories" enabled="false" />
     <feature name="Pagination" enabled="true" />
     <feature name="Theming" enabled="true" />
 

@@ -56,7 +56,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && yarn gen",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .tsx --ext .ts src/",
@@ -64,7 +64,8 @@
     "pretty": "prettier --write ./src",
     "model": "tplant -A -i src/interfaces/**/*.ts -o models/model.svg",
     "clean": "yarn rimraf node_modules",
-    "gen": "node feature.config.js"
+    "gen": "node feature.config.js",
+    "prestart": "npm run build"
   },
   "eslintConfig": {
     "extends": [
