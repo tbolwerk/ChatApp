@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { useFassets } from 'feature-u';
 import { Link } from 'react-router-dom';
 import { Container } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface HeaderProps {
   sections: ReadonlyArray<React.ComponentClass<any>>;
@@ -17,17 +18,23 @@ export default function Header(props: HeaderProps) {
 
   const HeaderAccountGroup = useFassets('account.HeaderAccountGroup');
   const Searchbar = useFassets('search.Searchbar');
+  const ToggleUITheme = useFassets('theme.ToggleUITheme');
 
   return (
     <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Toolbar
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}>
         <Container sx={{ flex: 1 }}>
           <Link to="/" style={{ textDecoration: 'none' }}>
-            <Typography component="h2" variant="h5" align="center" color="black" noWrap>
+            <Typography component="h2" variant="h5" align="center" noWrap>
               {title}
             </Typography>
           </Link>
         </Container>
+        {ToggleUITheme && <ToggleUITheme />}
         {Searchbar && <Searchbar />}
         {HeaderAccountGroup && <HeaderAccountGroup />}
       </Toolbar>

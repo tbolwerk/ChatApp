@@ -5,6 +5,10 @@ import { BrowserRouter } from 'react-router-dom';
 const App = () => {
   const MainLayout = useFassets('baseUI.mainLayout');
   const Auth0Provider = useFassets('account.auth0Provider');
+  const ThemeProvider = useFassets('theme.ThemeWrapper');
+
+  const wrapInAuth0Provider = (children: JSX.Element) => <Auth0Provider>{children}</Auth0Provider>;
+  const wrapInThemeProvider = (children: JSX.Element) => <ThemeProvider>{children}</ThemeProvider>;
 
   const app = (
     <BrowserRouter>
@@ -13,8 +17,10 @@ const App = () => {
       </div>
     </BrowserRouter>
   );
-
-  return Auth0Provider ? <Auth0Provider>{app}</Auth0Provider> : app;
+  const optionalWrappedInAuthProvider = Auth0Provider ? wrapInAuth0Provider(app) : app;
+  return ThemeProvider
+    ? wrapInThemeProvider(optionalWrappedInAuthProvider)
+    : optionalWrappedInAuthProvider;
 };
 
 export default App;

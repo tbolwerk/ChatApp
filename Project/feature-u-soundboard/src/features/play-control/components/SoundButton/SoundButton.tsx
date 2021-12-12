@@ -11,12 +11,10 @@ type Props = {
 };
 
 const SoundButton = ({ sound, updateSound }: Props) => {
-  const { name, path, favorite } = sound;
+  const { name, path } = sound;
 
   const [audio] = useState(new Audio(path));
   const [playing, setPlaying] = useState<boolean>(false);
-
-  const FavoriteIcon = useFassets('favoriteSound.FavoriteStar');
 
   useEffect(() => {
     const handleEnd = () => setPlaying(false);
@@ -29,7 +27,7 @@ const SoundButton = ({ sound, updateSound }: Props) => {
   };
 
   const handlePlayStop = () => {
-    audio.volume = 0.1;
+    audio.volume = 1;
     if (playing) {
       setPlaying(false);
       audio.pause();
@@ -39,17 +37,8 @@ const SoundButton = ({ sound, updateSound }: Props) => {
     }
   };
 
-  const handleFavoriteChange = () => {
-    const newSound = sound;
-    newSound.favorite = !sound.favorite;
-    updateSound(sound, newSound);
-  };
-
   return (
     <Box>
-      {FavoriteIcon && (
-        <FavoriteIcon name={name} favorite={!!favorite} handleChange={handleFavoriteChange} />
-      )}
       <Button
         style={{
           padding: 20,
