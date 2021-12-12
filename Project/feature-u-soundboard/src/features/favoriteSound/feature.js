@@ -4,10 +4,11 @@ import featureName from './featureName';
 import FavoriteStar from './component/favoriteStar';
 import { FavoriteFilterContainer, useFavoriteFilter } from './component/favoriteFilterContainer';
 import FavoriteFilterButton from './component/favoriteFilterButton';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: featureName,
-  enabled: true,
+  enabled: config.Favorites,
   // our public face ...
   fassets: {
     define: {

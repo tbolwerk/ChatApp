@@ -4,10 +4,11 @@ import { createFeature, fassetValidations } from 'feature-u';
 import CategoryView from './component/CategoryView';
 import featureName from './featureName';
 import { link, route } from './route';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: featureName,
-  enabled: true,
+  enabled: config.Categories,
 
   // our public face ...
   fassets: {

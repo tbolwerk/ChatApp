@@ -3,15 +3,18 @@ import { createFeature } from 'feature-u';
 import SoundContainer from './components/SoundContainer/SoundContainer';
 import { AssertionError } from 'assert';
 import SoundButton from './components/SoundButton/SoundButton';
+import config from '../../feature_config.json';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'play-control',
-  enabled: true,
+  name: featureName,
+  enabled: config.SoundPlayback,
+
   // our public face ...
   fassets: {
     define: {
-      'play.soundContainer': SoundContainer,
-      'play.soundButton': SoundButton,
+      [`${featureName}.soundContainer`]: SoundContainer,
+      [`${featureName}.soundButton`]: SoundButton,
     },
 
     defineUse: {},

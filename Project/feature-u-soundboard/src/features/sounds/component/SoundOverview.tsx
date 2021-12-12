@@ -19,7 +19,7 @@ export default function SoundOverview({ category }: Props) {
   const useFavoriteFilter = useFassets('favoriteSound.useFavoriteFilter');
 
   const [sounds, setSounds] = useState<Array<ISound>>([]);
-  const { filterOn } = useFavoriteFilter();
+  const { filterOn } = useFavoriteFilter ? useFavoriteFilter() : { filterOn: false };
 
   useEffect(() => {
     const getSounds = async () => {

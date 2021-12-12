@@ -1,12 +1,12 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
-import _account from './feature';
 import featureName from './featureName';
 import ShareButton from './component/ShareButton';
+import config from '../../feature_config.json';
 
 export default createFeature({
   name: featureName,
-  enabled: true,
+  enabled: config.Sharing,
   // our public face ...
   fassets: {
     define: {

@@ -1,14 +1,16 @@
 import React from 'react';
 import { createFeature } from 'feature-u';
 import SoundForm from './components/SoundForm/SoundForm';
+import config from '../../feature_config.json';
+import featureName from './featureName';
 
 export default createFeature({
-  name: 'upload',
-
+  name: featureName,
+  enabled: config.SoundUpload,
   // our public face ...
   fassets: {
     define: {
-      'upload.form': SoundForm,
+      [`${featureName}.form`]: SoundForm,
     },
 
     defineUse: {},

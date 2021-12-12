@@ -14,8 +14,8 @@ import voice from './voice-recording/feature';
 import sharing from './sharing/feature';
 
 export default [
-  tts,
   pagination,
+  tts,
   sharing,
   voice,
   sounds,
