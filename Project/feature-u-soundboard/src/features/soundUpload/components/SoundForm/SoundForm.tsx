@@ -1,15 +1,26 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
-import { Button, Collapse, Input, TextField } from '@mui/material';
+import React, { ChangeEvent, useRef, useState, SetStateAction, Dispatch } from 'react';
+import { Button, Snackbar, Alert, Input, TextField } from '@mui/material';
 import styles from './SoundForm.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import Axios from 'axios';
 import config from '../../../../dotenv.config';
 
-const SoundForm = () => {
+interface Props {
+  didUpload: boolean;
+  setDidUpload: Dispatch<SetStateAction<boolean>>;
+}
+
+const SoundForm = ({ didUpload, setDidUpload }: Props) => {
   const [name, setName] = useState<string>('');
   const [file, setFile] = useState<File | null>();
   const fileInput = useRef<HTMLInputElement>();
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+
   const { getIdTokenClaims } = useAuth0();
+
+  const handleClose = () => {
+    setShowSnackbar(false);
+  };
 
   const handleUpload = async () => {
     try {
@@ -18,15 +29,18 @@ const SoundForm = () => {
         const fd = new FormData();
         fd.set('name', name);
         fd.set('sound', file);
+        if (fileInput.current) {
+          fileInput.current.value = '';
+        }
         await Axios.post(`${config.apiEndpoint}/sounds`, fd, {
           headers: {
             authorization: `Bearer ${token.__raw}`,
           },
+        }).then(() => {
+          setName('');
+          setShowSnackbar(true);
+          setDidUpload(!didUpload);
         });
-        setName('');
-        if (fileInput.current) {
-          fileInput.current.value = '';
-        }
       } else {
         alert('Fill in all the fields!');
       }
@@ -49,6 +63,11 @@ const SoundForm = () => {
       <Button onClick={handleUpload} variant={'contained'}>
         Upload MP3
       </Button>
+      <Snackbar open={showSnackbar} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Sound uploaded!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

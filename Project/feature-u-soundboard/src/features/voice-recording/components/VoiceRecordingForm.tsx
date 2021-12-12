@@ -1,5 +1,5 @@
-import { Button, Input, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Snackbar, Alert, TextField } from '@mui/material';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import styles from './VoiceRecordingForm.module.css';
 import { Stop } from '@mui/icons-material';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -7,7 +7,12 @@ import Axios from 'axios';
 import config from '../../../dotenv.config';
 import Loading from '../../common/baseUI/component/Loading';
 
-const VoiceRecordingForm = () => {
+interface Props {
+  didUpload: boolean;
+  setDidUpload: Dispatch<SetStateAction<boolean>>;
+}
+
+const VoiceRecordingForm = ({ didUpload, setDidUpload }: Props) => {
   const [name, setName] = useState<string>('');
   const [recorder, setRecorder] = useState<MediaRecorder>(null);
   const [recording, setRecording] = useState<boolean>(false);
@@ -15,7 +20,13 @@ const VoiceRecordingForm = () => {
   const [player, setPlayer] = useState<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+
   const { getIdTokenClaims } = useAuth0();
+
+  const handleClose = () => {
+    setShowSnackbar(false);
+  };
 
   useEffect(() => {
     navigator.mediaDevices
@@ -72,9 +83,12 @@ const VoiceRecordingForm = () => {
             headers: {
               authorization: `Bearer ${token.__raw}`,
             },
+          }).then(() => {
+            setName('');
+            setShowSnackbar(true);
+            setUploading(false);
+            setDidUpload(!didUpload);
           });
-          setUploading(false);
-          setName('');
         } else {
           alert('Fill in all the fields!');
         }
@@ -110,6 +124,11 @@ const VoiceRecordingForm = () => {
       </Button>
       {renderPreviewButton()}
       {renderUploadButton()}
+      <Snackbar open={showSnackbar} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Sound uploaded!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

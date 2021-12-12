@@ -5,20 +5,20 @@ import fs from 'fs';
 import {randomUUID} from "crypto";
 
 class SoundController {
-    get(username:string) {
-        return getSounds(username);
+    async get(username:string) {
+        return await getSounds(username);
     }
 
-    save(name: string, path: string, user: string) {
-        insertSound(name, path, user, 0);
+    async save(name: string, path: string, user: string) {
+        await insertSound(name, path, user, 0);
     }
 
-    setFavorite(name: string, user: string, favorite: boolean) {
-        updateFavorite(name, user, favorite);
+    async setFavorite(name: string, user: string, favorite: boolean) {
+        await updateFavorite(name, user, favorite);
     }
 
-    getAll(){
-        return getAllSounds();
+    async getAll() {
+        return await getAllSounds();
     }
 
     async createTTS(text: string): Promise<string> {
@@ -35,8 +35,6 @@ class SoundController {
             throw e;
         }
     }
-
-
 }
 
 const controller = new SoundController();

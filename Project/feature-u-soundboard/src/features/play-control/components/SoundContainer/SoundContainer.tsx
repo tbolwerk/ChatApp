@@ -6,7 +6,11 @@ import config from '../../../../dotenv.config';
 import Axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const SoundContainer = () => {
+interface Props {
+  soundChanged?: boolean;
+}
+
+const SoundContainer = ({ soundChanged }: Props) => {
   const [sounds, setSounds] = useState<Array<ISound>>([]);
   const { user, getIdTokenClaims } = useAuth0();
 
@@ -24,25 +28,28 @@ const SoundContainer = () => {
       try {
         const token = await getIdTokenClaims();
         if (token) {
-          const res = await Axios.get<Array<ISound>>(`${config.apiEndpoint}/sounds`, {
+          return await Axios.get<Array<ISound>>(`${config.apiEndpoint}/sounds`, {
             headers: {
               authorization: `Bearer ${token.__raw}`,
             },
           });
-          setSounds(
-            res.data.map((s) => {
-              s.path = `${config.apiEndpoint}/${s.path}`;
-              return s;
-            }),
-          );
         }
       } catch (e) {
         throw e;
       }
     };
 
-    getSounds().catch((e) => console.log(e));
-  }, [user]);
+    getSounds()
+      .then((res) => {
+        setSounds(
+          res.data.map((s) => {
+            s.path = `${config.apiEndpoint}/${s.path}`;
+            return s;
+          }),
+        );
+      })
+      .catch((e) => console.log(e));
+  }, [user, soundChanged]);
 
   const handleSoundUpdate = (sound: ISound, newSound: ISound) => {
     const newSounds = sounds.map((s) =>

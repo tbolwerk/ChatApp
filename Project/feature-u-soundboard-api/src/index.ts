@@ -30,37 +30,40 @@ app.post("/tts", authenticateJWT, async (req, res) => {
     try {
         const file = await soundController.createTTS(req.body.text);
         await soundController.save(req.body.text, file, req.user.email);
-        return res.status(201);
+        res.status(201).end();
     } catch (e) {
+        console.error(e);
         res.status(500).json({
             error: e
         })
     }
 });
 
-app.post("/sounds", authenticateJWT, upload.single("sound"), (req: Request, res: Response) => {
+app.post("/sounds", authenticateJWT, upload.single("sound"), async (req: Request, res: Response) => {
     const { name } = req.body;
     if (req.file) {
-        soundController.save(name, req.file.filename, req.user.email);
-        return res.status(201);
+        await soundController.save(name, req.file.filename, req.user.email);
+        res.status(201).end();
+    } else {
+        res.status(400).json({
+            message: "Missing name or sound."
+        });
     }
-    res.status(400).json({
-        message: "Missing name or sound."
-    });
 });
 
-app.get("/sounds", authenticateJWT, (req: Request, res: Response) => {
-    soundController.get(req.user.email)
-        .then((data) => res.json(data))
+app.get("/sounds", authenticateJWT, async (req: Request, res: Response) => {
+    const data = await soundController.get(req.user.email);
+    res.json(data);
 })
 
-app.put("/sounds/favorite", authenticateJWT, (req: Request, res: Response) => {
+app.put("/sounds/favorite", authenticateJWT, async (req: Request, res: Response) => {
     const { name, favorite } = req.body;
-    soundController.setFavorite(name, req.user.email, favorite)
+    await soundController.setFavorite(name, req.user.email, favorite)
+    res.status(200).end();
 });
 
-app.get("/allsounds", (req: Request, res: Response) => {
-    soundController.getAll().then((data) => res.json(data));
+app.get("/allsounds", async (req: Request, res: Response) => {
+    await soundController.getAll().then((data) => res.json(data));
 })
 
 app.listen(port, () => {

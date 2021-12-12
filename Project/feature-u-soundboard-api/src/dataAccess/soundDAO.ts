@@ -1,7 +1,7 @@
 import useDb from "./database";
 
-export const insertSound = (name: string, path: string, username: string, favorite: number) => {
-    useDb((db) => {
+export const insertSound = async (name: string, path: string, username: string, favorite: number) => {
+    await useDb((db) => {
         const stmt = db.prepare("INSERT INTO sounds VALUES (?, ?, ?, ?)");
         stmt.run([name, path, username, favorite]);
         stmt.finalize();
@@ -28,8 +28,8 @@ export const getAllSounds = () => {
         })
     })
 }
-export const updateFavorite = (name: string, user: string, favorite: boolean) => {
-    useDb((db) => {
+export const updateFavorite = async (name: string, user: string, favorite: boolean) => {
+    await useDb((db) => {
         const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ?");
         stmt.run([favorite ? 1 : 0, user, name]);
         stmt.finalize();
