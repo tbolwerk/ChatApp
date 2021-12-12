@@ -17,7 +17,6 @@ export default function MainLayout() {
       style={{
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         color: theme.palette.mode === 'dark' ? 'white' : 'black',
-        height: '100vh',
       }}>
       <header className="App-header">
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -27,7 +26,6 @@ export default function MainLayout() {
         style={{
           backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
           color: theme.palette.mode === 'dark' ? 'white' : 'black',
-          height: '100vh',
         }}>
         <Routes>
           {routes.map(({ url, Content }: IRoute, index) => (

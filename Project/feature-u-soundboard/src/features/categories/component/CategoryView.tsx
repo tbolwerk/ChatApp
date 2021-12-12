@@ -36,10 +36,8 @@ function onHoverCard(e: any) {
 function offHoverCard(e: any) {}
 
 export default function CategoryView() {
-  const theme = useTheme();
-  // const Category = useFassets('sounds.SoundOverview');
   const PaginationFeature = useFassets('pagination.PaginationFeature');
-  // const [selectedCategory, setSelectedCategory] = useState('');
+
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {Array.from(pagedCategories).map((category, index) => (

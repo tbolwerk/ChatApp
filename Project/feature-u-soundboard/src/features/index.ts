@@ -12,9 +12,12 @@ import pagination from './common/pagination/feature';
 import favoriteSound from './favoriteSound/feature';
 import voice from './voice-recording/feature';
 import theme from './common/theme/feature';
+import sharing from './sharing/feature';
+
 export default [
   tts,
   pagination,
+  sharing,
   voice,
   sounds,
   categories,
