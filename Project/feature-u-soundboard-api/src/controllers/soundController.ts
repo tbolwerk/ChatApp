@@ -13,8 +13,8 @@ class SoundController {
         await insertSound(name, path, user, 0);
     }
 
-    async setFavorite(name: string, user: string, favorite: boolean) {
-        await updateFavorite(name, user, favorite);
+    async setFavorite(name: string, path: string, user: string, favorite: boolean) {
+        await updateFavorite(name, path, user, favorite);
     }
 
     async getAll() {

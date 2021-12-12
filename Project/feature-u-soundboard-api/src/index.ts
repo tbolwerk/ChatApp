@@ -57,8 +57,8 @@ app.get("/sounds", authenticateJWT, async (req: Request, res: Response) => {
 })
 
 app.put("/sounds/favorite", authenticateJWT, async (req: Request, res: Response) => {
-    const { name, favorite } = req.body;
-    await soundController.setFavorite(name, req.user.email, favorite)
+    const { name, path, favorite } = req.body;
+    await soundController.setFavorite(name, path, req.user.email, favorite)
     res.status(200).end();
 });
 

@@ -28,10 +28,10 @@ export const getAllSounds = () => {
         })
     })
 }
-export const updateFavorite = async (name: string, user: string, favorite: boolean) => {
+export const updateFavorite = async (name: string, path: string, user: string, favorite: boolean) => {
     await useDb((db) => {
-        const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ?");
-        stmt.run([favorite ? 1 : 0, user, name]);
+        const stmt = db.prepare("UPDATE sounds SET favorite = ? WHERE user = ? AND name = ? AND path = ?");
+        stmt.run([favorite ? 1 : 0, user, name, path]);
         stmt.finalize();
     });
 }
